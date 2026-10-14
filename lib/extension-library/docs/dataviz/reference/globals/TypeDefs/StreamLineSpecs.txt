@@ -1,0 +1,15 @@
+https://aps.autodesk.com/en/docs/dataviz/v1/reference/globals/TypeDefs/StreamLineSpecs/
+Reference Guide > Globals > Type Definitions > StreamLineSpecs
+
+Type Definitions
+
+# StreamLineSpecs
+
+An object representing the specifications of a stream line to be created. This object is used in `StreamLineBuilder.createStreamLine` API.
+
+# Properties
+
+lineWidth (number) | The width of the `StreamLine` object in terms of pixels.
+lineColor (THREE.Color) | The global uniform line color. Individual segment colorscan be specified through `StreamLineData.colors` array. See `StreamLineData` for moredetails.
+opacity (number) | The global uniform line opacity in the range of `[0.0, 1.0]`.
+lineData (StreamLineData) | The point data to initialize the `StreamLine` objectwith. See `StreamLineData` for more details.

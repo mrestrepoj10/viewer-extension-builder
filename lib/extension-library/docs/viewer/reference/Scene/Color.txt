@@ -1,0 +1,338 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/Scene/Color/
+Reference Guide > Scene > Color
+
+Autodesk.Viewing.Scene
+
+# Color
+
+## new Color(colorOrRed, green, blue)
+
+Represents an RGB color. Each component (`r`, `g`, `b`) is a number in the range `0.0` to `1.0`.
+
+The color can be initialized from a hexadecimal value, a CSS-style string (`'rgb(255,0,0)'`, `'#ff0000'`, …), or another color. Passing three arguments is interpreted as separate red, green and blue components.
+
+### Parameters
+
+colorOrRed (number, string, Autodesk.Viewing.Scene.Color) | Hex, CSS string, or color to copy. Or pass `(r, g, b)` in `0.0..1.0`.
+green (number) | Green component in `0.0..1.0`.
+blue (number) | Blue component in `0.0..1.0`.
+
+# Properties
+
+r (number) | The red component, in the range `0.0` to `1.0`. Default: `1`.
+g (number) | The green component, in the range `0.0` to `1.0`. Default: `1`.
+b (number) | The blue component, in the range `0.0` to `1.0`. Default: `1`.
+
+# Methods
+
+## set(value)
+
+Sets this color from a hex value, a CSS color string, or another color.
+
+### Parameters
+
+value* (number, string, Autodesk.Viewing.Scene.Color) | Hex value, CSS color string, or color to copy.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Color | This color.
+
+## setHex(hex)
+
+Sets this color from a hexadecimal value (e.g. `0xff0000`).
+
+### Parameters
+
+hex* (number) | Hexadecimal color value.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Color | This color.
+
+## setRGB(r, g, b)
+
+Sets the red, green and blue components.
+
+### Parameters
+
+r* (number) | Red component, in the range `0.0` to `1.0`.
+g* (number) | Green component, in the range `0.0` to `1.0`.
+b* (number) | Blue component, in the range `0.0` to `1.0`.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Color | This color.
+
+## setHSL(h, s, l)
+
+Sets this color from hue, saturation and lightness components.
+
+### Parameters
+
+h* (number) | Hue, in the range `0.0` to `1.0`.
+s* (number) | Saturation, in the range `0.0` to `1.0`.
+l* (number) | Lightness, in the range `0.0` to `1.0`.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Color | This color.
+
+## setStyle(style)
+
+Sets this color from a CSS-style string, e.g. `'rgb(255,0,0)'`, `'rgb(100%,0%,0%)'`, `'#ff0000'`, or `'#f00'`.
+
+### Parameters
+
+style* (string) | CSS color string.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Color | This color.
+
+## copy(color)
+
+Copies the components of the given color into this color.
+
+### Parameters
+
+color* (Autodesk.Viewing.Scene.Color) | Color to copy.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Color | This color.
+
+## copyGammaToLinear(color, gammaFactor)
+
+Copies the given color, converting it from gamma to linear color space.
+
+### Parameters
+
+color* (Autodesk.Viewing.Scene.Color) | Color to copy.
+gammaFactor (number) | Gamma factor.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Color | This color.
+
+## copyLinearToGamma(color, gammaFactor)
+
+Copies the given color, converting it from linear to gamma color space.
+
+### Parameters
+
+color* (Autodesk.Viewing.Scene.Color) | Color to copy.
+gammaFactor (number) | Gamma factor.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Color | This color.
+
+## convertGammaToLinear()
+
+Converts this color from gamma to linear color space in place.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Color | This color.
+
+## convertLinearToGamma()
+
+Converts this color from linear to gamma color space in place.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Color | This color.
+
+## getHex()
+
+Returns the hexadecimal value of this color.
+
+### Returns
+
+type | description
+number | Hexadecimal color value.
+
+## getHexString()
+
+Returns the hexadecimal value of this color as a 6-digit string (e.g. `'ff0000'`).
+
+### Returns
+
+type | description
+string | Hexadecimal color string.
+
+## getHSL(optionalTarget)
+
+Returns the hue, saturation and lightness of this color.
+
+### Parameters
+
+optionalTarget (Object) | Optional object to write the result into. A new object is created if omitted.
+
+### Returns
+
+type | description
+Object | The hue, saturation and lightness, each in the range `0.0` to `1.0`.
+
+## getStyle()
+
+Returns this color as a CSS `rgb(...)` string.
+
+### Returns
+
+type | description
+string | CSS color string, e.g. `'rgb(255,0,0)'`.
+
+## offsetHSL(h, s, l)
+
+Offsets this color’s hue, saturation and lightness by the given amounts.
+
+### Parameters
+
+h* (number) | Hue offset.
+s* (number) | Saturation offset.
+l* (number) | Lightness offset.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Color | This color.
+
+## add(color)
+
+Adds the given color’s components to this color.
+
+### Parameters
+
+color* (Autodesk.Viewing.Scene.Color) | Color to add.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Color | This color.
+
+## addColors(color1, color2)
+
+Sets this color to the component-wise sum of two colors.
+
+### Parameters
+
+color1* (Autodesk.Viewing.Scene.Color) | First color.
+color2* (Autodesk.Viewing.Scene.Color) | Second color.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Color | This color.
+
+## addScalar(s)
+
+Adds a scalar value to each component of this color.
+
+### Parameters
+
+s* (number) | Scalar value to add.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Color | This color.
+
+## multiply(color)
+
+Multiplies this color’s components by the given color’s components.
+
+### Parameters
+
+color* (Autodesk.Viewing.Scene.Color) | Color to multiply by.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Color | This color.
+
+## multiplyScalar(s)
+
+Multiplies each component of this color by a scalar value.
+
+### Parameters
+
+s* (number) | Scalar value to multiply by.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Color | This color.
+
+## lerp(color, alpha)
+
+Linearly interpolates this color toward the given color.
+
+### Parameters
+
+color* (Autodesk.Viewing.Scene.Color) | Color to interpolate toward.
+alpha* (number) | Interpolation factor, in the range `0.0` to `1.0`.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Color | This color.
+
+## equals(c)
+
+Returns whether the given color equals this color.
+
+### Parameters
+
+c* (Autodesk.Viewing.Scene.Color) | Color to compare against.
+
+### Returns
+
+type | description
+boolean | `true` if all components are equal.
+
+## fromArray(array)
+
+Sets this color’s components from the first three elements of an array.
+
+### Parameters
+
+array* (Array.<number>) | Array of `[r, g, b]` values, each in the range `0.0` to `1.0`.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Color | This color.
+
+## toArray(array, offset)
+
+Writes this color’s components into an array as `[r, g, b]`.
+
+### Parameters
+
+array (Array.<number>) | Array to write into. A new array is created if omitted.
+offset (number) | Offset into the array.
+
+### Returns
+
+type | description
+Array.<number> | The array.
+
+## clone()
+
+Returns a new color with the same components as this color.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Color | A new color.

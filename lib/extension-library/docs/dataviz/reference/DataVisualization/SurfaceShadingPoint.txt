@@ -1,0 +1,57 @@
+https://aps.autodesk.com/en/docs/dataviz/v1/reference/DataVisualization/SurfaceShadingPoint/
+Reference Guide > DataVisualization > SurfaceShadingPoint
+
+Autodesk.DataVisualization
+
+# SurfaceShadingPoint
+
+A `SurfaceShadingPoint` object is used to represent a real-world entity that has a physical position within the model. A `SurfaceShadingPoint` contains one or more properties. Surface shading (i.e. heatmap) mechanism queries values of these properties in order to determine the color of the point where this `SurfaceShadingPoint` object is located.
+
+For an example, consider an IoT scenario of a physical sensor device, one that occupies a physical location and exposes multiple sensor properties (such as “temperature” and “humidity”), each of which has its own numeric values. In this scenario, a `SurfaceShadingPoint` can be used to represent the physical sensor device, where properties such as “temperature” and “humidity” are `types` defined in the `SurfaceShadingPoint` object.
+
+## new SurfaceShadingPoint(id, position, types, name, contextData)
+
+Constructs an instance of `SurfaceShadingPoint` object.
+
+### Parameters
+
+id* (string) | The identifier of this `SurfaceShadingPoint` object.
+position* (Object) | The position ofthis `SurfaceShadingPoint` object in the world space.
+types* (Array.<string>) | The types (of sensors, or properties) that areexposed by this `SurfaceShadingPoint` object.
+name (string) | Optional identifier associated withthis `SurfaceShadingPoint` object. Equivalent to `id` by default.
+contextData (Object) | Optional object used to track anyadditional information for this `SurfaceShadingPoint` object.
+
+### Examples
+
+```
+ const sensorId = "cafeteria-entrace-01";
+const position = { x: -159.2780, y: -50.4998, z: -16.9196 };
+const types = ["temperature", "humidity"];
+
+const shadingPoint = new Autodesk.DataVisualization.Core.SurfaceShadingPoint(
+    sensorId, position, types);
+```
+
+# Methods
+
+## positionFromDBId(model, dbId)
+
+Derives the position of a `SurfaceShadingPoint` from a given `DbId`. The position is calculated by taking the centroid of the union of all the geometry bounding boxes that this `DbId` corresponds to. This function is useful if a position is not supplied at the construction time.
+
+### Parameters
+
+model* (Model) | The model that contains the given `DbId`.
+dbId* (number) | The `DbId` of the object to derive the center point from.
+
+### Examples
+
+```
+ const sensorId = "cafeteria-entrace-01";
+const types = ["temperature", "humidity"];
+
+// Position of the shading point is unknown at construction time
+const shadingPoint = new Autodesk.DataVisualization.Core.SurfaceShadingPoint(
+    sensorId, undefined, types);
+
+shadingPoint.positionFromDBId(model, sensorDbId);
+```

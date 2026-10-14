@@ -1,0 +1,10 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/Functions/showCompass/
+Reference Guide > Globals > Functions > showCompass
+
+Functions
+
+# showCompass
+
+## Parameters
+
+show (boolean) | show the compass

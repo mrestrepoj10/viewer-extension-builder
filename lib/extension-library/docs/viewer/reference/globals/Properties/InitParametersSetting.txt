@@ -1,0 +1,6 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/Properties/InitParametersSetting/
+Reference Guide > Globals > Properties > InitParametersSetting
+
+Properties
+
+# InitParametersSetting

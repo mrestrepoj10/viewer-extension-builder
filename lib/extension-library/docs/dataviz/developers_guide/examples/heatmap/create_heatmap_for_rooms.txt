@@ -1,0 +1,120 @@
+https://aps.autodesk.com/en/docs/dataviz/v1/developers_guide/examples/heatmap/create_heatmap_for_rooms/
+Developer's Guide > Examples > Heatmap > Creating a Heatmap for Rooms
+
+# Creating Heatmaps for Rooms
+
+- Live demo: https://aps-iot-extensions-demo.autodesk.io/
+- Source code: https://github.com/autodesk-platform-services/aps-iot-extensions-demo
+
+## Setting up the Heatmap
+
+`ModelStructureInfo` obtains its room information from the corresponding `model` object. `generateSurfaceShadingData` method then maps each of the given device objects into these rooms based on their positional information. The `setupSurfaceShading` method uses the device-to-room mapping to build out heatmaps for each room that contains at least one device.
+
+```
+// Given a model loaded from Autodesk Platform Services
+const structureInfo = new Autodesk.DataVisualization.Core.ModelStructureInfo(model);
+
+const devices = [
+    {
+        id: "Room 107", // An ID to identify this device
+        position: { x: -159.2782, y: -50.4998, z: -16.9196 }, // World coordinates of this device
+        sensorTypes: ["temperature", "humidity"], // The types/properties this device exposes
+    },
+    {
+        id: "Hallway",
+        position: { x: -26.957, y: -55.477, z: -16.4814 },
+        sensorTypes: ["temperature", "humidity"],
+    },
+];
+
+// Generates `SurfaceShadingData` after assigning each device to a room.
+const shadingData = await structureInfo.generateSurfaceShadingData(devices);
+
+// Use the resulting shading data to generate heatmap from.
+await dataVizExtn.setupSurfaceShading(model, shadingData);
+
+// Register color stops for the heatmap. Along with the normalized sensor value
+// in the range of [0.0, 1.0], `renderSurfaceShading` will interpolate the final
+// heatmap color based on these specified colors.
+const sensorColors = [0x0000ff, 0x00ff00, 0xffff00, 0xff0000];
+
+// Set heatmap colors for temperature
+const sensorType = "temperature";
+dataVizExtn.registerSurfaceShadingColors(sensorType, sensorColors);
+```
+
+## Rendering the Heatmaps
+
+To select a set of heatmaps to render, simply call `renderSurfaceShading()` with the appropriate section (floor and room) that you want to render.
+
+```
+// Function that provides sensor value in the range of [0.0, 1.0]
+function getSensorValue(surfaceShadingPoint, sensorType) {
+    // The `SurfaceShadingPoint.id` property matches one of the identifiers passed
+    // to `generateSurfaceShadingData` function. In our case above, this will either
+    // be "cafeteria-entrance-01" or "cafeteria-exit-01".
+    const deviceId = surfaceShadingPoint.id;
+
+    // Read the sensor data, along with its possible value range
+    let sensorValue = readSensorValue(deviceId, sensorType);
+    const maxSensorValue = getMaxSensorValue(sensorType);
+    const minSensorValue = getMinSensorValue(sensorType);
+
+    // Normalize sensor value to [0, 1.0]
+    sensorValue = (sensorValue - minSensorValue) / (maxSensorValue - minSensorValue);
+    return clamp(sensorValue, 0.0, 1.0);
+}
+
+// This value can also be a room instead of a floor
+const floorName = "01 - Entry Level";
+dataVizExtn.renderSurfaceShading(floorName, sensorType, getSensorValue);
+```
+
+A call to `renderSurfaceShading` causes `getSensorValue` callback function to be invoked multiple times for each `SurfaceShadingPoint` object. `renderSurfaceShading` uses the normalized value that `getSensorValue` returns in conjunction with the color stops (registered through `registerSurfaceShadingColors`) to determine the final color for the `SurfaceShadingPoint`.
+
+IMPORTANT: Note that `renderSurfaceShading` recreates graphics resources, like materials, internally. If there is no change of sensor configuration, then you should use `updateSurfaceShading` for rapid updates of the heatmap.
+
+## Updating the Heatmap
+
+To update the currently established heatmap you can simply call `updateSurfaceShading()` as follows:
+
+```
+dataVizExtn.updateSurfaceShading(getSensorValue);
+```
+
+## Troubleshooting
+
+Occasionally, the above setup does not yield the expected visual outcome. The following image illustrates a scenario where `setupSurfaceShading` recognizes rooms successfully for rendering heatmap. Rooms that contain at least one sensor within their boundaries will have shading applied to them (the yellow color room below); while rooms without any sensor within their boundaries will not (rooms with white stripes pattern):
+
+The following are a few things to look out for when heatmaps do not render in the expected way.
+
+### Rooms are not detected
+
+As shown in the image above, when the `setupSurfaceShading` call includes a room for surface shading, it will shade the room with either white stripes or some variant of the colors specified in the `registerSurfaceShadingColors` call. If that is not the case, a prior call to `generateSurfaceShadingData` did not internally consider that particular room for surface shading.
+
+There are few possibilities where `generateSurfaceShadingData` would fail to identify a room as one to which to apply surface shading:
+
+- Room geometries were not generated by the Model Derivative service. To verify this, open the Model Browser panel from the bottom edge of the Viewer SDK toolbar. You should find an entry called Rooms (or an equivalent localized version of it) in the Model Browser. If not, please refer to Generating Room Elements For a Revit Model for information about including rooms during the translation process.
+- The Rooms node is localized in a language other than English. `generateSurfaceShadingData` currently detects room geometries by its node name, “Rooms”. For localized Revit files, `generateSurfaceShadingData` would be unable to locate the Rooms node through its name. To solve this issue, pass the localized equivalent of “Rooms” as the third parameter of the `generateSurfaceShadingData` call:
+
+```
+// Passing in a localized term for "Rooms" as the third parameter.
+structureInfo.generateSurfaceShadingData(devices, undefined, "Habitaciones");
+```
+
+### Sensors fall outside of boundaries
+
+If the viewer renders room geometries in white color stripes, it means `renderSurfaceShading` or `updateSurfaceShading` could not obtain the sensor value to use to render the heatmap. This is most likely because no sensor falls within the boundaries of those rooms. This issue is easy to identify by looking at Console in the browser’s Developer Tools window. The following warning indicates that sensors with ID `Hyperion-12` and `Hyperion-11` did not fall within any room boundaries that `generateSurfaceShadingData` considers:
+
+A common reason for this is the fact that a sensor falls exactly on the room boundary, causing `generateSurfaceShadingData` to consider the sensor as outside of the room due to a floating-point comparison error. As a rule of thumb, it is always safer to nudge a sensor’s position slightly towards the centroid of the room that contains it:
+
+```
+const devices = [
+    {
+        id: "Room 107",
+        // Nudge the 'position' towards centroid of room
+        position: { x: -159.28, y: -50.56, z: -16.92 },
+        sensorTypes: ["temperature", "humidity"],
+    },
+];
+```

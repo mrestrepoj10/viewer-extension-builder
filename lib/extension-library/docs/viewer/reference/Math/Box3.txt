@@ -1,0 +1,345 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/Math/Box3/
+Reference Guide > Math > Box3
+
+Autodesk.Viewing.Math
+
+# Box3
+
+## new Box3(min, max)
+
+Represents a 3D axis-aligned bounding box.
+
+### Parameters
+
+min (Autodesk.Viewing.Math.Vector3) | The minimum (lower) corner. Defaults to (+Infinity, +Infinity, +Infinity).
+max (Autodesk.Viewing.Math.Vector3) | The maximum (upper) corner. Defaults to (-Infinity, -Infinity, -Infinity).
+
+# Properties
+
+min (Autodesk.Viewing.Math.Vector3) | The minimum (lower) corner of the box.
+max (Autodesk.Viewing.Math.Vector3) | The maximum (upper) corner of the box.
+
+# Methods
+
+## set(min, max)
+
+Set the min and max corners of this box.
+
+### Parameters
+
+min* (Autodesk.Viewing.Math.Vector3) | The minimum corner.
+max* (Autodesk.Viewing.Math.Vector3) | The maximum corner.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Box3 | A reference to this box.
+
+## setFromPoints(points)
+
+Set this box to enclose the given points.
+
+### Parameters
+
+points* (Array.<Autodesk.Viewing.Math.Vector3>) | The points to enclose.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Box3 | A reference to this box.
+
+## setFromArray(array, offset)
+
+Set this box from six consecutive numbers in an array: min x, y, z then max x, y, z.
+
+### Parameters
+
+array* (Array.<number>) | The source array.
+offset* (number) | The offset into the array.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Box3 | A reference to this box.
+
+## copyToArray(array, offset)
+
+Write this box into an array as six consecutive numbers: min x, y, z then max x, y, z.
+
+### Parameters
+
+array* (Array.<number>) | The target array.
+offset* (number) | The offset into the array.
+
+## setFromCenterAndSize(center, size)
+
+Set this box from a center point and a size vector.
+
+### Parameters
+
+center* (Autodesk.Viewing.Math.Vector3) | The center point.
+size* (Autodesk.Viewing.Math.Vector3) | The size of the box along each axis.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Box3 | A reference to this box.
+
+## clone()
+
+Create a clone of this box.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Box3 | A new box with the same min and max.
+
+## copy(box)
+
+Copy the components from another box.
+
+### Parameters
+
+box* (Autodesk.Viewing.Math.Box3) | The box to copy.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Box3 | A reference to this box.
+
+## makeEmpty()
+
+Set this box to the empty box. Min components become +Infinity, max components become -Infinity.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Box3 | A reference to this box.
+
+## isEmpty()
+
+Check whether this box is empty (any max component is less than its min component).
+
+### Returns
+
+type | description
+boolean | True if this box has no volume.
+
+## isFinite()
+
+Check whether every component of both corners is a finite number. This does not overlap with isEmpty(): comparisons against NaN are always false, so a box with NaN corners reports as non-empty.
+
+### Returns
+
+type | description
+boolean | True if no corner component is NaN or an infinity.
+
+## getCenter(optionalTarget)
+
+Get the center point of this box. Returns (0, 0, 0) for an empty box.
+
+### Parameters
+
+optionalTarget (Autodesk.Viewing.Math.Vector3) | Optional output vector. If omitted, a new vector is created.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector3 | The center of the box.
+
+## getSize(optionalTarget)
+
+Get the size of this box along each axis (max - min).
+
+### Parameters
+
+optionalTarget (Autodesk.Viewing.Math.Vector3) | Optional output vector. If omitted, a new vector is created.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector3 | The size of the box along each axis.
+
+## expandByPoint(point)
+
+Expand this box to include the given point.
+
+### Parameters
+
+point* (Autodesk.Viewing.Math.Vector3) | The point to include.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Box3 | A reference to this box.
+
+## expandByVector(vector)
+
+Expand this box by the given vector. Min is moved by -vector and max by +vector.
+
+### Parameters
+
+vector* (Autodesk.Viewing.Math.Vector3) | The vector to expand by.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Box3 | A reference to this box.
+
+## expandByScalar(scalar)
+
+Expand this box uniformly by the given scalar. Min is moved by -scalar and max by +scalar on every axis.
+
+### Parameters
+
+scalar* (number) | The scalar amount to expand by.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Box3 | A reference to this box.
+
+## containsPoint(point)
+
+Check whether this box contains the given point.
+
+### Parameters
+
+point* (Autodesk.Viewing.Math.Vector3) | The point to test.
+
+### Returns
+
+type | description
+boolean | True if the point lies inside or on the boundary of this box.
+
+## containsBox(box)
+
+Check whether this box fully contains another box.
+
+### Parameters
+
+box* (Autodesk.Viewing.Math.Box3) | The box to test.
+
+### Returns
+
+type | description
+boolean | True if the given box lies entirely within this box.
+
+## getParameter(point, optionalTarget)
+
+Get the relative position of a point inside this box, in the range [0, 1] per axis when the point lies inside the box.
+
+### Parameters
+
+point* (Autodesk.Viewing.Math.Vector3) | The point to evaluate.
+optionalTarget (Autodesk.Viewing.Math.Vector3) | Optional output vector.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector3 | The relative position per axis.
+
+## intersectsBox(box)
+
+Check whether this box intersects another box.
+
+### Parameters
+
+box* (Autodesk.Viewing.Math.Box3) | The box to test.
+
+### Returns
+
+type | description
+boolean | True if the boxes overlap.
+
+## clampPoint(point, optionalTarget)
+
+Clamp the given point to lie inside this box, component-wise.
+
+### Parameters
+
+point* (Autodesk.Viewing.Math.Vector3) | The point to clamp.
+optionalTarget (Autodesk.Viewing.Math.Vector3) | Optional output vector.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector3 | The clamped point.
+
+## distanceToPoint(point)
+
+Compute the shortest distance from a point to this box. Returns 0 for points inside the box.
+
+### Parameters
+
+point* (Autodesk.Viewing.Math.Vector3) | The point.
+
+### Returns
+
+type | description
+number | The distance from the point to the box.
+
+## intersect(box)
+
+Set this box to the intersection of itself and another box.
+
+### Parameters
+
+box* (Autodesk.Viewing.Math.Box3) | The other box.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Box3 | A reference to this box.
+
+## union(box)
+
+Set this box to the union of itself and another box.
+
+### Parameters
+
+box* (Autodesk.Viewing.Math.Box3) | The other box.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Box3 | A reference to this box.
+
+## applyMatrix4(matrix)
+
+Transform this box by a 4x4 affine matrix. The resulting box is the axis-aligned bounding box of the transformed corners.
+
+### Parameters
+
+matrix* (Autodesk.Viewing.Math.Matrix4) | The matrix to apply.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Box3 | A reference to this box.
+
+## translate(offset)
+
+Translate this box by the given offset.
+
+### Parameters
+
+offset* (Autodesk.Viewing.Math.Vector3) | The translation offset.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Box3 | A reference to this box.
+
+## equals(box)
+
+Check whether this box equals another box (component-wise).
+
+### Parameters
+
+box* (Autodesk.Viewing.Math.Box3) | The box to compare.
+
+### Returns
+
+type | description
+boolean | True if the boxes are equal.

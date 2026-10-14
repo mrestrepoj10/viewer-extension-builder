@@ -1,0 +1,514 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/Math/Vector4/
+Reference Guide > Math > Vector4
+
+Autodesk.Viewing.Math
+
+# Vector4
+
+## new Vector4(x, y, z, w)
+
+Represents a 4D vector.
+
+### Parameters
+
+x (number) | The x component.
+y (number) | The y component.
+z (number) | The z component.
+w (number) | The w component.
+
+# Properties
+
+x (number) | The x component.
+y (number) | The y component.
+z (number) | The z component.
+w (number) | The w component.
+
+# Methods
+
+## set(x, y, z, w)
+
+Set the components of this vector.
+
+### Parameters
+
+x* (number) | The x component.
+y* (number) | The y component.
+z* (number) | The z component.
+w* (number) | The w component.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A reference to this vector.
+
+## setX(x)
+
+Set the x component.
+
+### Parameters
+
+x* (number) | The x component.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A reference to this vector.
+
+## setY(y)
+
+Set the y component.
+
+### Parameters
+
+y* (number) | The y component.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A reference to this vector.
+
+## setZ(z)
+
+Set the z component.
+
+### Parameters
+
+z* (number) | The z component.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A reference to this vector.
+
+## setW(w)
+
+Set the w component.
+
+### Parameters
+
+w* (number) | The w component.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A reference to this vector.
+
+## setComponent(index, value)
+
+Set a component by index.
+
+### Parameters
+
+index* (number) | The component index (0=x, 1=y, 2=z, 3=w).
+value* (number) | The component value.
+
+## getComponent(index)
+
+Get a component by index.
+
+### Parameters
+
+index* (number) | The component index (0=x, 1=y, 2=z, 3=w).
+
+### Returns
+
+type | description
+number | The component value.
+
+## copy(v)
+
+Copy the components from another vector.
+
+### Parameters
+
+v* (Autodesk.Viewing.Math.Vector4) | The vector to copy.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A reference to this vector.
+
+## add(v)
+
+Add a vector to this vector.
+
+### Parameters
+
+v* (Autodesk.Viewing.Math.Vector4) | The vector to add.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A reference to this vector.
+
+## addScalar(s)
+
+Add a scalar to each component of this vector.
+
+### Parameters
+
+s* (number) | The scalar to add.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A reference to this vector.
+
+## addVectors(a, b)
+
+Set this vector to the sum of two vectors.
+
+### Parameters
+
+a* (Autodesk.Viewing.Math.Vector4) | The first vector.
+b* (Autodesk.Viewing.Math.Vector4) | The second vector.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A reference to this vector.
+
+## sub(v)
+
+Subtract a vector from this vector.
+
+### Parameters
+
+v* (Autodesk.Viewing.Math.Vector4) | The vector to subtract.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A reference to this vector.
+
+## subScalar(s)
+
+Subtract a scalar from each component of this vector.
+
+### Parameters
+
+s* (number) | The scalar to subtract.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A reference to this vector.
+
+## subVectors(a, b)
+
+Set this vector to the difference of two vectors.
+
+### Parameters
+
+a* (Autodesk.Viewing.Math.Vector4) | The first vector.
+b* (Autodesk.Viewing.Math.Vector4) | The second vector.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A reference to this vector.
+
+## multiplyScalar(scalar)
+
+Multiply this vector by a scalar.
+
+### Parameters
+
+scalar* (number) | The scalar to multiply by.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A reference to this vector.
+
+## applyMatrix4(m)
+
+Apply a 4x4 matrix transformation to this vector.
+
+### Parameters
+
+m* (Autodesk.Viewing.Math.Matrix4) | The matrix to apply.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A reference to this vector.
+
+## divideScalar(scalar)
+
+Divide this vector by a scalar.
+
+### Parameters
+
+scalar* (number) | The scalar to divide by.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A reference to this vector.
+
+## setAxisAngleFromQuaternion(q)
+
+Set this vector to represent an axis-angle rotation from a quaternion.
+
+### Parameters
+
+q* (Autodesk.Viewing.Math.Quaternion) | The quaternion (assumed to be normalized).
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A reference to this vector.
+
+## setAxisAngleFromRotationMatrix(m)
+
+Set this vector to represent an axis-angle rotation from a rotation matrix.
+
+### Parameters
+
+m* (Autodesk.Viewing.Math.Matrix4) | The rotation matrix (upper 3x3 assumed to be a pure rotation matrix).
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A reference to this vector.
+
+## min(v)
+
+Set each component to the minimum of this vector and another vector.
+
+### Parameters
+
+v* (Autodesk.Viewing.Math.Vector4) | The vector to compare.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A reference to this vector.
+
+## max(v)
+
+Set each component to the maximum of this vector and another vector.
+
+### Parameters
+
+v* (Autodesk.Viewing.Math.Vector4) | The vector to compare.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A reference to this vector.
+
+## clamp(min, max)
+
+Clamp each component of this vector between corresponding components of min and max vectors.
+
+### Parameters
+
+min* (Autodesk.Viewing.Math.Vector4) | The minimum values.
+max* (Autodesk.Viewing.Math.Vector4) | The maximum values.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A reference to this vector.
+
+## clampScalar(minVal, maxVal)
+
+Clamp each component of this vector between scalar min and max values.
+
+### Parameters
+
+minVal* (number) | The minimum value.
+maxVal* (number) | The maximum value.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A reference to this vector.
+
+## floor()
+
+Apply floor to each component of this vector.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A reference to this vector.
+
+## ceil()
+
+Apply ceil to each component of this vector.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A reference to this vector.
+
+## round()
+
+Apply round to each component of this vector.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A reference to this vector.
+
+## roundToZero()
+
+Round each component toward zero (floor for positive, ceil for negative).
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A reference to this vector.
+
+## negate()
+
+Negate each component of this vector.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A reference to this vector.
+
+## dot(v)
+
+Calculate the dot product of this vector and another vector.
+
+### Parameters
+
+v* (Autodesk.Viewing.Math.Vector4) | The other vector.
+
+### Returns
+
+type | description
+number | The dot product.
+
+## lengthSq()
+
+Calculate the squared length of this vector.
+
+### Returns
+
+type | description
+number | The squared length.
+
+## length()
+
+Calculate the length of this vector.
+
+### Returns
+
+type | description
+number | The length.
+
+## lengthManhattan()
+
+Calculate the Manhattan length (sum of absolute values) of this vector.
+
+### Returns
+
+type | description
+number | The Manhattan length.
+
+## normalize()
+
+Normalize this vector to unit length.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A reference to this vector.
+
+## setLength(l)
+
+Set the length of this vector. Zero-length vectors are left unchanged.
+
+### Parameters
+
+l* (number) | The desired length.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A reference to this vector.
+
+## lerp(v, alpha)
+
+Set this vector to the linear interpolation between this vector and another vector.
+
+### Parameters
+
+v* (Autodesk.Viewing.Math.Vector4) | The target vector.
+alpha* (number) | The interpolation factor (0-1).
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A reference to this vector.
+
+## lerpVectors(v1, v2, alpha)
+
+Set this vector to the linear interpolation between two vectors.
+
+### Parameters
+
+v1* (Autodesk.Viewing.Math.Vector4) | The start vector.
+v2* (Autodesk.Viewing.Math.Vector4) | The end vector.
+alpha* (number) | The interpolation factor (0-1).
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A reference to this vector.
+
+## equals(v)
+
+Check if this vector equals another vector.
+
+### Parameters
+
+v* (Autodesk.Viewing.Math.Vector4) | The vector to compare.
+
+### Returns
+
+type | description
+boolean | True if all components are equal.
+
+## fromArray(array, offset)
+
+Set this vector from an array.
+
+### Parameters
+
+array* (Array.<number>) | The source array.
+offset (number) | The offset into the array.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A reference to this vector.
+
+## toArray(array, offset)
+
+Convert this vector to an array.
+
+### Parameters
+
+array (Array.<number>) | The target array.
+offset (number) | The offset into the array.
+
+### Returns
+
+type | description
+Array.<number> | The array containing the vector components.
+
+## clone()
+
+Create a clone of this vector.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector4 | A new vector with the same components.

@@ -1,0 +1,35 @@
+https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/interactive_examples/
+Developer's Guide > Interactive Examples
+
+# Interactive Examples
+
+Controlling Viewer states
+
+Learn to programmatically control Viewer states, like exploding a model.
+
+/en/docs/viewer/v7/developers_guide/interactive_examples/example_1/
+Handling Viewer events
+
+Learn to respond to users’ actions and perform tasks based on specific triggers.
+
+/en/docs/viewer/v7/developers_guide/interactive_examples/example_2
+Querying model properties
+
+Add functionality to search for specific model property values and display results in a dialog window.
+
+/en/docs/viewer/v7/developers_guide/interactive_examples/example_3/
+Customizing Viewer UI
+
+Create custom UI elements for unique interactions, like a button that displays a dialog window when clicked.
+
+/en/docs/viewer/v7/developers_guide/interactive_examples/example_4/
+Customizing UI scene
+
+Create and interact with custom three.js geometry that integrates like standard Viewer models.
+
+/en/docs/viewer/v7/developers_guide/interactive_examples/example_5/
+Model aggregation
+
+Combine a Revit model and a Fusion 360 model in the same view.
+
+/en/docs/viewer/v7/developers_guide/interactive_examples/example_6/

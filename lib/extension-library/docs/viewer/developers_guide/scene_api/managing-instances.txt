@@ -1,0 +1,99 @@
+https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/scene_api/managing-instances/
+Developer's Guide > Scene API > Manipulating Instances > Managing Instances
+
+# Managing Instances
+
+All previous examples call InstanceCollection3D.add once and leave the scene unchanged. Real applications need to mutate content at runtime — replacing a material when a status changes, repositioning an object in response to user input, or removing items that are no longer relevant. InstanceCollection3D exposes create, read, update and delete (CRUD) operations for exactly this purpose, each addressable by the numeric instance id returned from InstanceCollection3D.add.
+
+This example animates through the following operations: - adding three spheres - getting the transform of an instance - swapping a material - replacing geometry entirely - moving an instance with a new transform - removing a single instance - clearing the scene to restart the cycle
+
+After each mutation the example calls Viewer3D.refresh to update the view.
+
+See the Pen APS Viewer SDK - Managing Instances by Autodesk Platform Services (@autodesk-platform-services) on CodePen.
+
+## Source
+
+Create, Read, Update, Delete sequence
+
+Each element of the array performs one InstanceCollection3D operation. InstanceCollection3D.add returns an instance id stored in `instanceIds` for use by subsequent steps.
+
+First we create three spheres with different colors and transforms.
+
+```
+// Step 0: add red sphere (left)
+() => {
+    instanceIds.push(
+        instances.add(sphere, matRed, transformA)
+    );
+    console.log('added red sphere at left');
+},
+// Step 1: add green sphere (center)
+() => {
+    instanceIds.push(
+        instances.add(sphere, matGreen, transformB)
+    );
+    console.log('added green sphere at center');
+},
+// Step 2: add blue sphere (right)
+() => {
+    instanceIds.push(
+        instances.add(sphere, matBlue, transformC)
+    );
+    console.log('added blue sphere at right');
+},
+```
+
+We read the transform of the left sphere for later modification and log it to the console.
+
+```
+// Step 3: getTransformWorld - sphere (left)
+() => {
+    instances.getTransformWorld(instanceIds[0], transform);
+    console.log('left sphere transform',  transform);
+},
+```
+
+Here we show how to change materials, geometries and transformations of existing instances.
+
+```
+// Step 4: setMaterial — green → yellow
+() => {
+    instances.setMaterial(
+        instanceIds[1], matYellow
+    );
+    console.log('center sphere now yellow');
+},
+// Step 5: setGeometry — blue sphere → box
+() => {
+    instances.setGeometry(instanceIds[2], box);
+    console.log('right sphere replaced with box');
+},
+// Step 6: setTransformWorld — move red sphere upward
+() => {
+    instances.setTransformWorld(
+        instanceIds[0],
+        transform.multiply(
+            new Matrix4().makeTranslation(
+                0, 1, 0
+            )
+        )
+    );
+    console.log('red sphere moved up');
+},
+```
+
+Instances can be removed individually with InstanceCollection3D.remove or in batches with an array: `InstanceCollection.remove([id1, id2, id3])`.
+
+```
+// Step 7: remove — delete the box
+() => {
+    instances.remove(instanceIds.pop());
+    console.log('right instance deleted');
+},
+// Step 8: reset — remove remaining, restart cycle
+() => {
+    instances.remove(instanceIds);
+    instanceIds = [];
+    console.log('— scene cleared, restarting —');
+}
+```

@@ -8,6 +8,7 @@ import {
   xtermAdapter,
 } from 'libfx/browser'
 import { createViewerWorkspace, type FxExecEvent } from '@/components/ui/fx-terminal/workspace'
+import type { ExtensionRuntime } from '@/lib/extensions/runtime'
 import type { ViewerAgentTools } from '@/lib/viewer-agent-tools'
 
 export type FxColorScheme = 'light' | 'dark'
@@ -28,6 +29,7 @@ export interface FxTerminalSession {
 
 export interface FxTerminalStartOptions {
   tools: ViewerAgentTools
+  extensions?: ExtensionRuntime
   gatewayBase: string
   model: string
   effort: string
@@ -329,6 +331,7 @@ export async function startFxTerminal(
       gatewayBase: options.gatewayBase,
       model: options.model,
       onExec: options.onExec,
+      extensions: options.extensions,
     })
     let modelSaved = () => {}
     const saved = new Promise<void>((resolve) => {

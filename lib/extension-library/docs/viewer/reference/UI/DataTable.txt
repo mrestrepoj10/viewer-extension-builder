@@ -1,0 +1,98 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/UI/DataTable/
+Reference Guide > UI > DataTable
+
+Autodesk.Viewing.UI
+
+# DataTable
+
+## new DataTable(dockingPanel)
+
+UI component in LMV that can be added into the DockingPanels to create custom tables
+
+### Parameters
+
+dockingPanel* (Autodesk.Viewing.UI.DockingPanel) | Instance of the Docking Panel
+
+# Methods
+
+## setData(rowdata, columndata)
+
+Sets the table data
+
+### Parameters
+
+rowdata* (Array.<Array.<Array>>) | The dataset in array of arrays and represents a set of rows
+columndata* (Array) | The dataset in array and represents the column data
+
+## destroyTable()
+
+Destroys the table instance
+
+## setSortFunction(sortFunc)
+
+API to set the custom sorting function
+
+### Parameters
+
+sortFunc* (function) | custom sort function for the table dataset
+
+## getSortFunction()
+
+API to get the custom sorting function
+
+### Returns
+
+type | description
+function | custom sort function set by the setSortFunction method
+
+## restoreDefaultSortFunction()
+
+API to set the default sorting function
+
+## getGroupByColumn(col)
+
+Get the group by given column
+
+### Parameters
+
+col* (number) | column index
+
+### Returns
+
+type | description
+Array.<number> | rowGroups - an array of grouped data, where each group contains numbers that represent the row-indices of the original table dataset.
+
+## groupByColumn(col)
+
+Group by given column
+
+### Parameters
+
+col* (number) | column index
+
+## getAggregate(type, col)
+
+Get aggregation based on the type for the given column
+
+### Parameters
+
+type* (string) | type of aggregation
+col* (number) | column index
+
+### Returns
+
+type | description
+string | the final result of the aggregation
+
+## aggregate(type, col)
+
+Aggregate based on the type for the given column
+
+### Parameters
+
+type* (string) | type of aggregation
+col* (number) | column index
+
+## clearAggregates()
+
+Clears all the aggregations

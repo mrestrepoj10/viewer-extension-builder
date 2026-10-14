@@ -1,0 +1,122 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/ErrorCodes/
+Reference Guide > ErrorCodes
+
+Autodesk.Viewing
+
+# ErrorCodes
+
+Error code constants These constants will be used in Callbacks#onGenericError functions.
+
+# Constants
+
+## UNKNOWN_FAILURE
+
+An unknown failure has occurred.
+
+type
+number
+
+## BAD_DATA
+
+Bad data (corrupted or malformed) was encountered.
+
+type
+number
+
+## NETWORK_FAILURE
+
+A network failure was encountered.
+
+type
+number
+
+## NETWORK_ACCESS_DENIED
+
+Access was denied to a network resource (HTTP 403)
+
+type
+number
+
+## NETWORK_FILE_NOT_FOUND
+
+A network resource could not be found (HTTP 404)
+
+type
+number
+
+## NETWORK_SERVER_ERROR
+
+A server error was returned when accessing a network resource (HTTP 5xx)
+
+type
+number
+
+## NETWORK_UNHANDLED_RESPONSE_CODE
+
+An unhandled response code was returned when accessing a network resource (HTTP ‘everything else’)
+
+type
+number
+
+## BROWSER_WEBGL_NOT_SUPPORTED
+
+Browser error = webGL is not supported by the current browser
+
+type
+number
+
+## BAD_DATA_NO_VIEWABLE_CONTENT
+
+There is nothing viewable in the fetched document
+
+type
+number
+
+## BROWSER_WEBGL_DISABLED
+
+Browser error = webGL is supported, but not enabled
+
+type
+number
+
+## BAD_DATA_MODEL_IS_EMPTY
+
+There is no geometry in loaded model
+
+type
+number
+
+## UNSUPORTED_FILE_EXTENSION
+
+The extension of the loaded file is not supported
+
+type
+number
+
+## VIEWER_INTERNAL_ERROR
+
+Viewer error: wrong or forbidden usage of the viewer
+
+type
+number
+
+## WEBGL_LOST_CONTEXT
+
+WebGL error while loading a model, typically due to IE11 limitations
+
+type
+number
+
+## LOAD_CANCELED
+
+Viewer error because loading a resource was canceled
+
+type
+number
+
+## WEBGPU_LOST_CONTEXT
+
+WebGPU error while loading a model
+
+type
+number

@@ -1,0 +1,18 @@
+https://aps.autodesk.com/en/docs/dataviz/v1/reference/globals/Functions/filterShadingPointsByType/
+Reference Guide > Globals > Functions > filterShadingPointsByType
+
+Functions
+
+# filterShadingPointsByType
+
+Filters out shading points that expose the specified sensor type.
+
+## Parameters
+
+shadingPoints* (Array.<SurfaceShadingPoint>) | The shading points to filter from.
+sensorType* (string) | The type of sensors to filter device with.
+
+## Returns
+
+type | description
+Array.<SurfaceShadingPoint> | The shading points that expose the given sensor type.

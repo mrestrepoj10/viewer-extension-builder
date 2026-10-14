@@ -1,0 +1,14 @@
+{
+  "name": "BasicSkeleton",
+  "displayname": "Basic Skeleton",
+  "description": "Boilerplate: a toolbar button and a selection listener, both removed on unload.",
+  "options": {},
+  "viewerversion": "7.*",
+  "loadonstartup": "false",
+  "filestoload": {
+    "cssfiles": ["main.css"],
+    "jsfiles": ["main.js"]
+  },
+  "includeinlist": "true",
+  "bundleAlias": "BasicSkeleton"
+}

@@ -1,0 +1,72 @@
+.door-schedule-button .adsk-button-icon {
+  min-width: 24px;
+  min-height: 24px;
+  background-color: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M13 4h3a2 2 0 0 1 2 2v14'/%3E%3Cpath d='M2 20h3'/%3E%3Cpath d='M13 20h9'/%3E%3Cpath d='M10 12v.01'/%3E%3Cpath d='M13 4.56v16.01a.5.5 0 0 1-.6.49L5 19.5V5.6a1 1 0 0 1 .77-.97l6-1.5A1 1 0 0 1 13 4.56z'/%3E%3C/svg%3E")
+    center / 22px no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M13 4h3a2 2 0 0 1 2 2v14'/%3E%3Cpath d='M2 20h3'/%3E%3Cpath d='M13 20h9'/%3E%3Cpath d='M10 12v.01'/%3E%3Cpath d='M13 4.56v16.01a.5.5 0 0 1-.6.49L5 19.5V5.6a1 1 0 0 1 .77-.97l6-1.5A1 1 0 0 1 13 4.56z'/%3E%3C/svg%3E")
+    center / 22px no-repeat;
+}
+
+.door-schedule-body {
+  padding: 8px;
+}
+
+.door-schedule-summary,
+.door-schedule-message {
+  margin: 4px 4px 8px;
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+.door-schedule-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.door-schedule-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  row-gap: 2px;
+  align-items: center;
+  min-height: 44px;
+  padding: 6px 10px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.door-schedule-row:hover {
+  background: color-mix(in srgb, currentColor 8%, transparent);
+}
+
+.door-schedule-row:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 1px;
+}
+
+.door-schedule-name {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.door-schedule-count {
+  min-width: 28px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, currentColor 12%, transparent);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.door-schedule-levels {
+  grid-column: 1 / -1;
+  font-size: 12px;
+  opacity: 0.75;
+}

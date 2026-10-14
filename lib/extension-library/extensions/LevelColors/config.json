@@ -1,0 +1,14 @@
+{
+  "name": "LevelColors",
+  "displayname": "Level Colors",
+  "description": "Toolbar button and panel listing the model's levels; picking one colours that level's floors and isolates the level.",
+  "options": {},
+  "viewerversion": "7.*",
+  "loadonstartup": "false",
+  "filestoload": {
+    "cssfiles": ["main.css"],
+    "jsfiles": ["main.js"]
+  },
+  "includeinlist": "true",
+  "bundleAlias": "LevelColors"
+}

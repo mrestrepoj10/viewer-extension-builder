@@ -1,0 +1,114 @@
+https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/scene_api/detach-and-reattach/
+Developer's Guide > Scene API > Scene Graph > Detach and Reattach
+
+# Detach and Reattach
+
+This example demonstrates moving a scene graph node from one parent to another at runtime — without recreating or modifying any geometry or material. Two Node3D pivots spin in opposite directions on screen. Every two seconds a shared InstanceNode3D box is moved from whichever pivot currently owns it to the other, causing it to instantly begin orbiting the new pivot.
+
+The key lessons are that node transformations are relative to their parent and that nodes can be attached to or detached from the InstanceCollection3D at runtime.
+
+Detaching a node with remove() takes it out of the InstanceCollection3D but preserves the entire subtree — its transform hierarchy, geometry, and material all stay intact. When you reattach that subtree with add(), its instances are recreated relative to the new parent, so the node keeps its local transform but inherits the world transform of wherever you drop it. Because the box carries the same lateral offset throughout, moving it between pivots is enough to make it orbit a different centre without touching any geometry.
+
+See the Pen APS Viewer SDK - Detach and Reattach by Autodesk Platform Services (@autodesk-platform-services) on CodePen.
+
+## Source
+
+1. Set up two rotating pivots and the shared child
+
+Both pivots attach directly to the scene graph root. The box starts on `pivotA` with a lateral offset so it orbits visibly around the pivot centre.
+
+```
+// --- Two rotating pivots, side by side ---
+const pivotA = new avs.Node3D();
+pivotA.position.set(-2, 0, 0);
+root.add(pivotA);
+
+const pivotB = new avs.Node3D();
+pivotB.position.set(2, 0, 0);
+root.add(pivotB);
+
+// Visual markers so the pivots are visible
+const markerGeom = () =>
+    avs.GeometryFactory.createSphere(0.35, 8, 8);
+const markerMatA = new avs.StandardMaterial({
+    color: 0xff6644
+});
+const markerMatB = new avs.StandardMaterial({
+    color: 0x44bb44
+});
+
+pivotA.add(
+    new avs.InstanceNode3D(markerGeom(), markerMatA)
+);
+pivotB.add(
+    new avs.InstanceNode3D(markerGeom(), markerMatB)
+);
+
+// --- The box that will alternate between pivots ---
+// Offset on X so it orbits around the pivot center
+const boxGeom = avs.GeometryFactory.createBox(
+    1, 1, 1
+);
+const boxMat = new avs.StandardMaterial({
+    color: 0x44aaff
+});
+const box = new avs.InstanceNode3D(boxGeom, boxMat);
+box.position.set(1.5, 0, 0);
+
+// Start attached to pivot A
+let currentParent = pivotA;
+pivotA.add(box);
+```
+
+2. Reparent on a timer
+
+remove() then add() is the complete reparenting sequence.
+
+```
+setInterval(() => {
+    const newParent =
+        currentParent === pivotA ? pivotB : pivotA;
+
+    currentParent.remove(box);
+    console.log(
+        'Detached from',
+        currentParent === pivotA ? 'A' : 'B'
+    );
+
+    newParent.add(box);
+    console.log(
+        'Attached to',
+        newParent === pivotA ? 'A' : 'B'
+    );
+
+    currentParent = newParent;
+}, 2000);
+```
+
+3. Animation loop
+
+The two pivots spin in opposite directions. markDirty() on each pivot flags their subtrees. root.updateTransformWorld() recomputes only those subtrees and synchronizes back the transformations to InstanceCollection3D
+
+```
+let time = 0;
+const zAxis = new avm.Vector3(0, 0, 1);
+
+const animate = () => {
+    time += 0.016;
+
+    pivotA.quaternion.setFromAxisAngle(
+        zAxis, time * 1.5
+    );
+    pivotA.markDirty();
+
+    pivotB.quaternion.setFromAxisAngle(
+        zAxis, -time * 1.5
+    );
+    pivotB.markDirty();
+
+    root.updateTransformWorld();
+    viewer.refresh(true);
+    requestAnimationFrame(animate);
+};
+animate();
+```

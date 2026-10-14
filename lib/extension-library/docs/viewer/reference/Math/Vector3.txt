@@ -1,0 +1,719 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/Math/Vector3/
+Reference Guide > Math > Vector3
+
+Autodesk.Viewing.Math
+
+# Vector3
+
+## new Vector3(x, y, z)
+
+A 3D vector with components x, y and z.
+
+### Parameters
+
+x (number) | The x component (defaults to 0).
+y (number) | The y component (defaults to 0).
+z (number) | The z component (defaults to 0).
+
+# Properties
+
+x (number) | The x component of the vector.
+y (number) | The y component of the vector.
+z (number) | The z component of the vector.
+
+# Methods
+
+## set(x, y, z)
+
+Set the components of this vector.
+
+### Parameters
+
+x* (number) | The x component.
+y* (number) | The y component.
+z* (number) | The z component.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## setX(x)
+
+Set the x component of this vector.
+
+### Parameters
+
+x* (number) | The x component.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## setY(y)
+
+Set the y component of this vector.
+
+### Parameters
+
+y* (number) | The y component.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## setZ(z)
+
+Set the z component of this vector.
+
+### Parameters
+
+z* (number) | The z component.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## setComponent(index, value)
+
+Set a component by index.
+
+### Parameters
+
+index* (number) | The component index (0=x, 1=y, 2=z).
+value* (number) | The value to set.
+
+## getComponent(index)
+
+Get a component by index.
+
+### Parameters
+
+index* (number) | The component index (0=x, 1=y, 2=z).
+
+### Returns
+
+type | description
+number | The component value.
+
+## clone()
+
+Create a clone of this vector.
+
+### Returns
+
+type | description
+Vector3 | A new vector with the same components.
+
+## copy(v)
+
+Copy the components from another vector.
+
+### Parameters
+
+v* (Vector3) | The vector to copy.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## add(v)
+
+Add a vector to this vector.
+
+### Parameters
+
+v* (Vector3) | The vector to add.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## addScalar(s)
+
+Add a scalar to each component of this vector.
+
+### Parameters
+
+s* (number) | The scalar to add.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## addVectors(a, b)
+
+Set this vector to the sum of two vectors.
+
+### Parameters
+
+a* (Vector3) | The first vector.
+b* (Vector3) | The second vector.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## addScaledVector(v, s)
+
+Add a scaled vector to this vector.
+
+### Parameters
+
+v* (Vector3) | The vector to scale and add.
+s* (number) | The scale factor.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## sub(v)
+
+Subtract a vector from this vector.
+
+### Parameters
+
+v* (Vector3) | The vector to subtract.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## subScalar(s)
+
+Subtract a scalar from each component of this vector.
+
+### Parameters
+
+s* (number) | The scalar to subtract.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## subVectors(a, b)
+
+Set this vector to the difference of two vectors.
+
+### Parameters
+
+a* (Vector3) | The first vector.
+b* (Vector3) | The second vector.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## multiply(v)
+
+Multiply this vector by another vector component-wise.
+
+### Parameters
+
+v* (Vector3) | The vector to multiply by.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## multiplyScalar(scalar)
+
+Multiply this vector by a scalar.
+
+### Parameters
+
+scalar* (number) | The scalar to multiply by.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## multiplyVectors(a, b)
+
+Set this vector to the component-wise product of two vectors.
+
+### Parameters
+
+a* (Vector3) | The first vector.
+b* (Vector3) | The second vector.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## applyMatrix3(m)
+
+Apply a 3x3 matrix to this vector.
+
+### Parameters
+
+m* (Matrix3) | The matrix to apply.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## applyMatrix4(m)
+
+Apply a 4x4 affine matrix to this vector.
+
+### Parameters
+
+m* (Matrix4) | The affine matrix to apply.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## applyProjection(m)
+
+Apply a 4x4 projection matrix to this vector.
+
+### Parameters
+
+m* (Matrix4) | The projection matrix to apply.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## applyQuaternion(q)
+
+Apply a quaternion rotation to this vector.
+
+### Parameters
+
+q* (Quaternion) | The quaternion to apply.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## transformDirection(m)
+
+Transform this vector interpreted as a direction by a 4x4 affine matrix.
+
+### Parameters
+
+m* (Matrix4) | The affine matrix to apply.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## divide(v)
+
+Divide this vector by another vector component-wise.
+
+### Parameters
+
+v* (Vector3) | The vector to divide by.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## divideScalar(scalar)
+
+Divide this vector by a scalar.
+
+### Parameters
+
+scalar* (number) | The scalar to divide by.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## min(v)
+
+Set each component to the minimum of this vector and another vector.
+
+### Parameters
+
+v* (Vector3) | The other vector.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## max(v)
+
+Set each component to the maximum of this vector and another vector.
+
+### Parameters
+
+v* (Vector3) | The other vector.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## clamp(min, max)
+
+Clamp this vector between min and max vectors.
+
+### Parameters
+
+min* (Vector3) | The minimum values.
+max* (Vector3) | The maximum values.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## clampScalar(minVal, maxVal)
+
+Clamp each component between scalar min and max values.
+
+### Parameters
+
+minVal* (number) | The minimum scalar value.
+maxVal* (number) | The maximum scalar value.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## floor()
+
+Apply Math.floor to each component of this vector.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## ceil()
+
+Apply Math.ceil to each component of this vector.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## round()
+
+Apply Math.round to each component of this vector.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## roundToZero()
+
+Round each component toward zero (floor for positive, ceil for negative).
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## negate()
+
+Negate each component of this vector.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## dot(v)
+
+Calculate the dot product of this vector and another.
+
+### Parameters
+
+v* (Vector3) | The other vector.
+
+### Returns
+
+type | description
+number | The dot product.
+
+## lengthSq()
+
+Calculate the squared length of this vector.
+
+### Returns
+
+type | description
+number | The squared length.
+
+## length()
+
+Calculate the length of this vector.
+
+### Returns
+
+type | description
+number | The length.
+
+## lengthManhattan()
+
+Calculate the Manhattan length (L1 norm) of this vector.
+
+### Returns
+
+type | description
+number | The Manhattan length.
+
+## normalize()
+
+Normalize this vector to unit length.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## setLength(l)
+
+Set the length of this vector. A zero vector will not be modified.
+
+### Parameters
+
+l* (number) | The new length.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## lerp(v, alpha)
+
+Set this vector to the linear interpolation between this vector and another.
+
+### Parameters
+
+v* (Vector3) | The target vector.
+alpha* (number) | The interpolation factor between 0 and 1.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## lerpVectors(v1, v2, alpha)
+
+Set this vector to the linear interpolation between two vectors.
+
+### Parameters
+
+v1* (Vector3) | The start vector.
+v2* (Vector3) | The end vector.
+alpha* (number) | The interpolation factor between 0 and 1.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## cross(v)
+
+Set this vector to the cross product of this vector and another.
+
+### Parameters
+
+v* (Vector3) | The other vector.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## crossVectors(a, b)
+
+Set this vector to the cross product of two vectors.
+
+### Parameters
+
+a* (Vector3) | The first vector.
+b* (Vector3) | The second vector.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## projectOnVector(vector)
+
+Project this vector onto another vector.
+
+### Parameters
+
+vector* (Vector3) | The vector to project onto.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## projectOnPlane(planeNormal)
+
+Project this vector onto a plane orthogonal to the given normal.
+
+### Parameters
+
+planeNormal* (Vector3) | The plane normal.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## reflect(normal)
+
+Reflect this vector off a plane orthogonal to the given normal.
+
+### Parameters
+
+normal* (Vector3) | The plane normal (assumed to have unit length).
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## distanceTo(v)
+
+Calculate the distance from this vector to another.
+
+### Parameters
+
+v* (Vector3) | The other vector.
+
+### Returns
+
+type | description
+number | The distance.
+
+## distanceToSquared(v)
+
+Calculate the squared distance from this vector to another.
+
+### Parameters
+
+v* (Vector3) | The other vector.
+
+### Returns
+
+type | description
+number | The squared distance.
+
+## setFromMatrixPosition(m)
+
+Set this vector from the position component of a 4x4 matrix.
+
+### Parameters
+
+m* (Matrix4) | The matrix.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## setFromMatrixScale(m)
+
+Set this vector from the scale components of a 4x4 matrix.
+
+### Parameters
+
+m* (Matrix4) | The matrix.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## setFromMatrixColumn(index, matrix)
+
+Set this vector from a column of a matrix.
+
+### Parameters
+
+index* (number) | The column index between 0 and 3.
+matrix* (Matrix4) | The matrix.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## equals(v)
+
+Check if this vector equals another vector.
+
+### Parameters
+
+v* (Vector3) | The vector to compare.
+
+### Returns
+
+type | description
+boolean | True if the vectors are equal.
+
+## fromArray(array, offset)
+
+Set this vector from an array.
+
+### Parameters
+
+array* (Array.<number>) | The source array.
+offset (number) | The offset into the array.
+
+### Returns
+
+type | description
+Vector3 | A reference to this vector.
+
+## toArray(array, offset)
+
+Convert this vector to an array.
+
+### Parameters
+
+array (Array.<number>) | The target array.
+offset (number) | The offset into the array.
+
+### Returns
+
+type | description
+Array.<number> | The array [x, y, z].
+
+## isFinite()
+
+Check if all components of a vector are finite.
+
+### Returns
+
+type | description
+boolean | True if all components are finite.

@@ -1,0 +1,107 @@
+https://aps.autodesk.com/en/docs/dataviz/v1/developers_guide/examples/sprites/handling_sprite_events/
+Developer's Guide > Examples > Sprites > Handling Sprite Events
+
+# Handling Sprite Events
+
+When a user interacts with sprite viewables using a mouse, the Data Visualization extension raises two types of events for these interactions:
+
+1. `Autodesk.DataVisualization.Core.MOUSE_HOVERING` - When a user hovers over or off a sprite.
+2. `Autodesk.DataVisualization.Core.MOUSE_CLICK` - When a user clicks on a sprite.
+
+## Mouse hovering event
+
+When a user hovers on or off a sprite, the viewer dispatches the following event:
+
+```
+const event = {
+    type: "DATAVIZ_OBJECT_HOVERING", // Event identifier
+    dbId: 123, // `dbId` of sprite that the mouse hovers on/off
+    hovering: true, // `true` as mouse hovers over the sprite, or `false` otherwise
+    originalEvent: {}, // The original JavaScript `MouseEvent` object
+};
+```
+
+## Mouse clicking event
+
+When a user clicks on a sprite, the viewer dispatches the following event:
+
+```
+const event = {
+    type: "DATAVIZ_OBJECT_CLICK", // Event identifier
+    dbId: 123, // `dbId` of sprite that is clicked on
+    originalEvent: {}, // The original JavaScript `MouseEvent` object
+};
+```
+
+## Example
+
+In your application, you can create event listeners for each of these events and configure them as shown below. In each function, `event` refers to the dispatched event type defined above.
+
+```
+function onSpriteHovering(event) {
+    const targetDbId = event.dbId;
+
+    if (event.hovering) {
+        console.log(`The mouse hovers over ${targetDbId}`);
+    } else {
+        console.log(`The mouse hovers off ${targetDbId}`);
+    }
+}
+
+function onSpriteClicked(event) {
+    console.log(`Sprite clicked: ${event.dbId}`);
+}
+
+// Register event handlers for these two events.
+const DataVizCore = Autodesk.DataVisualization.Core;
+viewer.addEventListener(DataVizCore.MOUSE_HOVERING, onSpriteHovering);
+viewer.addEventListener(DataVizCore.MOUSE_CLICK, onSpriteClicked);
+```
+
+## Determining Which Sprite Icon Was Clicked By The User
+
+To make it easy to determine which sprite (icon) is clicked by the user, append a custom attribute to the viewable object. The following code snippet illustrates the way to associate additional data of a sensor device with its corresponding `SpriteViewable`. The client code can retrieve this associated data (i.e., `myContextData` below) in a click event handler by obtaining the `SpriteViewable` from the `dbId` parameter:
+
+```
+let viewableData = null;
+
+function initializeApp() {
+    // Create a sprite viewable for a physical sensor with an assigned
+    // `dbId` of `123`. Both parameters `position` and `style` are skipped
+    // here for clarity. Please refer to the developer's guide for details.
+    //
+    const DataVizCore = Autodesk.DataVisualization.Core;
+    mySensorSprite = new DataVizCore.SpriteViewable(position, style, 123);
+
+    // Tag custom data on this instance of `SpriteViewable` for later use.
+    mySensorSprite.myContextData = {
+        sensorManufacturer: "Imaginary Co. Ltd.",
+        sensorModel: "BTE-2900x",
+        labels: ["In Service", "Passive"],
+    };
+
+    viewableData = new DataVizCore.ViewableData();
+    viewableData.addViewable(mySensorSprite);
+
+    await viewableData.finish();
+    dataVizExtn.addViewables(viewableData);
+}
+
+// In the handler for `MOUSE_CLICK` event...
+function onSensorSpriteClicked(event) {
+    // The identifier of the `SpriteViewable` that is being clicked.
+    const targetDbId = event.dbId;
+
+    // Look up the corresponding sprite viewable from `viewableData`.
+    const viewables = viewableData.viewables;
+    const viewable = viewables.find((v) => v.dbId === targetDbId);
+
+    if (viewable && viewable.myContextData) {
+        const data = viewable.myContextData;
+        console.log(`Sensor model: ${data.sensorModel}`);
+        // Should print "Sensor model: BTE-2900x"
+    }
+}
+```
+
+Note: the `dbId` will need to be a unique number, and if using x, y, z position, will need to be a number not associated with any objects.

@@ -1,0 +1,108 @@
+https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/scene_api/concepts/
+Developer's Guide > Scene API > Concepts
+
+# Concepts
+
+## What is the Scene API?
+
+The Scene API is the unified API for creating and placing custom 3D content in the viewer. It lets you:
+
+- Build models entirely in code — no file upload required.
+- Add geometry, assign materials, and position content programmatically.
+- Modify the appearance of instances in loaded models.
+- Place custom content on overlay or underlay render layers.
+
+Custom content is organized as individual renderable units that combine a geometry shape, a material, and a transform. You create and manipulate instances through the InstanceCollection3D API.
+
+## Core Types
+
+This section is a quick reference. Each type is covered in depth in the example pages that follow.
+
+### Model
+
+A Model is a container that can hold content loaded from a design file or content you construct yourself at runtime — the rendering pipeline treats both the same way. It holds an InstanceCollection3D (its instances), an optional object tree (its logical object hierarchy), and an optional scene graph of Node3D groups.
+
+### InstanceCollection3D
+
+The primary API surface for the model’s content. Access it via `model.getInstances()`. It stores all instances in the model as a flat, addressable collection.
+
+### Instance
+
+The central renderable unit: geometry + material + transform + visibility. There is no `Instance` class to construct directly — the collection manages the storage and addresses instances by id. Think of an instance as a single draw call: one shape, one material, one position in the world.
+
+### Geometry (BufferGeometry)
+
+Vertex data describing a shape. A BufferGeometry holds typed-array attributes: - `position` (3D vertex positions, required) - `normal` (surface normals, required for lit materials) - `uv` (texture coordinates, optional) - `color` (per-vertex color, optional)
+
+Geometry is covered in the Geometry and First Render section (Hello Triangle through Working with Buffers).
+
+### Material
+
+Controls the appearance of individual instances. There are four material types: StandardMaterial for shaded (Phong) opaque or transparent surfaces that respond to scene lighting, UnlitMaterial for flat color or texture with no lighting (HUD elements, labels), LineMaterial for line primitives (wireframes, guides, annotations), and PointsMaterial for point-cloud or particle rendering.
+
+These are covered in the Materials section.
+
+### Transform
+
+A per-instance Matrix4 that defines the transformation relative to the model space. The matrix defines translation, rotation and scale of the instance. If not specified, the instance is placed at the model origin with no rotation or scale.
+
+### ObjectTree
+
+An object represents a logical model component (assembly, part, room) and is identified by a `dbId`. Each object can have one or more instances as its renderable representation.
+
+Objects are structured in a hierarchy called ObjectTree. This hierarchy may be used to describe how parts are assembled — which components belong to which sub-assemblies.
+
+Access it via Model.getObjectTree, which returns an object tree. To iterate the instances that belong to a given object, use `objectTree.enumNodeInstances(dbId, callback)`.
+
+The object tree is covered in depth in the Loaded Models section (Wrapping Loaded Instances).
+
+### Scene Graph
+
+An optional, programmatically-built tree of Node3D groups that lets you group instances under a common transform. It lets you interact with instances and groups of instances in an object-oriented way, for example, to move a whole sub-assembly by translating its parent node.
+
+The scene graph is not present on a model by default — you build it only when you need it.
+
+See the Scene Graph section for usage details (Building a Hierarchy) and (Wrapping Loaded Instances).
+
+## Object vs. Instance
+
+The Scene API exposes two parallel concepts that are easy to confuse:
+
+- Object: A logical model component — an assembly, a part, a room. Objects are identified by a `dbId` (database id), can be selected, and carry property-database metadata. Viewer features such as isolate, hide, and theming operate on objects via their `dbId`.
+- Instance A renderable piece of geometry with a material and a transform. One object can consist of one or more instances — for example, a door object might have separate instances for the knob (brass material) and the frame (wood material), each with its own geometry and appearance.
+
+Concrete example:
+
+A Door object has `dbId=42`. It has two instances:
+
+- Instance A — door frame, wood material.
+- Instance B — door knob, brass material.
+
+Calling `viewer.isolate([42])` affects the object (both instances disappear from the screen). Calling `instances.setMaterial(instanceB_id, goldMat)` affects only the knob’s instance, leaving the frame unchanged.
+
+As a rule of thumb: customize appearance at the instance level; organize and query design intent at the object level.
+
+Each concept has its own place to live, and keeping the two straight is the single most important conceptual step in the Scene API:
+
+- The Object Tree is a hierarchy of objects, identified by `dbId`. Use it for selection, property queries, and isolate/hide by part. A loaded model has an object tree; a fully dynamic model you build in code does not.
+- The InstanceCollection is a flat list of instances — it has no parent/child relationships. Use it for geometry assignment, materials, transforms, and visibility.
+- The Scene Graph is an optional, programmatic hierarchy of transform groups you build yourself, for animation, reparenting, and grouping assemblies. It has no relationship to the object tree.
+
+## How Content Reaches the Screen
+
+There are two ways to make a model visible in the viewer.
+
+Main content
+
+Use Viewer3D.showModel to add a model to the main scene. This is also where loaded models normally live, and it’s where most examples place app-created content. Models in the main scene are rendered progressively (across multiple frames) to maintain a constant frame rate.
+
+Render layers (overlays and underlays)
+
+Use `viewer.layers` to place content on a named render layer with explicit render ordering. Models in render layers are rendered all at once every frame. As a result, render layers are not suitable for complex models.
+
+There are two types of render layers:
+
+- Main — rendered before or after the main scene content into the main render target.
+- Overlay — rendered after each progressive frame of the main scene and blended with the main scene content. Overlays can be rendered independent of the main scene.
+
+See the Render layers section for details.

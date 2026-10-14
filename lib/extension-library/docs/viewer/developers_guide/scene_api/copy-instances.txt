@@ -1,0 +1,58 @@
+https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/scene_api/copy-instances/
+Developer's Guide > Scene API > Loaded Models > Copy Instances
+
+# Copy Instances
+
+While Wrapping Loaded Instances only changes loaded instances, sometimes you need a true copy — separate geometry and material in a new model, independent from the source.
+
+This example reads geometry and material from a loaded model’s InstanceCollection3D and reproduces them in a fresh dynamic model. The copy can then be manipulated (moved, recolored, hidden) without affecting the original because it lives in an entirely separate InstanceCollection3D.
+
+The workflow mirrors the wrapping pattern: resolve instance ids from dbIds via the object tree, then clone geometry and material from InstanceCollection3D.getGeometry / InstanceCollection3D.getMaterial on the source collection and pass them to InstanceCollection3D.add on the new one, offsetting the transform so both copies stay visible. Geometries and materials are owned by their model and can’t be shared across models — always clone first.
+
+This is useful for snapshots that outlive the original load state.
+
+Opt-In feature — required for loaded models.
+
+Enable the Scene API before `Autodesk.Viewing.Initializer`:
+
+```
+FeatureFlags.set(Autodesk.Viewing.PublicFeatureFlags.SceneAPI, true);
+
+Autodesk.Viewing.Initializer(options, function() {
+    // ... create viewer, load document ...
+});
+```
+
+See the Pen APS Viewer SDK - Copy Instances by Autodesk Platform Services (@autodesk-platform-services) on CodePen.
+
+## Source
+
+Copy instances into a new dynamic model
+
+```
+// Create a new dynamic model to hold the copied instances.
+const copyModel = new av.Model();
+viewer.showModel(copyModel);
+const copyCollection = copyModel.getInstances();
+
+// Copy geometry from the source into the new collection.
+// We apply a translation so the copies are separate from
+// the originals.
+const offsetTransform = new avm.Matrix4()
+  .makeTranslation(0, 0, 10);
+
+const mat = new avs.StandardMaterial({color: '#ffff00'});
+const tmpMatrix = new avm.Matrix4();
+for (const instanceId of instanceIds) {
+  const geom = instances.getGeometry(instanceId);
+
+  // Compose original transform with offset
+  const origTransform = instances.getTransformWorld(
+    instanceId, tmpMatrix
+  );
+  const copyTransform = offsetTransform.clone();
+  copyTransform.multiply(origTransform);
+
+  copyCollection.add(geom.clone(), mat, copyTransform);
+}
+```

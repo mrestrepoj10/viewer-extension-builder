@@ -1,0 +1,92 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/GeolocationExtension/
+Reference Guide > Extensions > GeolocationExtension
+
+Autodesk.Viewing.Extensions
+
+# GeolocationExtension
+
+Provides functions for converting GPS coordinates in WGS-84 format { x: Longitude, y: Latitude, z: Height(m) } into Viewer scene coordinates, and back. Supports a single model loaded into the scene.
+
+The extension id is: `Autodesk.Geolocation`
+
+## new GeolocationExtension(viewer, options)
+
+### Parameters
+
+viewer* (Autodesk.Viewing.Viewer3D) | The Viewer instance
+options (object) | Not used
+
+### Examples
+
+```
+viewer.loadExtension('Autodesk.Geolocation')
+```
+
+# Methods
+
+## activate()
+
+When active, the extension will detect clicks on the model and will place a marker on the model. A panel will be displayed containing vertices clicked on the model. Each point-entry will also contain GPS its associated GPS position.
+
+## deactivate()
+
+Stops detecting click events on the canvas and closes the Panel.
+
+## isActive()
+
+Whether the extension is active. When the extension is active, click events will be processed and added into a Panel.
+
+### Returns
+
+type | description
+boolean | True if the extension is active.
+
+## hasGeolocationData()
+
+### Returns
+
+type | description
+boolean | true when the model contains geolocation data.
+
+## lmvToLonLat(lmvPoint)
+
+Converts viewer coordinates (obtained with something like `viewer.clientToWorld()`) into { x: Longitude, y: Latitude, z: Height (meters) } in WGS-84 format.
+
+### Parameters
+
+lmvPoint* (Autodesk.Viewing.Math.Vector3) | 3D point in the scene
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector3 | GPS coordinate in WGS-84 format: { x: Longitude, y: Latitude, z: Height }
+
+## lonLatToLmv(lonLat)
+
+Converts coordinates from { x: Longitude, y: Latitude, z: Height (meters) } in WGS-84 format into viewer scene coordinates.
+
+### Parameters
+
+lonLat* (Autodesk.Viewing.Math.Vector3) | GPS coordinate in WGS-84 format: { x: Longitude, y: Latitude, z: Height }
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector3 | 3D point in the scene
+
+## openGoogleMaps(pointLL84)
+
+Returns a Google Maps URL with a PIN on the specified GPS location. When no argument is provided, the URL will use the Model’s geolocation if available.
+
+### Parameters
+
+pointLL84 (Autodesk.Viewing.Math.Vector3) | GPS location in WGS-84 format: { x: Longitude, y: Latitude }. Height is ignored.
+
+## getCurrentPositionLmv()
+
+Returns a Promise that resolves with a position in Viewer-space coordinates based on the device’s real world GPS position.
+
+### Returns
+
+type | description
+Promise | that resolves with a Autodesk.Viewing.Math.Vector3 containing Viewer-space coordinates. It rejects if device’s real world GPS position is not available.

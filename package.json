@@ -8,15 +8,21 @@
     "start": "next start",
     "lint": "eslint",
     "format": "biome format --write .",
-    "check": "biome check ."
+    "check": "biome check .",
+    "docs:build": "node lib/extension-library/scripts/build-docs-index.mts",
+    "docs:regen": "node lib/extension-library/scripts/build-workspace-files.mts"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
     "@xterm/addon-fit": "^0.11.0",
     "@xterm/xterm": "^6.0.0",
+    "acorn": "8.19.0",
     "aec-auth": "^0.3.1",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.4.0",
+    "eslint-linter-browserify": "10.12.0",
+    "fflate": "^0.8.3",
+    "globals": "17.13.0",
     "just-bash": "^3.6.0",
     "libfx": "0.0.13",
     "lucide-react": "^1.55.0",

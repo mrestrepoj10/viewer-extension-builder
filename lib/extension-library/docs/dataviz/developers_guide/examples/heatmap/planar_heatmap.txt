@@ -1,0 +1,132 @@
+https://aps.autodesk.com/en/docs/dataviz/v1/developers_guide/examples/heatmap/planar_heatmap/
+Developer's Guide > Examples > Heatmap > Creating a Planar Heatmap
+
+# Creating a Planar Heatmap
+
+The following image illustrates the difference between a volumetric heatmap (top) and a planar heatmap (bottom):
+
+## Setting up a Planar Heatmap
+
+A planar heatmap is a heatmap rendered as a projection on a plane. The way to set up a planar heatmap is largely the same as setting up a volumetric heatmap for rooms.
+
+The following code snippet shows how to create a planar heatmap, using a third parameter `options` to the `setupSurfaceShading` endpoint:
+
+```
+const shadingData = generateSurfaceShadingData(devices);
+await dataVizExtn.setupSurfaceShading(model, shadingData, {
+    type: "PlanarHeatmap",
+    placementPosition: 0.0,
+    slicingEnabled: true,
+});
+
+// Register a few color stops for sensor values in range [0.0, 1.0]
+const sensorType = "Temperature";
+const sensorColors = [0x0000ff, 0x00ff00, 0xffff00, 0xff0000];
+dataVizExtn.registerSurfaceShadingColors(sensorType, sensorColors);
+```
+
+Options:
+
+- `type` - To create a planar heatmap, set this value to `"PlanarHeatmap"`. Note that `setupSurfaceShading` ignores the `options` parameter unless you explicitly set `options.type` to `"PlanarHeatmap"`.
+- `width` - Optional. The width, in pixels, of the underlying texture to use when rendering the heatmap. If the bounding box of the geometry turns out to be portrait, `setupSurfaceShading` will adjust the `width` value with respect to the `height` to preserve the aspect ratio. If not specified, the default value is `1024` pixels.
+- `height` - Optional. The height, in pixels, of the underlying texture to use when rendering the heatmap. If the bounding box of the geometry turns out to be landscape, `setupSurfaceShading` will adjust the `height` value with respect to the `width` to preserve the aspect ratio. If not specified, the default value is `1024` pixels.
+- `slicingEnabled` - Optional. Set this to `true` to enable geometry slicing by using the `CompGeom` viewer extension. `setupSurfaceShading` will try to use edges as boundaries for irregularly shaped geometries, but this may fail for complex geometries. If you set this to `false`, this uses the axis-aligned bounding boxes of relevant geometries to display the heatmap texture. If you don’t specify a value, the default value is `true`.
+- `slicingPosition` - Optional. A number representing the point at which slicing should happen. Valid values are in the range `[0.0, 1.0]`. If not specified, `setupSurfaceShading` will use the default value of `0.5`, and slice geometry through the vertical midpoint of the bounding box. `setupSurfaceShading` will only use this value if `options.slicingEnabled` is set to `true`.
+- `placementPosition` - Optional. A number indicating the placement position of the resulting plane. Valid values are in the range `[0.0, 1.0]`. When set to `0.0` (the default), this positions the plane at the lowest `z` coordinate of the bounding box. When set to `1.0`, this positions the plane at the highest point of the bounding box.
+- `minOpacity` - Optional. A number indicating the minimum heatmap opacity that the lowest sensor value will have. Valid values are in the range `[0.0, 1.0]`. When `minOpacity = 0.0` (the default), both `renderSurfaceShading` and `updateSurfaceShading` render the lowest sensor value with full transparency. When `minOpacity = 1.0` they render the lowest sensor value fully opaque.
+- `maxOpacity` - Optional. A number indicating the maximal heatmap opacity that the highest sensor value will have. Valid values are in the range `[0.0, 1.0]`. When `maxOpacity = 0.0`, both `renderSurfaceShading` and `updateSurfaceShading` render the highest sensor value with full transparency. When `maxOpacity = 1.0` (the default), they render the highest sensor value fully opaque.
+
+## Rendering the Heatmaps
+
+Rendering a planar heatmap follows the exact same pattern as rendering a volumetric heatmap. The only difference is that you pass a third parameter, `pointData`, to the callback function, as shown below:
+
+```
+// Function that provides a [0,1] value for the planar heatmap
+function getSensorValue(surfaceShadingPoint, sensorType, pointData) {
+    /**
+     * The position of `surfaceShadingPoint` expressed in coordinate values
+     * with respect to the top-left corner of the underlying texture. For
+     * example, with a texture of dimensions 2048x1024 pixels, a point located
+     * at the mid-point of the texture would be { x: 1024, y: 512 }. The
+     * texture dimension is determined when the planar heatmap was set up.
+     */
+    const { x, y } = pointData;
+
+    /**
+     * The client implementation of `getSensorValue` callback can optionally
+     * make use of the coordinate values to compute the normalized value of
+     * this given `surfaceShadingPoint`.
+     */
+    const sensorValue = computeSensorValue(x, y);
+    return clamp(sensorValue, 0.0, 1.0);
+}
+
+// This value can also be a room instead of a floor
+const floorName = "01 - Entry Level";
+const sensorType = "Temperature";
+dataVizExtn.renderSurfaceShading(floorName, sensorType, getSensorValue);
+```
+
+Apart from the third parameter to the callback function, the rendering/updating of a planar heatmap is identical to that of the regular volumetric heatmap.
+
+For more advanced configuration of planar heatmaps, please refer to Using Advanced Planar Heatmap Options.
+
+## Applying a Planar Heatmap to a 2D model
+
+Planar heatmaps can also be applied to 2D models in the same manner as described above. For complex geometries, ensure that the `slicingEnabled` is set to `false` in the options object.
+
+The example below utilizes a sample AutoCAD file available at - https://download.autodesk.com/us/samplefiles/acad/architectural_example-imperial.dwg which contains a 2D scene with no built-in room geometries. The following code snippets shows how to add a planar heatmap by manually constructing a SurfaceShadingData object. To learn more about the structure of SurfaceShadingData, see Applying Heatmaps to Arbitrary Models
+
+### Example 1 - Constructing SurfaceShadingData
+
+```
+const data = [
+    {
+        id: 1,
+        position: new THREE.Vector3(6.53, 7.42),
+        sensorTypes: ["temperature"],
+        dbIds: [306, 313, 626, 636],
+    },
+    {
+        id: 2,
+        position: new THREE.Vector3(6.53, 5.34),
+        sensorTypes: ["temperature"],
+        dbIds: [315, 316, 635, 637],
+    },
+    {
+        id: 3,
+        position: new THREE.Vector3(6.53, 3.27),
+        sensorTypes: ["temperature"],
+        dbIds: [311, 314, 634, 638],
+    },
+    {
+        id: 4,
+        position: new THREE.Vector3(6.53, 1.24),
+        sensorTypes: ["temperature"],
+        dbIds: [307, 308, 309, 310, 312, 639],
+    },
+];
+// <Code to initialize and render sprites not shown>
+
+const {
+    SurfaceShadingData,
+    SurfaceShadingPoint,
+    SurfaceShadingNode,
+} = Autodesk.DataVisualization.Core;
+
+const shadingNode = new SurfaceShadingNode("Sensor A", 307);
+data.forEach((obj, index) => {
+    const pt = new SurfaceShadingPoint("Device " + index, obj.position, obj.sensorTypes);
+    shadingNode.addPoint(pt);
+});
+
+const heatmapData = new SurfaceShadingData();
+heatmapData.addChild(shadingNode);
+heatmapData.initialize(model);
+
+await dataVizExtn.setupSurfaceShading(model, heatmapData, {
+    type: "PlanarHeatmap",
+    slicingEnabled: false,
+});
+dataVizExtn.renderSurfaceShading("Sensor A", "temperature", Math.random, 250); // 250 = confidence size.
+```

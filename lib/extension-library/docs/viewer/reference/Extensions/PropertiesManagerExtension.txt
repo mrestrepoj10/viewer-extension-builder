@@ -1,0 +1,79 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/PropertiesManagerExtension/
+Reference Guide > Extensions > PropertiesManagerExtension
+
+Autodesk.Viewing.Extensions
+
+# PropertiesManagerExtension
+
+## new PropertiesManagerExtension(viewer, options)
+
+Use its `activate()` method to open the Properties UI.
+
+The extension id is: `Autodesk.PropertiesManager`
+
+### Parameters
+
+viewer* (Viewer3D) | Viewer instance
+options* (object) | Configurations for the extension
+
+### Examples
+
+```
+viewer.loadExtension('Autodesk.PropertiesManager')
+```
+
+# Methods
+
+## load()
+
+Invoked when the extension gets loaded.
+
+### Returns
+
+type | description
+boolean | true when the extension loaded successfully.
+
+## unload()
+
+Invoked when the extension gets unloaded.
+
+## activate()
+
+Opens the Properties UI.
+
+## deactivate()
+
+Closes the Properties UI.
+
+## isActive()
+
+### Returns
+
+type | description
+boolean | true is the properties panel is open.
+
+## setPanel(propertyPanel)
+
+Overrides the property panel instance.
+
+### Parameters
+
+propertyPanel*
+
+### Returns
+
+type | description
+boolean | True if the panel or null was set successfully, and false otherwise.
+
+## setDefaultPanel()
+
+Resets the panel to its default instance.
+
+## getPanel()
+
+Gets the property panel instance.
+
+### Returns
+
+type | description
+object | The panel instance.

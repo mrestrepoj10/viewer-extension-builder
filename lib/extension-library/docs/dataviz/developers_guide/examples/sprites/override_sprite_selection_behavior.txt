@@ -1,0 +1,109 @@
+https://aps.autodesk.com/en/docs/dataviz/v1/developers_guide/examples/sprites/override_sprite_selection_behavior/
+Developer's Guide > Examples > Sprites > Overriding Sprite Default Selection Behavior
+
+# Overriding Default Sprite Selection Behavior
+
+## The default behavior
+
+When a user selects a sprite viewable, the Data Visualization extension respects the default highlight behavior that the client code specifies when it creates the sprite. The client code configures the highlight behavior when it creates an instance of `ViewableStyle`, by changing its `highlightedColor` and `highlightedUrl` parameters.
+
+The Reference Application configures the default selection behavior as shown below (retaining the color as white `0xffffff`, and replacing the sprite image with light-blue-circle.svg):
+
+```
+const normalColor = new THREE.Color(0xffffff);
+const normalUrl = "https://.../normal.svg";
+
+const highlightedColor = new THREE.Color(0xffffff);
+const highlightedUrl = "https://.../light-blue-circle.svg";
+
+const additionalIconUrls = []; // Specify more icons to use if needed
+
+const DataVizCore = Autodesk.DataVisualization.Core;
+const spriteStyle = new DataVizCore.ViewableStyle(
+    DataVizCore.ViewableType.SPRITE,
+    normalColor,
+    normalUrl,
+    highlightedColor, // This determines the highlight color
+    highlightedUrl, // This determines the highlight image
+    additionalIconUrls
+);
+```
+
+As a result of the above configuration, this is how the Reference Application behaves when the user selects a sprite:
+
+Note that selected sprite appears `1.5` times larger than the non-selected ones.
+
+Using `ViewableStyle` alone does not allow client code to alter this selection behavior. To completely change the sprite selection behavior, the client code has to perform the following steps:
+
+1. Disable the default selection behavior
+2. Define a new selection behavior
+3. Define a new deselection behavior
+
+## Disabling the default selection behavior
+
+To disable the default selection behavior, the client code needs to handle the `MOUSE_CLICK` event, and prevent it from propagating further to trigger the default selection mechanism. You can do this by setting `hasStopped = true`, as follows:
+
+```
+viewer.addEventListener(DataVizCore.MOUSE_CLICK, onSpriteClicked);
+
+function onSpriteClicked(event) {
+    event.hasStopped = true; // Stop MOUSE_CLICK from propagating further.
+
+    // Continue with application logic that reacts to the click event (e.g.,
+    // update UI to reflect details specific to the sprite being clicked on).
+}
+```
+
+When the client code stops the `MOUSE_CLICK` from propagating further behavior, clicking on the sprite will result in no visible changes. However, it does continue to send events like `MOUSE_CLICK` and `MOUSE_CLICK_OUT` to the event handler so that it can execute application logic.
+
+## Defining a new selection behavior
+
+To define a new selection behavior, the client code needs to invoke `invalidateViewables`, which triggers a repaint of the corresponding `SpriteViewable` object.
+
+The following snippet causes the clicked sprite to double in its size (`scale: 2.0`) and changes its icon to `smiley.svg`:
+
+```
+function onSpriteClicked(event) {
+    event.hasStopped = true;
+
+    const viewablesToUpdate = [event.dbId];
+    dataVizExtn.invalidateViewables(viewablesToUpdate, (viewable) => {
+        return {
+            scale: 2.0, // Double the viewable size
+            url: "https://.../smiley.svg",
+        };
+    });
+
+    // Continue with application logic that reacts to the click event (e.g.
+    // update UI to reflect details specific to the sprite being clicked on).
+}
+```
+
+Note that `url` must be an exact match of either `normalUrl`, `highlightedUrl`, or one of the entries in the `additionalIconUrls` array. The client code used these while constructing the `ViewableStyle` object earlier. To change other aspects of `SpriteViewable` objects, please refer to documentation for `invalidateViewables`.
+
+## Defining a new deselection behavior
+
+To restore the appearance of the sprite, the client code needs to handle the `MOUSE_CLICK_OUT` event. Note that `event.hasStopped = true` prevents the `MOUSE_CLICK_OUT` event from propagating further. As with `MOUSE_CLICK`, the client code should use `invalidateViewables` to restore the sprite to its original appearance:
+
+```
+viewer.addEventListener(DataVizCore.MOUSE_CLICK_OUT, onSpriteClickedOut);
+
+function onSpriteClickedOut(event) {
+    event.hasStopped = true;
+
+    const viewablesToUpdate = [event.dbId];
+    dataVizExtn.invalidateViewables(viewablesToUpdate, (viewable) => {
+        return {
+            scale: 1.0, // Restore the viewable size
+            url: "https://.../circle.svg",
+        };
+    });
+
+    // Continue with application logic that reacts to the deselection
+    // event (e.g., update UI to a state where no selection is made).
+}
+```
+
+## Result: the new selection behavior
+
+The above three steps should result in a new selection behavior as illustrated below:

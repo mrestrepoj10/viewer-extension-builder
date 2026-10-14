@@ -1,0 +1,199 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/Private/PropertyDatabase/
+Reference Guide > Private > PropertyDatabase
+
+Autodesk.Viewing.Private
+
+# PropertyDatabase
+
+The Property Database contains property information for each part of a model. The data is read-only, since it has been packed to optimize memory footprint. It’s implemented as an Entity-Atribute-Value (EAV) set of tables. LMV keeps the PropertyDatabase in a browser worker thread to prevent compute-intensive methods to block the main browser UI thread. Words “Attribute” and “Property” are use interchangeably.
+
+## new PropertyDatabase(dbjsons, fileType)
+
+### Parameters
+
+dbjsons* (object) | is expected to be of the form {{ attrs: {filename1:x, filename2:y}, ids: {filename1:x… }, values: {… }, offsets: {… }, avs: {… } } where each of the elements of each array is a pair of the original name and the unzipped raw byte array buffer corresponding to the respective property database constituent. In the current implementation each array is expected to only have one name-value element.
+fileType* (string) | Optional file type (‘rvt’, ‘dwg’, etc.) for applying file-specific naming logic
+
+# Methods
+
+## getObjectCount()
+
+Obtains the number of database ids (dbIds) available. These ids range betwee 1 (inclusive) up to getObjectCount() (exclusive).
+
+### Returns
+
+type | description
+number
+
+## getAttrValue(attrId, valId, integerHint)
+
+Obtains the actual value of a property.
+
+### Parameters
+
+attrId* (number) | The attribute id
+valId* (number) | The value id
+integerHint (boolean) | If true the return value will be casted to integer.
+
+### Returns
+
+type | description
+
+## getObjectProperties(dbId, propFilter, ignoreHidden, propIgnored)
+
+Obtains all properties for a given database id.
+
+### Parameters
+
+dbId* (number) | The database id
+propFilter (Array.<string>) | Array of property names to return values for. Use null for no filtering.
+ignoreHidden (boolean) | true to ignore hidden properties.
+propIgnored (Array.<string>) | Array of property names to not include in the return value.
+
+### Returns
+
+type | description
+object | consisting of attributes `name`, `dbId`, `properties` and `externalId`.
+
+## getExternalIdMapping(extIdFilter)
+
+Obtains a map between each database id (dbId) and their corresponding external-id. The external-id is the identifier used by the source file. Example: A translated Revit file has a wall with dbId=1, but in Revit (desktop application) the identifier of that wall is “Wall-06-some-guid-here”.
+
+### Parameters
+
+extIdFilter (Array.<number>) | Limits the result to only contain the ids in this array.
+
+### Returns
+
+type | description
+object | map from dbId into external-id.
+
+## getSearchTerms(searchText)
+
+Given a text string, returns an array of individual words separated by white spaces. Will preserve white spacing within double quotes.
+
+### Parameters
+
+searchText* (string) | Text to search
+
+## bruteForceFind(propertyName)
+
+Given a property name, it returns an array of ids that contain it.
+
+### Parameters
+
+propertyName* (string) | Property name
+
+## getLayerToNodeIdMapping()
+
+Specialized function that returns: { ‘layer-name-1’: [id1, id2, …, idN], ‘layer-name-2’: [idX, idY, …, idZ], … }
+
+## getAttributeDef(attrId)
+
+Unpacks an attribute value into all available components.
+
+### Parameters
+
+attrId* (number) | The attribute id.
+
+### Returns
+
+type | description
+object | containing `name`, `category`, `dataType`, `dataTypeContext`, `description`, `displayName` and `flags`.
+
+## enumAttributes(cb)
+
+Invokes a callback function for each attribute-id in the model.
+
+### Parameters
+
+cb* (function) | Callback invoked
+
+### Examples
+
+```
+pdb.enumAttributes(function(attrId, attrDef) {
+        // attrDef is an object
+        if (attrDef.name === 'name') {
+            return true; // return true to stop iteration.
+        }
+   })
+```
+
+## enumObjectProperties(dbId, cb)
+
+Iterates over all properties for a given database id and invokes the supplied callback function.
+
+### Parameters
+
+dbId* (number) | The attribute id.
+cb* (function) | callback function, that receives 2 arguments: attribute-id (`attrId`) and value-id (`valId`). Have the function return `true` to abort iteration.
+
+## getPropertiesSubsetWithInheritance(dbId, desiredAttrIds, dstValIds)
+
+Given an object ID, returns the corresponding value IDs for the given list of attribute Ids. Takes into account instance_of inheritance of properties.
+
+### Parameters
+
+dbId* (number) | Integer input object ID
+desiredAttrIds* (object) | An optional map of the requested attribute Ids, where desiredAttrIds[attrId] is “truthy”. If not provided, all properties will be returned.
+dstValIds* (object) | A storage target map, such that dstValIds[attrId] will be the resulting value ID. It is the responsibility of the caller to zero initialize this map.
+
+### Returns
+
+type | description
+Array.<number> | A flat list of integers attributeId - valueId pairs. This is in addition to the dstValIds, for cases where the object has mutliple properties of the same type, e.g. children, viewable_in, etc.
+
+## findLayers(viewScope)
+
+Iterates over the property database and finds all layers.
+
+### Parameters
+
+viewScope (string) | Optional view-scope key. When provided and the database carries `__viewable_in__` relations, only layers reachable from entities tagged with this scope are returned. Pass the OTG graphics-node URN (matches the `m_viewUrn` ATF writes via `FindOrAddEntity(extId, scope)`). When the scope is unresolvable or `__viewable_in__` is absent, falls back to the unscoped enumeration so callers that pass no scope keep working.
+
+### Returns
+
+type | description
+object
+
+## enumObjects(cb, fromId, toId)
+
+Iterates over all database ids and invokes a callback function.
+
+### Parameters
+
+cb* (function) | callback function. Receives a single parameter: the database-id. Have the function return true to abort iteration.
+fromId* (number) | starting id (inclusive)
+toId* (number) | end id (exclusive)
+
+## attributeHidden(attrId)
+
+Checks whether an attribute is hidden or not.
+
+### Parameters
+
+attrId* (number) | The attribute id.
+
+### Returns
+
+type | description
+boolean | true if the attribute is a hidden one.
+
+## numberOfAttributes()
+
+Returns count of the number of attributes
+
+### Returns
+
+type | description
+number
+
+## numberOfValues()
+
+Returns count of the number of values
+
+### Returns
+
+type | description
+number

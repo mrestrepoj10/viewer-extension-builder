@@ -1,0 +1,15 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/AttributeLayout/
+Reference Guide > Globals > Type Definitions > AttributeLayout
+
+Type Definitions
+
+# AttributeLayout
+
+Describes one attribute within an interleaved vertex buffer.
+
+# Properties
+
+offset (number) | Start position (in floats) of this attribute within one vertex stride.
+itemSize (number) | Number of components per vertex (e.g. 3 for xyz positions).
+bytesPerItem (number) | Bytes per component (default 4, i.e. float32).
+normalized (boolean) | Whether integer data should be normalized to [0,1].

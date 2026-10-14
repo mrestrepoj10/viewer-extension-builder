@@ -1,0 +1,277 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/UI/ControlGroup/
+Reference Guide > UI > ControlGroup
+
+Autodesk.Viewing.UI
+
+# ControlGroup
+
+Extends `Autodesk.Viewing.UI.Control`_
+
+## new ControlGroup(id, options)
+
+Class for grouping controls.
+
+### Parameters
+
+id (string) | The id for this control group.
+options (object) | An optional dictionary of options.
+  collapsible (boolean) | Whether this control group is collapsible.
+
+# Methods
+
+## addControl(control, options)
+
+Adds a control to this control group.
+
+### Parameters
+
+control* (Autodesk.Viewing.UI.Control) | The control to add.
+options (object) | An option dictionary of options.
+  index (object) | The index to insert the control at.
+
+### Returns
+
+type | description
+boolean | True if the control was successfully added.
+
+## indexOf(control)
+
+Returns the index of a control in this group. -1 if the item isn’t found.
+
+### Parameters
+
+control* (string, Autodesk.Viewing.UI.Control) | The control ID or control instance to find.
+
+### Returns
+
+type | description
+number | Index of a successfully removed control, otherwise -1.
+
+## removeControl(control)
+
+Removes a control from this control group.
+
+### Parameters
+
+control* (string, Autodesk.Viewing.UI.Control) | The control ID or control instance to remove.
+
+### Returns
+
+type | description
+boolean | True if the control was successfully removed.
+
+## getControl(controlId)
+
+Returns the control with the corresponding ID if it is in this control group.
+
+### Parameters
+
+controlId* (string) | The ID of the control.
+
+### Returns
+
+type | description
+Autodesk.Viewing.UI.Control | The control or null if it doesn’t exist.
+
+## getControlId(index)
+
+Returns the control ID with for corresponding index if it is in this control group.
+
+### Parameters
+
+index* (number) | Index of the control.
+
+### Returns
+
+type | description
+string | The ID of the control or null if it doesn’t exist.
+
+## getNumberOfControls()
+
+Returns the number of controls in this control group.
+
+### Returns
+
+type | description
+number | The number of controls.
+
+## setCollapsed(collapsed)
+
+Sets the collapsed state of this control group. Iterates over the child controls and calls child.setCollapsed(collapsed).
+
+### Parameters
+
+collapsed* (boolean) | The collapsed value to set.
+
+### Returns
+
+type | description
+boolean | True if at least one collapsible child’s state changes.
+
+## getId()
+
+Gets this control’s ID.
+
+### Returns
+
+type | description
+string | The control’s ID.
+
+## setVisible(visible)
+
+Sets the visibility of this control.
+
+### Parameters
+
+visible* (boolean) | The visibility value to set.
+
+### Returns
+
+type | description
+boolean | True if the control’s visibility changed.
+
+## isVisible()
+
+Gets the visibility of this control.
+
+### Returns
+
+type | description
+boolean | True if the this control is visible.
+
+## setToolTip(toolTipText)
+
+Sets the tooltip text for this control.
+
+### Parameters
+
+toolTipText* (string) | The text for the tooltip.
+
+### Returns
+
+type | description
+boolean | True if the tooltip was successfully set.
+
+## getToolTip()
+
+Returns the tooltip text for this control.
+
+### Returns
+
+type | description
+string | The tooltip text. Null if it’s not set.
+
+## isCollapsed()
+
+Gets the collapsed state of this control.
+
+### Returns
+
+type | description
+boolean | True if this control is collapsed.
+
+## isCollapsible()
+
+Returns whether or not this control is collapsible.
+
+### Returns
+
+type | description
+boolean | True if this control can be collapsed.
+
+## addClass(cssClass)
+
+Adds a CSS class to this control.
+
+### Parameters
+
+cssClass* (string) | The name of the CSS class.
+
+## removeClass(cssClass)
+
+Removes a CSS class from this control.
+
+### Parameters
+
+cssClass* (string) | The name of the CSS class.
+
+## getPosition()
+
+Returns the position of this control relative to the canvas.
+
+### Returns
+
+type | description
+object | The `top` and `left` values of the toolbar.
+
+## getDimensions()
+
+Returns the dimensions of this control.
+
+### Returns
+
+type | description
+object | The `width` and `height` of the toolbar.
+
+## setDisplay(value)
+
+Sets the CSS `display` style value.
+
+### Parameters
+
+value* (string) | CSS display value
+
+## removeFromParent()
+
+Removes current control from its parent container.
+
+### Returns
+
+type | description
+boolean | True if the control was successfully removed.
+
+# Events
+
+## CONTROL_ADDED
+
+Event fired a control is added to the control group.
+
+### Properties
+
+control (string) | The control that was added.
+index (number) | The index at which the control was added.
+
+## CONTROL_REMOVED
+
+Event fired when a control is removed from the control group.
+
+### Properties
+
+control (string) | The control that was removed.
+index (number) | The index at which the control was removed.
+
+## SIZE_CHANGED
+
+Event fired when the size of the control group changes.
+
+### Properties
+
+childEvent (object) | The event that the child fired.
+
+## VISIBILITY_CHANGED
+
+Event fired when the visibility of the control changes.
+
+### Properties
+
+controlId (string) | The ID of the control that fired this event.
+isVisible (boolean) | True if the control is now visible.
+
+## COLLAPSED_CHANGED
+
+Event fired when the collapsed state of the control changes.
+
+### Properties
+
+controlId (string) | The ID of the control that fired this event.
+isCollapsed (boolean) | True if the control is now collapsed.

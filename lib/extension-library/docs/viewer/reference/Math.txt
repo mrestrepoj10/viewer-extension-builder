@@ -1,0 +1,8 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/Math/
+Reference Guide > Math
+
+Autodesk.Viewing
+
+# Math
+
+The Math namespace contains mathematical classes and functions used by the Viewer SDK.

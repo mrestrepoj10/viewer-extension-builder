@@ -1,0 +1,35 @@
+https://aps.autodesk.com/en/docs/dataviz/v1/reference/DataVisualization/Room/
+Reference Guide > DataVisualization > Room
+
+Autodesk.DataVisualization
+
+# Room
+
+A class that represents a room found in the model. See LevelRoomsMap for more details.
+
+## new Room(id, name, bounds)
+
+Constructs an instance of `Room` object. Client code should not construct rooms directly, but to obtain them from `LevelRoomsMap.getRoomsOnLevel` API.
+
+### Parameters
+
+id* (number) | The `DbId` of the room
+name* (string) | The name of the room
+bounds* (THREE.Box3) | The bounding box of the room
+
+# Properties
+
+id | Returns the `DbId` of the room
+name | Returns the name of the room
+bounds | Returns the bounding box of the room
+devices | Gets the list of all `Device` objects in the room. If the room doesnot contain any devices, an empty array will be returned.
+
+# Methods
+
+## addDevice(device)
+
+Adds a RoomDevice to the Room
+
+### Parameters
+
+device* (RoomDevice) | The `Device` to be added to the room

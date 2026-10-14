@@ -1,0 +1,16 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/GeometryChangedCallback/
+Reference Guide > Globals > Type Definitions > GeometryChangedCallback
+
+Type Definitions
+
+# GeometryChangedCallback
+
+## Parameters
+
+instanceId* (number) | The id of the instance whose geometry changed.
+geometry* (BufferGeometry) | The new geometry.
+
+## Returns
+
+type | description
+void

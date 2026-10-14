@@ -1,0 +1,69 @@
+https://aps.autodesk.com/en/docs/dataviz/v1/reference/DataVisualization/ModelStructureInfo/
+Reference Guide > DataVisualization > ModelStructureInfo
+
+Autodesk.DataVisualization
+
+# ModelStructureInfo
+
+Data class to deal with the structural information of a model.
+
+## new ModelStructureInfo(model)
+
+Constructs an instance of `ModelStructureInfo` object.
+
+### Parameters
+
+model* (Model) | The model from which structural informationis to be generated.
+
+### Examples
+
+```
+ function onModelLoaded(event) {
+  const model = event.model;
+  const info = new Autodesk.DataVisualization.Core.ModelStructureInfo(model);
+}
+
+// Register to be notified when the model is fully loaded
+viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT,
+  onModelLoaded, { once: true });
+```
+
+# Methods
+
+## getLevelRoomsMap(keepRoomDetail, nodeName)
+
+Gets the structural info and build level-to-rooms map.
+
+### Parameters
+
+keepRoomDetail (boolean) | Whether to keep the roomdetailed properties after this call completes.
+nodeName (string) | Optional. Name of the node whose immediatechild nodes are to be retrieved. If this parameter is not supplied, orif it is an empty string, then the default value “Rooms” will be used.
+
+### Returns
+
+type | description
+LevelRoomsMap | The level-to-rooms map
+
+## generateSurfaceShadingData(devices, levels, nodeName)
+
+Assigns client-defined devices to rooms based on their 3D space positions and the bounding box of each room, then generate hierarchical shading data based on the assignment.
+
+### Parameters
+
+devices* (Array.<RoomDevice>) | The devices to be assigned to loaded rooms.
+levels (LevelRoomsMap) | Optional. The level-to-rooms map. If noneis supplied, one will be generated internally.
+nodeName (string) | Optional. Name of the node whose immediatechild nodes are to be retrieved. If this parameter is not supplied, orif it is an empty string, then the default value “Rooms” will be used.
+
+### Returns
+
+type | description
+SurfaceShadingData | The resulting `SurfaceShadingData` object.
+
+### Examples
+
+```
+ // 'devices' is a list of 'Device' objects in a 'Room'.
+const info = new Autodesk.DataVisualization.Core.ModelStructureInfo(model);
+const shadingData = await info.generateSurfaceShadingData(devices);
+dataVizExtn.setupSurfaceShading(model, shadingData);
+```

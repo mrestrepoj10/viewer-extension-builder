@@ -1,0 +1,133 @@
+https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/scene_api/standard-material/
+Developer's Guide > Scene API > Materials > Standard Material
+
+# Standard Material
+
+StandardMaterial implements customized Blinn-Phong shading with image based lighting. It is the standard material for 3D objects that should respond to scene lighting and the one you will reach for most often. Unlike UnlitMaterial, the final pixel color depends on the viewer’s current lighting setup, so the same material can look different in different environments.
+
+The two most important parameters after `color` (diffuse albedo) are `specularColor` and `specularPower`. `specularColor` sets the F0 reflectance — the highlight tint at near-normal incidence. A dark specular color (`0x111111`) produces a dull, matte highlight; a bright one (`0xeeeeee`) produces a strong, mirror-like flare. `specularPower` (shininess) controls the angular spread of the highlight: low values (2–8) spread it broadly across the surface like rough plastic. High values (128–512) concentrate it into a tight point like polished metal. The `metal` flag switches the shading to a metallic reflection model where the specular color bleeds into the diffuse albedo, producing the characteristic colored reflections of brushed aluminium or gold.
+
+Five texture maps extend the material without extra geometry. - `map` replaces the flat `color` with a per-texel diffuse image. - `specularMap` controls specular intensity per texel so worn areas can be less shiny than bare metal. - `normalMap` encodes surface micro-geometry as tangent-space RGB vectors, adding the illusion of fine detail at zero polygon cost. - `bumpMap` does the same with a greyscale height field scaled by `bumpScale`. - `alphaMap` masks opacity per texel the same way it does in UnlitMaterial, and also requires `transparent: true`.
+
+The `vertexColors` flag works identically to UnlitMaterial. It multiplies per-vertex color data from the geometry’s `color` attribute into the diffuse result.
+
+See the Pen APS Viewer SDK - StandardMaterial by Autodesk Platform Services (@autodesk-platform-services) on CodePen.
+
+## Source
+
+1. Specular Color × Shininess grid
+
+The main 5×5 grid sweeps five specular colors (dark to bright) across columns and five shininess values (rough to sharp) up rows. All spheres share the same blue albedo so the specular variation is clear.
+
+```
+for (let row = 0; row < ROWS; row++) {
+  for (let col = 0; col < COLS; col++) {
+    const mat = new avs.StandardMaterial({
+      color: ALBEDO,
+      specularColor: SPECULAR[col],
+      specularPower: SHININESS[row],
+    });
+    instances.add(
+      geom,
+      mat,
+      new avm.Matrix4().makeTranslation(
+        OFFSET_X + col * SPACING,
+        OFFSET_Y + row * SPACING,
+        0
+      )
+    );
+  }
+}
+
+// ── Metal row ─────────────────────────────────────
+for (let col = 0; col < COLS; col++) {
+  const mat = new avs.StandardMaterial({
+    color: ALBEDO,
+    specularColor: SPECULAR[col],
+    specularPower: 128,
+    metal: true,
+  });
+  instances.add(
+    geom,
+    mat,
+    new avm.Matrix4().makeTranslation(
+      OFFSET_X + col * SPACING,
+      METAL_Y,
+      0
+    )
+  );
+}
+```
+
+2. Metal row
+
+A separate row below the main grid demonstrates `metal: true` across all five specular colors at a fixed high shininess. The specular color tints the diffuse reflection, producing the characteristic colored highlights of metallic surfaces.
+
+3. Texture showcase
+
+One sphere per map type is placed in the right column. Each example isolates a single map so the effect is unambiguous.
+
+```
+instances.add(
+  geom,
+  new avs.StandardMaterial({
+    color: 0xffffff,
+    map: diffuseTex,
+    specularPower: 64,
+  }),
+  new avm.Matrix4().makeTranslation(
+    TEX_X, OFFSET_Y + 4 * SPACING, 0
+  )
+);
+
+instances.add(
+  geom,
+  new avs.StandardMaterial({
+    color: ALBEDO,
+    specularColor: 0xffffff,
+    specularMap: specularTex,
+    specularPower: 128,
+  }),
+  new avm.Matrix4().makeTranslation(
+    TEX_X, OFFSET_Y + 3 * SPACING, 0
+  )
+);
+
+instances.add(
+  geom,
+  new avs.StandardMaterial({
+    color: ALBEDO,
+    normalMap: normalTex,
+    specularPower: 64,
+  }),
+  new avm.Matrix4().makeTranslation(
+    TEX_X, OFFSET_Y + 2 * SPACING, 0
+  )
+);
+
+instances.add(
+  geom,
+  new avs.StandardMaterial({
+    color: ALBEDO,
+    bumpMap: bumpTex,
+    bumpScale: 1,
+    specularPower: 64,
+  }),
+  new avm.Matrix4().makeTranslation(
+    TEX_X, OFFSET_Y + 1 * SPACING, 0
+  )
+);
+
+instances.add(
+  geom,
+  new avs.StandardMaterial({
+    color: ALBEDO,
+    alphaMap: alphaTex,
+    transparent: true,
+    specularPower: 64,
+  }),
+  new avm.Matrix4().makeTranslation(
+    TEX_X, OFFSET_Y + 0 * SPACING, 0
+  )
+);
+```

@@ -1,0 +1,79 @@
+https://aps.autodesk.com/en/docs/dataviz/v1/developers_guide/examples/heatmap/planar_heatmap_advanced/
+Developer's Guide > Examples > Heatmap > Using Advanced Planar Heatmap Options
+
+# Advanced Planar Heatmap Options
+
+## Heatmap Opacity Options
+
+When the client code creates a planar heatmap, it can optionally specify opacity values to use to render minimum and maximum sensor values. The following code snippet illustrates how to do this:
+
+```
+const shadingData = generateSurfaceShadingData(devices);
+await dataVizExtn.setupSurfaceShading(model, shadingData, {
+    type: "PlanarHeatmap",
+    minOpacity: 0.0, // The default value if this option is omitted
+    maxOpacity: 1.0, // The default value if this option is omitted
+});
+```
+
+Note that `minOpacity` and `maxOpacity` are creation time options, so the client code cannot change these values without recreating a new planar heatmap.
+
+The `minOpacity` and `maxOpacity` options are defined as follows:
+
+- `minOpacity` - Optional. The minimum heatmap opacity that the lowest sensor value will have. This value is in the range of `[0.0, 1.0]`. For `minOpacity = 0.0` (the default), `renderSurfaceShading` and `updateSurfaceShading` render the lowest sensor value with full transparency; For `minOpacity = 1.0` it renders the lowest sensor value fully opaque.
+- `maxOpacity` - Optional. The maximal heatmap opacity the highest sensor value will have. This value is in the range of `[0.0, 1.0]`. When `maxOpacity = 0.0`, both `renderSurfaceShading` and `updateSurfaceShading` render the highest sensor value with full transparency. When `maxOpacity = 1.0` (the default), they render the highest sensor value, fully opaque.
+
+### Difference in min/max opacity values
+
+The following screenshot illustrates the differences between various opacity configurations:
+
+## Heatmap Slicing and Placement Positions
+
+The client code typically creates a planar heatmap by slicing through the corresponding geometry. It does this at the time the planar heatmap is created, as follows:
+
+```
+const shadingData = generateSurfaceShadingData(devices);
+await dataVizExtn.setupSurfaceShading(model, shadingData, {
+    type: "PlanarHeatmap",
+    slicingEnabled: true, // Slicing is enabled by default
+    slicingPosition: 0.5, // Slicing happens at the vertical mid-point of the geometry
+    placementPosition: 0.0, // The sliced planar heatmap placed at the base of geometry
+});
+```
+
+Note that the `slicingEnabled`, `slicingPosition`, and `placementPosition` values above are the default values if the client code does not specify them.
+
+The `slicingPosition` and `placementPosition` options are defined as follows:
+
+- `slicingPosition` - Optional. A number representing the point at which slicing should happen. Valid values are in the range `[0.0, 1.0]`. If not specified, `setupSurfaceShading` will use the default value of `0.5`, and slice geometry through the vertical mid-point of the bounding box. `setupSurfaceShading` will only use this value if `options.slicingEnabled` is set to `true`.
+- `placementPosition` - Optional. A number in the range `[0.0, 1.0]`, indicating the placement position of the resulting plane. When set to `0.0` (the default), this positions the plane at the lowest `z` coordinate of the bounding box. When set to `1.0`, this positions the plane at the highest point of the bounding box.
+
+### Difference in placement position values
+
+The following screenshot illustrates the difference in placement position (note that due to the rectangular nature of the rooms, different `slicingPosition` values are not demonstrated here as there will be no difference in slicing a room through its upper vs. lower regions):
+
+## Heatmap Confidence Size
+
+The confidence size value of a heatmap determines the distance from the sensor at which its value will affect the heatmap before dropping off to zero. The client code can alter the confidence size using both `renderSurfaceShading` and `updateSurfaceShading`. For example:
+
+```
+// Specifying confidence value in a call to `renderSurfaceShading` API
+dataVizExtn.renderSurfaceShading("First Floor", "humidity", getSensorValue, {
+    confidence: 160.0,
+});
+
+// Specifying confidence value in a call to `updateSurfaceShading` API
+dataVizExtn.updateSurfaceShading(getSensorValue, {
+    confidence: 160.0,
+});
+```
+
+Important: If your code specifies a value for `confidence` in `renderSurfaceShading`, please be sure to specify the same value for `updateSurfaceShading`, so that the latter will not default to a value that is different from your intended confidence size.
+
+The `confidence` option is defined as follows:
+
+- `confidence` Optional. The distance from the sensor that its value will affect the heatmap before dropping off. Measured in world coordinates of the current model. The default value is `160.0`.
+
+### Difference in confidence sizes
+
+The following screenshot illustrates different confidence sizes:

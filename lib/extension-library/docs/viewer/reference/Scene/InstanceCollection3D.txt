@@ -1,0 +1,389 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/Scene/InstanceCollection3D/
+Reference Guide > Scene > InstanceCollection3D
+
+Autodesk.Viewing.Scene
+
+# InstanceCollection3D
+
+Represents the full list of all instances of a model, and provides functions to access and manipulate them.
+
+## new InstanceCollection3D()
+
+# Methods
+
+## setVisibilityState(instanceId, state)
+
+Set the visibility state (Visible, Hidden, Ghosted) of an instance.
+
+### Parameters
+
+instanceId* (number)
+state* (VisibilityState)
+
+### Returns
+
+type | description
+boolean | Whether this value changed
+
+## getVisibilityState(instanceId)
+
+Returns the visibility state (Visible, Hidden, Ghosted) of an instance.
+
+### Parameters
+
+instanceId* (number)
+
+### Returns
+
+type | description
+VisibilityState | The visibility state of the instance.
+
+## setHighlighted(instanceId, value)
+
+Set the highlighted state of an instance.
+
+### Parameters
+
+instanceId* (number)
+value* (boolean) | Whether the instance should be highlighted or not.
+
+### Returns
+
+type | description
+boolean | Whether the flag has changed
+
+## setThemingColor(dbId, color)
+
+Applies a theming color that is blended with the final instance color.
+
+### Parameters
+
+dbId* (number)
+color (Vector4) | theming color (in xyz) and intensity (in w). All components in [0,1]. Set to undefined for ‘no theming’
+
+## registerMaterialChangedCallback(callback)
+
+Registers a callback that is invoked when the material of an instance is changed.
+
+### Parameters
+
+callback* (MaterialChangedCallback) | The callback to invoke on the event.
+
+## removeMaterialChangedCallback(callback)
+
+Deregisters a callback that has previously been registered via `registerMaterialChangedCallback`.
+
+### Parameters
+
+callback* (MaterialChangedCallback) | The callback to deregister.
+
+## registerThemingColorChangedCallback(callback)
+
+Registers a callback that is invoked when the theming color of an instance is changed.
+
+### Parameters
+
+callback* (ThemingColorChangedCallback) | The callback to invoke on the event.
+
+## removeThemingColorChangedCallback(callback)
+
+Deregisters a callback that has previously been registered via `registerThemingColorChangedCallback`.
+
+### Parameters
+
+callback* (ThemingColorChangedCallback) | The callback to deregister.
+
+## registerHighlightingChangedCallback(callback)
+
+Registers a callback that is invoked when the highlighting of an instance is changed.
+
+### Parameters
+
+callback* (InstancesCallback) | The callback to invoke on the event.
+
+## removeHighlightingChangedCallback(callback)
+
+Deregisters a callback that has previously been registered via `registerHighlightingChangedCallback`.
+
+### Parameters
+
+callback* (InstancesCallback) | The callback to deregister.
+
+## registerVisibilityDirtyCallback(callback)
+
+Registers a callback that is invoked when the visibility of any instance changes.
+
+### Parameters
+
+callback* (InstancesCallback) | The callback to invoke on the event.
+
+## removeVisibilityDirtyCallback(callback)
+
+Deregisters a callback that has previously been registered via `registerVisibilityDirtyCallback`.
+
+### Parameters
+
+callback* (InstancesCallback) | The callback to deregister.
+
+## getMaterial(instanceId)
+
+Returns the material for a specific instance.
+
+### Parameters
+
+instanceId* (number)
+
+### Returns
+
+type | description
+The material for the given instance, or undefined if no material is currently assigned to the instance.
+
+## getGeometry(instanceId)
+
+Returns the geometry for a specific instance.
+
+### Parameters
+
+instanceId* (number)
+
+### Returns
+
+type | description
+BufferGeometry, undefined | The geometry for the given instance, or undefined no geometry is currently assigned to the instance.
+
+## setMaterial(instanceId, material)
+
+Sets the material for a specific instance.
+
+### Parameters
+
+instanceId* (number)
+material* (BasicMaterial, PhongMaterial) | The material to set for the given instance.
+
+### Returns
+
+type | description
+boolean | true, if the material was successfully set
+
+## getCount()
+
+Returns the number of instances in the collection.
+
+### Returns
+
+type | description
+number | The number of instances.
+
+## getDbId(instanceId)
+
+Returns the dbId of a specific instance.
+
+### Parameters
+
+instanceId* (number)
+
+### Returns
+
+type | description
+number | The dbId of the given instance.
+
+## getTransformWorld(instanceId, target)
+
+Get the world transform of an instance.
+
+### Parameters
+
+instanceId* (number)
+target* (Matrix4) | Target matrix to receive the result.
+
+### Returns
+
+type | description
+Matrix4 | The world matrix.
+
+## getWorldBounds(instanceId, target)
+
+Returns the world bounding box of an instance.
+
+### Parameters
+
+instanceId* (number)
+target* (Box3) | result is saved here
+
+### Returns
+
+type | description
+Box3 | The world bounding box of the instance.
+
+## registerTransformChangedCallback(callback)
+
+Registers a callback that is invoked when the transform of an instance is changed. Important: This is to get notified about individual instance changes, it does not fire when the model matrix changes.
+
+### Parameters
+
+callback* (InstancesCallback) | The callback to invoke on the event.
+
+## removeTransformChangedCallback(callback)
+
+Deregisters a callback that has previously been registered via `registerTransformChangedCallback`.
+
+### Parameters
+
+callback* (InstancesCallback) | The callback to deregister.
+
+## registerInstancesAddedCallback(callback)
+
+Registers a callback that is invoked when instances are added via `add()`.
+
+### Parameters
+
+callback* (InstancesCallback)
+
+## removeInstancesAddedCallback(callback)
+
+Deregisters a callback previously registered via `registerInstancesAddedCallback`.
+
+### Parameters
+
+callback* (InstancesCallback)
+
+## registerInstancesRemovedCallback(callback)
+
+Registers a callback that is invoked when instances are removed via `remove()`.
+
+### Parameters
+
+callback* (InstancesCallback)
+
+## removeInstancesRemovedCallback(callback)
+
+Deregisters a callback previously registered via `registerInstancesRemovedCallback`.
+
+### Parameters
+
+callback* (InstancesCallback)
+
+## registerGeometryChangedCallback(callback)
+
+Registers a callback that is invoked when the geometry of an instance is changed via `setGeometry()`.
+
+### Parameters
+
+callback* (GeometryChangedCallback)
+
+## removeGeometryChangedCallback(callback)
+
+Deregisters a callback previously registered via `registerGeometryChangedCallback`.
+
+### Parameters
+
+callback* (GeometryChangedCallback)
+
+## add(geometry, material, transform, bbox)
+
+Add a new instance using the given geometry, materials and transform. If the geometry and material are not already in the model, they will be added. This transfers ownership of the geometry and material to the instance collection and the objects can change in the process.
+
+### Parameters
+
+geometry* (BufferGeometry) | The geometry of the instance.
+material* (Autodesk.Viewing.Scene.Material) | The material of the instance.
+transform (Matrix4) | The transformation matrix of the instance. If not provided, it will be set to the identity matrix.
+bbox (Box3) | The bounding box of the instance relative to the model, if not provided, it will be computed.
+
+### Returns
+
+type | description
+number | The id of the new instance, -1 if the instance could not be added.
+
+## remove(instanceIds)
+
+Removes the instances from the collection. Unused geometries remain in the model and need to be removed manually.
+
+### Parameters
+
+instanceIds* (number, Array.<number>) | The id or ids of instances to remove.
+
+## addMaterial(material)
+
+Add a material that can be referenced by an instance in the model. This transfers ownership of the material to the instance collection and the object can change in the process. A material is only added once and ignored after that.
+
+### Parameters
+
+material* (Autodesk.Viewing.Scene.Material) | The material to add.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Material, null | The added material, or null if it could not be added because it is still in use by another model.
+
+## addGeometry(geometry)
+
+Adds a new geometry to the model and computes its bounding box if it is not already computed. This transfers ownership of the geometry to the instance collection and the object can change in the process. The geometry is only added once and ignored after that.
+
+### Parameters
+
+geometry* (BufferGeometry)
+
+### Returns
+
+type | description
+BufferGeometry, null | The geometry. null if the geometry already belongs to another model.
+
+## setGeometry(instanceId, geometry)
+
+Set the geometry of an instance. It will replace the current instance geometry with the new one. If not already added, the geometry will be added to the collection.
+
+### Parameters
+
+instanceId* (number) | The id of the instance to set the geometry of.
+geometry* (BufferGeometry) | The geometry to set.
+
+### Returns
+
+type | description
+boolean | true, if the geometry was successfully set
+
+## getTransformLocal(instanceId, target)
+
+Get the model local transform of an instance.
+
+### Parameters
+
+instanceId* (number) | The id of the instance to get the transform of.
+target* (Matrix4) | The matrix to store the transform in.
+
+### Returns
+
+type | description
+Matrix4 | The transform of the instance.
+
+## setTransformWorld(instanceId, transform)
+
+Set the world transform of an instance.
+
+### Parameters
+
+instanceId* (number) | The id of the instance to set the transform of.
+transform* (Matrix4) | The world transform to set.
+
+## setTransformLocal(instanceId, transform)
+
+Set the model local transform of an instance.
+
+### Parameters
+
+instanceId* (number) | The id of the instance to set the transform of.
+transform* (Matrix4) | The local transform to set.
+
+## getSceneGraph(create)
+
+Returns the scene graph root node for the model. If `create` is true and the scene graph does not exist, it will be created.
+
+### Parameters
+
+create (boolean) | Whether to create the scene graph if it doesn’t exist.
+
+### Returns
+
+type | description
+Node3D, null | The scene graph root node. `null` if the scene graph is not created.

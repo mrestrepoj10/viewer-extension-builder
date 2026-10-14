@@ -1,0 +1,18 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/PublicFeatureFlags/
+Reference Guide > Viewing > PublicFeatureFlags
+
+Autodesk.Viewing
+
+# PublicFeatureFlags
+
+## new PublicFeatureFlags()
+
+List of publicly available feature flags.
+
+# Properties
+
+DSEndpoints (boolean) | Defines whether automatic region routing is enabled (Default OFF)
+LargeModelExperience (boolean) | Defines whether optimizations for working with large models are activated (Default ON)
+SlowGpuDetection (boolean) | Defines whether users are notified that they use a slow graphics card (Default OFF)
+SceneAPI (boolean) | Defines whether the Scene API feature is active for all models (Default OFF)
+WebGPU (boolean) | Defines whether the WebGPU renderer can be activated in the settings panel (Default ON)

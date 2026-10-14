@@ -1,0 +1,27 @@
+https://aps.autodesk.com/en/docs/dataviz/v1/reference/globals/TypeDefs/RoomDevice/
+Reference Guide > Globals > Type Definitions > RoomDevice
+
+Type Definitions
+
+# RoomDevice
+
+The object that defines the structure of a Device in a Room.
+
+# Properties
+
+id (string) | An ID to identify this device
+position (Object) | World coordinates of this device
+sensorTypes (Array.<string>) | The types/properties this device exposes
+type (string) | A type identifier for this device. Ex: Thermometer
+name (string) | An optional name identifier for the device
+
+## Examples
+
+```
+ {
+    id: "cafeteria-entrace-01",
+    position: { x: -159.2782, y: -50.4998, z: -16.9196 },
+    sensorTypes: ["temperature", "humidity"],
+    type: 'thermometer'
+},
+```

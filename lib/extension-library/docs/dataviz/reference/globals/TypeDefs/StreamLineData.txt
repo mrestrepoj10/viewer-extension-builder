@@ -1,0 +1,12 @@
+https://aps.autodesk.com/en/docs/dataviz/v1/reference/globals/TypeDefs/StreamLineData/
+Reference Guide > Globals > Type Definitions > StreamLineData
+
+Type Definitions
+
+# StreamLineData
+
+An object which carries the coordinates and colors of points that made up the line.
+
+# Properties
+
+points (Float32Array) | The point array specified as `Float32Array`. It is a lineararray that carries the coordinates of the points forming the line `[x0, y0, z0, x1, ... ]`.

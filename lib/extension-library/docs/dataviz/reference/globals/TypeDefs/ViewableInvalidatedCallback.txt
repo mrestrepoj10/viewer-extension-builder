@@ -1,0 +1,17 @@
+https://aps.autodesk.com/en/docs/dataviz/v1/reference/globals/TypeDefs/ViewableInvalidatedCallback/
+Reference Guide > Globals > Type Definitions > ViewableInvalidatedCallback
+
+Type Definitions
+
+# ViewableInvalidatedCallback
+
+Callback function invoked when a `CustomViewable` is being invalidated through a call to `invalidateViewable` API. Client code can optionally modify one or more properties of `CustomViewable` during this call.
+
+## Parameters
+
+viewable* (CustomViewable) | The viewable object that is being invalidated.
+
+## Returns
+
+type | description
+PropertyUpdates | Object that specifies the properties to be updated.

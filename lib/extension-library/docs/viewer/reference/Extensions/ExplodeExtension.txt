@@ -1,0 +1,126 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/ExplodeExtension/
+Reference Guide > Extensions > ExplodeExtension
+
+Autodesk.Viewing.Extensions
+
+# ExplodeExtension
+
+Use its `activate()` method to enable the explode UI.
+
+The extension id is: `Autodesk.Explode`
+
+## new ExplodeExtension(viewer, options)
+
+### Parameters
+
+viewer* (Viewer3D) | Viewer instance
+options* (object) | Configurations for the extension
+
+### Examples
+
+```
+viewer.loadExtension('Autodesk.Explode')
+```
+
+# Methods
+
+## load()
+
+Initializes and registers the ExplodeTool.
+
+## unload()
+
+Deactivate the extension, deregister the ExplodeTool, and remove the UI from the toolbar.
+
+## onToolbarCreated(toolbar)
+
+Invoked by the viewer when the toolbar UI is available.
+
+### Parameters
+
+toolbar* (Autodesk.Viewing.UI.ToolBar) | toolbar instance.
+
+## activate()
+
+Activates the tool and UI.
+
+## deactivate()
+
+Hides the explode UI and deactivates the ExplodeTool (resets the explode scale).
+
+## isActive()
+
+### Returns
+
+type | description
+boolean | true if the ExplodeTool is active.
+
+## getScale()
+
+### Returns
+
+type | description
+number | Between 0 and 1.
+
+## setScale(value)
+
+Sets scale of the explode and applies an explode operation.
+
+### Parameters
+
+value* (number) | Between 0 and 1.
+
+## getMagnitude()
+
+### Returns
+
+type | description
+number | 0 - +inf.
+
+## setMagnitude(value)
+
+Sets magnitude of the explode and applies an explode operation.
+
+### Parameters
+
+value* (number) | 0 - +inf.
+
+## getDepthDampening()
+
+### Returns
+
+type | description
+number | 1 - +inf.
+
+## setDepthDampening(value)
+
+Sets depth dampening of the explode and applies an explode operation.
+
+### Parameters
+
+value* (number) | 0 - +inf.
+
+## setStrategy(strategy)
+
+Specifies the algorithm used for exploding models.
+
+### Parameters
+
+strategy* (string) | Either ‘hierarchy’ or ‘radial’.
+
+## getStrategy()
+
+Returns an identifier for the algorithm used for exploding models.
+
+### Returns
+
+type | description
+string
+
+## setUIEnabled(enable)
+
+Enable / Disable the explode button & slider. Doesn’t affect the state of the explode scale itself.
+
+### Parameters
+
+enable* (boolean) | enable / disable the UI.

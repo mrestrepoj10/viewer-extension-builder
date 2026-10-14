@@ -1,0 +1,12 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/UI/
+Reference Guide > UI
+
+Autodesk.Viewing
+
+# UI
+
+The UI classes let you enhance the user interface offered in the Viewer SDK. Classes in the UI namespace let you add a variety of functionality with a consistent look and feel to the viewer.
+
+If you need controls that provide custom behavior not included in the existing classes, you can extend the classes to create the user interface elements you need. Extending existing classes is easier than writing new classes and maintains the existing design for the controls you add.
+
+To learn how to add UI elements, check out our tutorial on customizing the toolbar.

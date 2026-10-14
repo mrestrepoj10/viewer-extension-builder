@@ -1,0 +1,19 @@
+https://aps.autodesk.com/en/docs/dataviz/v1/reference/globals/TypeDefs/SensorValueCallback/
+Reference Guide > Globals > Type Definitions > SensorValueCallback
+
+Type Definitions
+
+# SensorValueCallback
+
+Callback function to retrieve the normalized value of a sensor given a device identifier and sensor type. The callback function should return a normalized value in the range of `[0.0, 1.0]`.
+
+# Properties
+
+shadingPoint (SurfaceShadingPoint) | The generated SurfaceShadingPoint froma prior call to `ModelStructureInfo.generateSurfaceShadingData` method or one froma manually created SurfaceShadingData.
+sensorType (string) | An sensor type that was specified whenthe `Device` was created.
+data (Object) | Previous data only defined when rendering orupdating PlanarHeatmap
+
+## Returns
+
+type | description
+number | A normalized sensor value in the range of `[0.0, 1.0]`.If `NaN` (not a number) is returned, the sensor will have no influence in theresulting heatmap color (it is as though the sensor did not exist).

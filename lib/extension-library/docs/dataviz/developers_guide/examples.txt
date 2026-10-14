@@ -1,0 +1,18 @@
+https://aps.autodesk.com/en/docs/dataviz/v1/developers_guide/examples/
+Developer's Guide > Examples
+
+# Examples
+
+## Sprites
+
+Creating Sprites With Styles Use styles to insert texture-based sprites into the 3D view.
+Animating Sprite Viewables Add animation to sprites to bring a user’s attention to a particular area of the model.
+Handling Sprite Events Configure event listeners to trigger behavior when a user directly interacts with a sprite.
+Overriding Sprite Default Selection Behavior Override the default click selection behavior of a sprite.
+
+## Heatmaps
+
+Creating a Heatmap for Rooms Configure heatmap surface shading to map devices (like sensors) to their respective rooms.
+Creating a Planar Heatmap Display a heatmap on an arbitrary model, such as a piece of machinery.
+Using Advanced Planar Heatmap Options Using advanced planar heatmap, such as setting opacity, slicing and placement, and confidence size.
+Applying Heatmaps to Arbitrary Models Display a planar heatmap – a heatmap rendered as a projection on a plane.
