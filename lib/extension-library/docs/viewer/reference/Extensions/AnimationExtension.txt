@@ -1,0 +1,196 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/AnimationExtension/
+Reference Guide > Extensions > AnimationExtension
+
+Autodesk.Viewing.Extensions
+
+# AnimationExtension
+
+## new AnimationExtension(viewer, options)
+
+AnimationExtension adds a toolbar with buttons (play/pause/forward/backward/goto start/end) and timeline scrubber to control animation playback. The extension provides api methods that will be reflected by the animation toolbar.
+
+The extension id is: `Autodesk.Fusion360.Animation`
+
+### Parameters
+
+viewer* (Viewer3D) | Viewer instance
+options* (object) | Configurations for the extension
+
+### Examples
+
+```
+// When ANIMATION_READY_EVENT is fired, object tree has been created and animation data has been processed
+viewer.addEventListener(Autodesk.Viewing.ANIMATION_READY_EVENT, function () {
+  const animationExt = viewer.getExtension('Autodesk.Fusion360.Animation');
+  animationExt.play();
+});
+```
+
+# Methods
+
+## load()
+
+Adds a toolbar button and hooks animation listeners.
+
+## unload()
+
+Removes toobar button and unhooks animation listeners.
+
+## play()
+
+Plays the animation. Invoke pause() to stop the animation.
+
+## pause()
+
+Pauses an active animation. Can resume by invoking play()
+
+## isPlaying()
+
+Whether the animation is currently playing. Always returns the opposite of isPaused()
+
+### Returns
+
+type | description
+boolean
+
+## isPaused()
+
+Whether the animation is currently paused. Always returns the opposite of isPlaying()
+
+### Returns
+
+type | description
+boolean
+
+## rewind()
+
+Rewinds and pauses the animation.
+
+## setTimelineValue(scale)
+
+Sets the animation at the very beginning (0), at the end(1) or anywhere in between. For example, use value 0.5 to set the animation half way through it’s completion. Will pause a playing animation.
+
+### Parameters
+
+scale* (number) | value between 0 and 1
+
+## prevKeyframe()
+
+Sets animation onto the previous keyframe. Will pause the animation if playing.
+
+## nextKeyframe()
+
+Sets animation onto the next keyframe. Will pause the animation if playing.
+
+## getDuration()
+
+Returns how many seconds does the animation take to complete.
+
+### Returns
+
+type | description
+number
+
+## getDurationLabel()
+
+Returns duration as a formatted String h:mm:ss (hours:minutes:seconds)
+
+### Returns
+
+type | description
+string
+
+## getCurrentTime()
+
+Returns the elapsed time (in seconds) of the animation.
+
+### Returns
+
+type | description
+number
+
+## getCurrentTimeLabel()
+
+Returns the current animation time as a formatted String h:mm:ss (hours:minutes:seconds)
+
+### Returns
+
+type | description
+string
+
+## setFollowCamera(followCam)
+
+Whether a playing animation updates the camera position.
+
+### Parameters
+
+followCam* (boolean) | true to allow animation to update camera position (default behavior).
+
+### Returns
+
+type | description
+boolean | true if the operation was successful.
+
+## isFollowingCamera()
+
+### Returns
+
+type | description
+boolean | Whether animations will update the camera’s position (true) or not (false)
+
+## setSpeedModifier(value)
+
+Changes the speed at which the animation is played. Use value 1 to run the animation at default speed, use value 2 to run it at double the speed, use value 0.5 to run it at half the speed.
+
+### Parameters
+
+value* (number) | A multiplier for the animation’s elapsed time.
+
+## getSpeedModifier()
+
+### Returns
+
+type | description
+number | The playback speed multiplier.
+
+## setLooping(loop)
+
+Sets whether the animation rewinds and plays as soon as the animation finishes playing.
+
+### Parameters
+
+loop* (boolean) | true to have the animation loop continuously.
+
+## isLooping()
+
+### Returns
+
+type | description
+boolean | Whether the animation will loop continuously.
+
+## onToolbarCreated(toolbar)
+
+Invoked by the viewer when the toolbar UI is available.
+
+### Parameters
+
+toolbar* (Autodesk.Viewing.UI.ToolBar) | toolbar instance.
+
+## openPanel()
+
+Opens a panel with options to configure the animation extension.
+
+## activate()
+
+Plays the animation.
+
+## deactivate()
+
+Pauses the animation.
+
+## isActive()
+
+### Returns
+
+type | description
+boolean | true when the animation is playing.

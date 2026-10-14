@@ -1,0 +1,127 @@
+https://aps.autodesk.com/en/docs/dataviz/v1/developers_guide/examples/heatmap/sensor_to_room/
+Developer's Guide > Examples > Heatmap > Mapping Sensors to Rooms
+
+# Mapping Sensors to Rooms
+
+Here is a small JavaScript snippet using the Data Visualization structure:
+
+```
+// Given a model loaded from Forge
+const structureInfo = new Autodesk.DataVisualization.Core.ModelStructureInfo(model);
+// Given a deviceList (an array of Device objects) ...
+/*
+Recap of Device Structure
+{
+    id: unique_id,
+    position: { x: 10, y: 20, z: 30},
+    sensorTypes: ['Temperature','CO2']
+}
+*/
+let shadingData = await structureInfo.generateSurfaceShadingData(deviceList);
+await dataVizExtn.setupSurfaceShading(model, shadingData);
+```
+
+Lets examine how IoT devices get mapped into the scene:
+
+## Automated room-to-device mapping
+
+Automated device mapping requires both the room information and device position information.
+
+The `ModelStructureInfo` object obtains the room and level information from the `model`. (Revit models have this information.) Each room provides its position and size in the form of a bounding box.
+
+We see from the snippet above that each device contains a `position`, which we want to use to determine which room contains the device.
+
+All this information forms the `SurfaceShadingData` structure.
+
+We use this structure for Heatmap shading by providing the `SurfaceShadingNodes` as the bounds of the heatmap, and its `SurfaceShadingPoints` to provide values through a callback function (`getSensorValue()` in this example) when rendering.
+
+```
+function getSensorValue(surfaceShadingPoint, sensorType) {
+    // Our surface shading point id will be equivalent to our deviceId
+    const deviceId = surfaceShadingPoint.id;
+    const sensorValue = readSensorValue(deviceId, sensorType);
+    const maxSensorValue = getMaxSensorValue(sensorType);
+    const minSensorValue = getMinSensorValue(sensorType);
+    // Normalize sensor value to [0, 1.0]
+    sensorValue = (sensorValue - minSensorValue) / (maxSensorValue - minSensorValue);
+    return clamp(sensorValue, 0.0, 1.0);
+}
+
+function onFloorSelectedOnUi(floorName) {
+    const sensorType = "CO₂";
+    dataVizExtn.renderSurfaceShading(floorName, sensorType, getSensorValue);
+}
+```
+
+## Manual device-to-room Mapping
+
+We do not always have room information or device position information. In those cases, how do we generate our `SurfaceShadingData`?
+
+Lets look at the signature of `generateSurfaceShadingData`.
+
+```
+/*
+Recap of Device Structure
+{
+    id: unique_id,
+    position: { x: 10, y: 20, z: 30},
+    sensorTypes: ['Temperature','CO2']
+}
+*/
+ModelStructureInfo.generateSurfaceShadingData(Device[], Autodesk.DataVisualization.Core.LevelRoomsMap)
+```
+
+`LevelRoomMap` is an optional parameter that we can pass that already contains the appropriate mapping for devices and rooms.
+
+If we do not have the position information for our devices, but we do have level and room information from the model (such as a Revit model), we can do the following:
+
+```
+// Given a model loaded from Forge
+const DataVizCore = Autodesk.DataVisualization.Core
+const structureInfo = new DataVizCore.ModelStructureInfo(model);
+let levelRoomsMap = await structureInfo.getLevelRoomsMap();
+let rooms = levelRoomsMap.getRoomsOnLevel("Level 1");
+for (let room of rooms) {
+    if (room.name === "Lobby") {
+        let center = new THREE.Vector3();
+        room.bounds.getCenter(center);
+        const lobbyDevice = {
+            id: "Lobby Device", // An ID to identify this device
+            position: { x: center.x, y:center.y, z: center.z }, // World coordinates of this device
+            sensorTypes: ["temperature"], // The types/properties this device exposes
+        }
+        room.addDevice(lobbyDevice);
+    }
+}
+let shadingData = await structureInfo.generateSurfaceShadingData([lobbyDevice], levelRoomsMap);
+await dataVizExtn.setupSurfaceShading(model, shadingData);
+```
+
+If we do not have room information, we can manually generate the room and level information as well:
+
+```
+const DataVizCore = Autodesk.DataVisualization.Core
+let levelRoomsMap = new DataVizCore.LevelRoomsMap();
+let lobby = new DataVizCore.Room(
+    1234, //Room's DbId
+    "Lobby",
+    new THREE.Box3(new THREE.Vector3(0, 0, 0), new THREE.Vector3(10, 10, 10))
+);
+
+const lobbyDevice = {
+        id: "Lobby Device", // An ID to identify this device
+        position: { x: 5, y: 5, z: 5 }, // World coordinates of this device
+        sensorTypes: ["temperature"], // The types/properties this device exposes
+    }
+
+lobby.addDevice(lobbyDevice);
+levelRoomsMap.addRoomToLevel("Level 1", lobby);
+const structureInfo = new DataVizCore.ModelStructureInfo(model);
+let shadingData = await structureInfo.generateSurfaceShadingData([lobbyDevice], levelRoomsMap);
+await dataVizExtn.setupSurfaceShading(mode, shadingData);
+```
+
+For an example of the structure, see:
+
+- Live demo: https://aps-iot-extensions-demo.autodesk.io/
+- Source code: https://github.com/autodesk-platform-services/aps-iot-extensions-demo

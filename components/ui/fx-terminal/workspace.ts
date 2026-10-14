@@ -1,6 +1,7 @@
 import { Bash, type CommandContext, defineCommand } from 'just-bash/browser'
 import type { WorkspaceAdapter, WorkspaceExecResult } from 'libfx/browser'
-
+import { createDocsCommand } from '@/components/ui/fx-terminal/docs-command'
+import { createExtCommand, extReadme } from '@/components/ui/fx-terminal/ext-commands'
 import {
   checkImage,
   describeImage,
@@ -13,6 +14,15 @@ import {
   toBase64,
 } from '@/components/ui/fx-terminal/images'
 import type { AgentTool, AgentToolResult, AgentToolSchemaProperty } from '@/lib/agent-types'
+import {
+  DOCS_INDEX_PATH,
+  DOCS_ROOT,
+  REFERENCE_EXTENSIONS,
+  SKILL_INSTRUCTIONS,
+  WORKSPACE_FILES,
+} from '@/lib/extension-library'
+import { EXTENSIONS_DIR } from '@/lib/extensions/format'
+import type { ExtensionRuntime } from '@/lib/extensions/runtime'
 import type { ViewerAgentTools } from '@/lib/viewer-agent-tools'
 
 export interface FxExecEvent {
@@ -26,6 +36,8 @@ export interface ViewerWorkspaceOptions {
   model: string
   onExec?: (event: FxExecEvent) => void
   fetch?: typeof fetch
+  /** Page-side loader the `ext` command drives; without it `ext load` refuses. */
+  extensions?: ExtensionRuntime
 }
 
 type WorkspaceFs = CommandContext['fs']
@@ -269,13 +281,17 @@ function readme(catalog: ViewerAgentTools): string {
     `## shots\n\n\`\`\`\n${SHOTS_HELP}\`\`\``,
     `## describe_image\n\n\`\`\`\n${DESCRIBE_HELP}\`\`\``,
   ]
-  return `# viewer\n\n${catalogHelp(catalog.tools)}\n# How to work\n\n${catalog.instructions}\n\nEvery tool named above is a viewer subcommand: get_model_info is \`viewer get_model_info\`.\n\n${TERMINAL_NOTES}\n\n# Tools\n\n${sections.join('\n\n')}\n`
+  const extensions = `\n${SKILL_INSTRUCTIONS.trim()}\n`
+  return `# viewer\n\n${catalogHelp(catalog.tools)}\n# How to work\n\n${catalog.instructions}\n\nEvery tool named above is a viewer subcommand: get_model_info is \`viewer get_model_info\`.\n\n${TERMINAL_NOTES}\n${extensions}\n${extReadme()}\n# Tools\n\n${sections.join('\n\n')}\n`
 }
 
 const MOTD =
   '[workspace] This is a sandboxed bash (pipes, grep, jq, sort, redirects) over an in-memory ' +
   'filesystem at /model, with no network. The `viewer` command drives the model viewer next to ' +
-  'this terminal: each subcommand is one tool. Start with `viewer help` or `cat README.md`.\n\n'
+  'this terminal: each subcommand is one tool. The `ext` command builds Viewer extensions under ' +
+  `${EXTENSIONS_DIR}, checks them, and loads them into that viewer; \`docs grep\` searches the ` +
+  'offline Viewer docs. Read README.md first: it holds the extension patterns. Then `ext --help`, ' +
+  '`viewer help`.\n\n'
 
 function utf8Head(text: string, bytes: number): string {
   if (encoder.encode(text).length <= bytes) return text
@@ -530,11 +546,17 @@ export function createViewerWorkspace(
   const viewer = defineCommand('viewer', async (args, context) =>
     run(args, context.signal ?? new AbortController().signal, context),
   )
+  const ext = createExtCommand({
+    runtime: options.extensions,
+    references: new Set(REFERENCE_EXTENSIONS),
+    defaultTemplate: 'BasicSkeleton',
+  })
+  const docs = createDocsCommand({ root: DOCS_ROOT, indexPath: DOCS_INDEX_PATH })
   const bash = new Bash({
-    files: { [`${ROOT}/README.md`]: readme(catalog), [`${HOME}/.keep`]: '' },
+    files: { ...WORKSPACE_FILES, [`${ROOT}/README.md`]: readme(catalog), [`${HOME}/.keep`]: '' },
     cwd: ROOT,
     env: { HOME, USER: 'agent', TERM: 'xterm-256color' },
-    customCommands: [viewer],
+    customCommands: [viewer, ext, docs],
   })
 
   let first = true

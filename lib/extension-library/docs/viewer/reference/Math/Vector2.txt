@@ -1,0 +1,491 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/Math/Vector2/
+Reference Guide > Math > Vector2
+
+Autodesk.Viewing.Math
+
+# Vector2
+
+## new Vector2(x, y)
+
+Represents a 2D vector.
+
+### Parameters
+
+x (number) | The x component.
+y (number) | The y component.
+
+# Properties
+
+x (number) | The x component.
+y (number) | The y component.
+
+# Methods
+
+## set(x, y)
+
+Sets the x and y components.
+
+### Parameters
+
+x* (number) | The x component.
+y* (number) | The y component.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | This vector.
+
+## setX(x)
+
+Sets the x component.
+
+### Parameters
+
+x* (number) | The x value.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | This vector.
+
+## setY(y)
+
+Sets the y component.
+
+### Parameters
+
+y* (number) | The y value.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | This vector.
+
+## setComponent(index, value)
+
+Sets a component by index (0 = x, 1 = y).
+
+### Parameters
+
+index* (number) | The component index.
+value* (number) | The value to set.
+
+### Returns
+
+type | description
+void
+
+## getComponent(index)
+
+Gets a component by index (0 = x, 1 = y).
+
+### Parameters
+
+index* (number) | The component index.
+
+### Returns
+
+type | description
+number | The component value.
+
+## copy(v)
+
+Copies the x and y components from the given vector.
+
+### Parameters
+
+v* (Autodesk.Viewing.Math.Vector2) | The vector to copy.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | This vector.
+
+## add(v)
+
+Adds the given vector to this vector.
+
+### Parameters
+
+v* (Autodesk.Viewing.Math.Vector2) | The vector to add.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | This vector.
+
+## addScalar(s)
+
+Adds a scalar value to both components.
+
+### Parameters
+
+s* (number) | The scalar to add.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | This vector.
+
+## addVectors(a, b)
+
+Sets this vector to the sum of two vectors.
+
+### Parameters
+
+a* (Autodesk.Viewing.Math.Vector2) | The first vector.
+b* (Autodesk.Viewing.Math.Vector2) | The second vector.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | This vector.
+
+## sub(v)
+
+Subtracts the given vector from this vector.
+
+### Parameters
+
+v* (Autodesk.Viewing.Math.Vector2) | The vector to subtract.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | This vector.
+
+## subScalar(s)
+
+Subtracts a scalar value from both components.
+
+### Parameters
+
+s* (number) | The scalar to subtract.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | This vector.
+
+## subVectors(a, b)
+
+Sets this vector to the difference of two vectors (a - b).
+
+### Parameters
+
+a* (Autodesk.Viewing.Math.Vector2) | The first vector.
+b* (Autodesk.Viewing.Math.Vector2) | The second vector.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | This vector.
+
+## multiply(v)
+
+Multiplies this vector component-wise by the given vector.
+
+### Parameters
+
+v* (Autodesk.Viewing.Math.Vector2) | The vector to multiply by.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | This vector.
+
+## multiplyScalar(s)
+
+Multiplies both components by a scalar.
+
+### Parameters
+
+s* (number) | The scalar to multiply by.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | This vector.
+
+## divide(v)
+
+Divides this vector component-wise by the given vector.
+
+### Parameters
+
+v* (Autodesk.Viewing.Math.Vector2) | The vector to divide by.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | This vector.
+
+## divideScalar(scalar)
+
+Divides both components by a scalar. If scalar is 0, components are set to 0.
+
+### Parameters
+
+scalar* (number) | The scalar to divide by.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | This vector.
+
+## min(v)
+
+Sets each component to the minimum of this vector and the given vector.
+
+### Parameters
+
+v* (Autodesk.Viewing.Math.Vector2) | The vector to compare against.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | This vector.
+
+## max(v)
+
+Sets each component to the maximum of this vector and the given vector.
+
+### Parameters
+
+v* (Autodesk.Viewing.Math.Vector2) | The vector to compare against.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | This vector.
+
+## clamp(min, max)
+
+Clamps each component between the corresponding components of min and max.
+
+### Parameters
+
+min* (Autodesk.Viewing.Math.Vector2) | The minimum bounds.
+max* (Autodesk.Viewing.Math.Vector2) | The maximum bounds.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | This vector.
+
+## clampScalar(minVal, maxVal)
+
+Clamps each component between the given scalar min and max values.
+
+### Parameters
+
+minVal* (number) | The minimum value.
+maxVal* (number) | The maximum value.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | This vector.
+
+## floor()
+
+Floors each component.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | This vector.
+
+## ceil()
+
+Ceils each component.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | This vector.
+
+## round()
+
+Rounds each component to the nearest integer.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | This vector.
+
+## roundToZero()
+
+Rounds each component toward zero.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | This vector.
+
+## negate()
+
+Negates each component.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | This vector.
+
+## dot(v)
+
+Computes the dot product of this vector and the given vector.
+
+### Parameters
+
+v* (Autodesk.Viewing.Math.Vector2) | The other vector.
+
+### Returns
+
+type | description
+number | The dot product.
+
+## lengthSq()
+
+Returns the squared length of this vector.
+
+### Returns
+
+type | description
+number | The squared length.
+
+## length()
+
+Returns the length (magnitude) of this vector.
+
+### Returns
+
+type | description
+number | The length (magnitude) of this vector.
+
+## normalize()
+
+Normalizes this vector to unit length.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | This vector.
+
+## distanceTo(v)
+
+Returns the distance from this vector to the given vector.
+
+### Parameters
+
+v* (Autodesk.Viewing.Math.Vector2) | The other vector.
+
+### Returns
+
+type | description
+number | The distance.
+
+## distanceToSquared(v)
+
+Returns the squared distance from this vector to the given vector.
+
+### Parameters
+
+v* (Autodesk.Viewing.Math.Vector2) | The other vector.
+
+### Returns
+
+type | description
+number | The squared distance.
+
+## setLength(l)
+
+Scales this vector so that its length equals the given value.
+
+### Parameters
+
+l* (number) | The desired length.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | This vector.
+
+## lerp(v, alpha)
+
+Linearly interpolates between this vector and the given vector.
+
+### Parameters
+
+v* (Autodesk.Viewing.Math.Vector2) | The target vector.
+alpha* (number) | The interpolation factor (0–1).
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | This vector.
+
+## lerpVectors(v1, v2, alpha)
+
+Sets this vector to the linear interpolation between v1 and v2.
+
+### Parameters
+
+v1* (Autodesk.Viewing.Math.Vector2) | The start vector.
+v2* (Autodesk.Viewing.Math.Vector2) | The end vector.
+alpha* (number) | The interpolation factor (0–1).
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | This vector.
+
+## equals(v)
+
+Returns true if the given vector has the same x and y as this vector.
+
+### Parameters
+
+v* (Autodesk.Viewing.Math.Vector2) | The vector to compare.
+
+### Returns
+
+type | description
+boolean
+
+## fromArray(array, offset)
+
+Sets this vector’s components from an array.
+
+### Parameters
+
+array* (Array.<number>) | The source array.
+offset (number) | Index to start reading from.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | This vector.
+
+## toArray(array, offset)
+
+Writes this vector’s components into an array.
+
+### Parameters
+
+array (Array.<number>) | The target array.
+offset (number) | Index to start writing at.
+
+### Returns
+
+type | description
+Array.<number> | The array.
+
+## clone()
+
+Returns a new Vector2 with the same x and y as this vector.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | A new clone.

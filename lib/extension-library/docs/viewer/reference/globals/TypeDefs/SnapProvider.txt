@@ -1,0 +1,10 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/SnapProvider/
+Reference Guide > Globals > Type Definitions > SnapProvider
+
+Type Definitions
+
+# SnapProvider
+
+Externally registered snap providers are scoped per viewer instance (stored on the viewer as `_snapProviders`), so providers registered for one viewer never run inside another viewer’s Snapper. Each provider is a function `(snapResult, viewer, context) => boolean` that runs at the end of Snapper.onMouseMove, after any built-in model snapping AND also when the model was not hit at all (so providers can snap over empty space). `context` is `{ position, snapper }`, where `position` is the mouse position in canvas coords ({x, y}) for screen-space snapping and `snapper` is the Snapper instance (e.g. for `snapper.setDetectRadius(worldPoint)` / `snapper.getDetectRadiusInPixels()`).
+
+When a provider wants to take over, it mutates the snapResult (set geomType + geomVertex/geomEdge, and typically intersectPoint + radius) and returns true. This lets extensions add snap targets that are not part of the model geometry (e.g. Grids snapping to grid lines/intersections) without every tool having to know about them. A provider should compute everything that can fail first and only then mutate snapResult, so that a thrown error never leaves snapResult half-written.

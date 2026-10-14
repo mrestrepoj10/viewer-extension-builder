@@ -1,0 +1,136 @@
+https://aps.autodesk.com/en/docs/dataviz/v1/developers_guide/examples/sprites/animate_sprites/
+Developer's Guide > Examples > Sprites > Animating Sprite Viewables
+
+# Animating Sprite Viewables
+
+Animated sprite viewables are a good way to bring a user’s attention to a particular area of the model. Once you have added a sprite viewable to the scene, you can animate it by using the invalidateViewables API.
+
+- Live demo: https://aps-iot-extensions-demo.autodesk.io/
+- Source code: https://github.com/autodesk-platform-services/aps-iot-extensions-demo
+
+This image shows both static and animated sprite viewable objects:
+
+## Animating Sprite Viewables
+
+Whenever an event invalidates a `SpriteViewable` object, this provides an opportunity for your client code to change its properties, and you can use this opportunity to add animation.
+
+Here is a list of all properties of a `SpriteViewable` that can your code can update during an invalidation pass:
+
+- Icon
+- Color
+- Position
+- Highlight state
+
+The following code snippet illustrates the way to invalidate a few `SpriteViewable` objects by their identifiers:
+
+```
+// The following step invalidates all viewables in the viewer.
+// In scenarios where you only want to update a subset of the viewables,
+// `spritesToUpdate` should only include `dbId` of those viewables.
+//
+const spritesToUpdate = dataVizExtn.viewableData.viewables.map((v) => v.dbId);
+
+dataVizExtn.invalidateViewables(spritesToUpdate, (viewable) => {
+    // The callback function to update properties of the 'viewable'.
+    // This callback function will be invoked three times in this
+    // example, each time for a 'viewable' that corresponds to an
+    // entry in 'spritesToUpdate' list.
+});
+```
+
+What goes into the callback function depends on the properties you want to update. See sections below for more details on how to update respective sprite properties.
+
+### Updating the sprite icon
+
+You can update the icon of a sprite object during an `invalidateViewables` call, as long as the new icon was preloaded. The following code snippet shows how to preload icon files into a `ViewableStyle` before using it to create `SpriteViewable` objects:
+
+```
+const fans = ["fan-00.svg", "fan-01.svg", "fan-02.svg", "fan-03.svg"];
+
+const baseURL = "http://localhost:9081/assets/images/";
+const spriteColor = new THREE.Color(0xffffff);
+const highlightedColor = new THREE.Color(0xe0e0ff);
+const dataVizCore = Autodesk.DataVisualization.Core;
+
+// Define a 'ViewableStyle' to be used for `SpriteViewable` creation.
+const style = new dataVizCore.ViewableStyle(
+    dataVizCore.ViewableType.SPRITE,
+    spriteColor,
+    `${baseURL}${fans[0]}`,
+    highlightedColor,
+    `${baseURL}${fans[0]}`, // Highlighted URL
+    fans.map((f) => `${baseURL}${f}`) // URLs of icons to be used for sprite
+);
+```
+
+The following code implements a timer. Within the `invalidateViewables` function is a callback to return a viewable, which we match with our `spriteToUdate` array. Once we match the viewable to our id, we return a new object with a new state. In this case, a new URL, pointing to the next SVG in the animation sequence:
+
+```
+// The following step invalidates all viewables in the viewer.
+// In scenarios where you only want to update a subset of the viewables,
+// `spritesToUpdate` should only include `dbId` of those viewables.
+//
+let spritesToUpdate = dataVizExtn.viewableData.viewables.map((v) => v.dbId);
+let i = 0;
+
+setInterval(() => {
+    dataVizExtn.invalidateViewables(spritesToUpdate, (viewable) => {
+        return { url: `${baseURL}${fans[i++ % fans.length]}` };
+    });
+}, 200);
+```
+
+### Updating the sprite color
+
+The following code snippet invalidates and updates the background color of a `SpriteViewable` object:
+
+```
+dataVizExtn.invalidateViewables(spritesToUpdate, (viewable) => {
+    return {
+        // Change the sprite to pink color.
+        color: { r: 1.0, g: 0.753, b: 0.796 },
+    };
+});
+```
+
+### Updating the sprite position
+
+The following code snippet invalidates and updates the position of a `SpriteViewable` object:
+
+```
+dataVizExtn.invalidateViewables(spritesToUpdate, (viewable) => {
+    return {
+        // Move the viewable to a new location.
+        position: { x: 10.0, y: 20.0, z: 30.0 },
+    };
+});
+```
+
+### Scaling or hiding the sprite highlight state
+
+The following code snippet scales a given set of `SpriteViewable` objects and doubles their size:
+
+```
+dataVizExtn.invalidateViewables(spritesToUpdate, (viewable) => {
+    return {
+        scale: 2.0, // Double the viewable size.
+    };
+});
+```
+
+Note that the valid range for `scale` value is `[0.0, 2.0]`. A `scale` of `0.0` simply hides the viewable。
+
+### Updating multiple sprite properties
+
+To avoid invalidating the same sprite multiple times, you can update all the properties for the same set of `SpriteViewable` objects in a single call:
+
+```
+dataVizExtn.invalidateViewables(spritesToUpdate, (viewable) => {
+    return {
+        url: `${rootResUrl}/fan-${iconIndex}.svg`, // Change the icon
+        color: { r: 1.0, g: 0.753, b: 0.796 }, // Update its color
+        position: { x: 10.0, y: 20.0, z: 30.0 }, // Move the viewable
+        scale: 2.0, // Double the viewable size
+    };
+});
+```

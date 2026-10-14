@@ -1,0 +1,233 @@
+https://aps.autodesk.com/en/docs/dataviz/v1/reference/DataVisualization/DataVisualization/
+Reference Guide > DataVisualization > DataVisualization
+
+Autodesk.DataVisualization
+
+# DataVisualization
+
+Data Visualization extension provides an API for building scenes with custom sprites (dots) and heatmaps (surface shading) within model boundaries.
+
+The extension id is: `Autodesk.DataVisualization`
+
+## new DataVisualization(viewer, options)
+
+### Parameters
+
+viewer* (Viewer3D) | Viewer instance
+options* (object) | Configurations for the extension
+
+### Examples
+
+```
+const ext = await viewer.loadExtension("Autodesk.DataVisualization")
+```
+
+# Methods
+
+## addViewables(data)
+
+Adds a collection of `CustomViewable` objects for display through the `ViewableData` object that contains them.
+
+### Parameters
+
+data* (ViewableData) | The `ViewableData` that contains allthe `CustomViewable` objects which are to be added for display.
+
+## removeAllViewables()
+
+Removes all viewables from display.
+
+## changeOcclusion(enable)
+
+Enables or disables depth testing for custom viewable objects. When depth testing is enabled for custom viewables, they will be occluded by objects in the scene that are nearer to the camera. If depth testing is disabled for custom viewables, they will always be visible regardless of other objects that may be blocking them.
+
+### Parameters
+
+enable* (boolean) | Indicates if occlusion should be enabled. Setthis parameter to `true` to enable depth testing for custom viewables,or `false` otherwise.
+
+## showHideViewables(visible, occlusion)
+
+Sets the visibility and occlusion for these custom viewables.
+
+### Parameters
+
+visible* (boolean) | Indicates if all custom viewables should be visible.Set this to `true` to display all custom viewables, or `false` otherwise.
+occlusion* (boolean) | Indicates if occlusion should be enabled. Ifthis parameter is set to `true`, depth testing will be enabled for customviewables, causing them to be occluded by objects that are nearer to thecamera. Set this to `false` in order to always display custom viewables ontop of the view and not be occluded by other objects in the scene.
+
+## highlightViewables(dbIds)
+
+Highlights one or more existing custom viewables in the scene. Highlighted viewables can be cleared with `clearHighlightedViewables` API.
+
+### Parameters
+
+dbIds* (number, Array.<number>) | The `DbId` of one or more custom viewablesto highlight.
+
+## clearHighlightedViewables()
+
+Clears any existing highlighted custom viewable that was highlighted with a prior call to `highlightViewables` API.
+
+## invalidateViewables(dbIds, callback)
+
+Invalidates one or more `CustomViewable` objects, causing them to update with new properties (e.g. sprite image, position, etc.). Since this call updates all relevant viewable objects in a single batch, it is recommended that more viewables to be batched in less number of `invalidateViewables` calls.
+
+### Parameters
+
+dbIds* (number, Array.<number>) | One or more `DbId` values of viewables tobe updated in this call.
+callback* (ViewableInvalidatedCallback) | The client specified callbackfunction to be invoked for each of the `CustomViewable` objects beinginvalidated. The callback function should return new property values thatthe `CustomViewable` object is to be updated with.
+
+## showTextures()
+
+Enables texture display in the current scene.
+
+## hideTextures()
+
+Disables texture display in the current scene.
+
+## setupSurfaceShading(model, shadingData, options)
+
+Sets up surface shading (heatmap display) for the model.
+
+### Parameters
+
+model* (Model) | The model to set up the shading for. It is used toestablish connections between `DbId` and the corresponding fragmentsso that heatmap can be rendered. Note that this model may not alwaysbe the same one representing the main loaded model. If the shading isset up for models built by `SceneBuilder`, then this parameter shouldbe the model within that same `SceneBuilder`. See example for more.
+shadingData* (SurfaceShadingData) | The surface shading data generatedwith a prior call to `ModelStructureInfo.generateSurfaceShadingData`.This value is used to set up the surface shading.
+options (Object) | Extra configuration options for surface shading.The `options` parameter is only used for setting up `PlanarHeatmap` (i.e.when `options.type` is set to `PlanarHeatmap`).
+  type* (string) | To create a planar heatmap, this must be setto `"PlanarHeatmap"`.
+  width (number) | Optional. The width in pixels of theunderlying texture used for rendering the heatmap. If the bounding box ofthe geometry turns out to be portrait, then `width` value will be adjustedwith respect to `height` value to retain the aspect ratio. If unspecified,the default value of `1024` pixels is used.
+  height (number) | Optional. The height in pixels of theunderlying texture used for rendering the heatmap. If the bounding box ofthe geometry turns out to be landscape, then `height` value will beadjusted with respect to `width` value to retain the aspect ratio.If unspecified, the default value of `1024` pixels is used.
+  slicingEnabled (boolean) | Optional. Set this to `true` toenable geometry slicing through the use of `CompGeom` viewer extension.This allows edges to be built as boundaries for irregularly shaped geometries,but may fail for complex geometries. When set to `false`, the axis-alignedbounding boxes of relevant geometries will be used to display heatmap texture.If unspecified, this parameter will be set to `true`.
+  slicingPosition (number) | Optional. A number representing thepoint at which slicing should happen. Valid value range is `[0.0, 1.0]`. Ifunspecified, the default value of `0.5` will be used, slicing geometry throughthe vertical mid-point of the bounding box. This value will be used onlyif `options.slicingEnabled` is set to `true`.
+  placementPosition (number) | Optional. A number in the rangeof `[0.0, 1.0]`, indicating the placement position of the resulting plane.When set to `0.0`, the plane will be positioned at the lowest `z` coordinateof the bounding box. When set to `1.0`, the plane will be positioned at thehighest point of the bounding box. If unspecified, the default value of ``0.0``will be used.
+  minOpacity (number) | Optional. The minimum opacity the lowestvalue in the heatmap will have. This value is in the range of `[0.0, 1.0]`. Ifunspecified the default value of `0.0` will be used.
+  maxOpacity (number) | Optional. The maximal opacity the highestvalue in the heatmap will have. This value is in the range of `[0.0, 1.0]`. Ifunspecified the default value of `1.0` will be used.
+
+### Examples
+
+```
+ // 'devices' is a list of 'Device' objects
+const info = new Autodesk.DataVisualization.Core.ModelStructureInfo(model);
+const shadingData = await info.generateSurfaceShadingData(devices);
+
+// The call to 'generateSurfaceShadingData' above generates 'shadingData'
+// based on 'model' that is passed to 'ModelStructureInfo', therefore the
+// 'DbId' within 'shadingData' are all originated from the same 'model'.
+// In this case, the first parameter is the same 'model' above.
+//
+dataVizExtn.setupSurfaceShading(model, shadingData);
+
+// If the 'SurfaceShadingData' passed to 'setupSurfaceShading' is constructed
+// with 'DbId' coming from a 'SceneBuilder', then the first parameter must be
+// the same model that 'SurfaceShadingData' was created from:
+//
+// const anotherModel = sceneBuilder.modelBuilder.model;
+// dataVizExtn.setupSurfaceShading(anotherModel, shadingData);
+```
+
+## renderSurfaceShading(nodeIds, sensorType, valueCallback, options)
+
+Renders one or more nodes with the given identifiers. This call creates necessary resources like overlay scene and materials, therefore is by design to be called only when necessary (i.e., when surface shading needs to be updated due to geometry changes). For more lightweight rendering, `updateSurfaceShading` API should be used instead.
+
+### Parameters
+
+nodeIds* (string, Array.<string>) | One or more identifiers of nodesto render. These identifiers are among the ones providedthrough `SurfaceShadingData` in a prior call to `setupSurfaceShading` API.
+sensorType* (string) | The type of sensor to render the shading for.
+valueCallback* (SensorValueCallback) | The callback function thatwill be invoked when surface shading requires the sensor value to render.
+options* (Object) | Extra configurations for heatmap and/or to provide the modelto use for this API in a multi-model setup.
+  heatmapConfig (HeatmapConfig) | Optional. The configuration ofthe heatmap. See documentation for `HeatmapConfig` for more details.
+  model (Model) | Optional. The model to render the shading for.If none is provided, the API will use the model used in the prior call to``setupSurfaceShading`` API
+
+### Examples
+
+```
+ // This callback will be invoked multiple times for each call to
+// 'renderSurfaceShading' below, once for each of the devices on
+// the floor.
+function getSensorValue(deviceInfo, sensorType) {
+    const deviceId = deviceInfo.id;
+    const sensorValue = readSensorValue(deviceId, sensorType);
+    return clamp(sensorValue, 0.0, 1.0); // Normalize sensor value
+}
+
+function onFloorSelectedOnUi(floorName) {
+    const sensorType = "CO₂";
+    dataVizExtn.renderSurfaceShading(floorName, sensorType, getSensorValue);
+}
+
+// In case of multiple models, pass the model to the API
+ let model2 = viewer.getAllModels().filter(model => model.id === 'the desired model id')
+ dataVizExtn.renderSurfaceShading(floorName, sensorType, getSensorValue, {model:model2});
+```
+
+## updateSurfaceShading(valueCallback, options)
+
+Updates the surface shading (heatmap) with the latest sensor values. This API simply updates the resources created in a prior call to the `renderSurfaceShading` without recreating them, therefore it is a more lightweight alternatives suited for high frequency calls.
+
+### Parameters
+
+valueCallback* (SensorValueCallback) | The callback function thatwill be invoked when surface shading requires the sensor value to render.
+options (Object) | Extra configurations for heatmap and/or to provide the modelto use for this API in a multi-model setup.
+  heatmapConfig (HeatmapConfig) | Optional. The configuration ofthe heatmap. See documentation for `HeatmapConfig` for more details.
+  model (Model) | Optional. The model to update the shading for.If none is provided, the API will use the model used in the prior call to``setupSurfaceShading`` API
+
+### Examples
+
+```
+ let seconds; // Selected time on the UI
+
+// This callback will be invoked multiple times for each call to
+// 'renderSurfaceShading' below, once for each of the devices on
+// the floor.
+function getSensorValue(deviceInfo, sensorType) {
+    const deviceId = deviceInfo.id;
+    const sensorValue = readSensorValue(deviceId, sensorType, seconds);
+    return clamp(sensorValue, 0.0, 1.0); // Normalize sensor value
+}
+
+// Handler for slider events that is triggered rapidly
+function onTimeSliderValueChanged(timeInSeconds) {
+    seconds = timeInSeconds;
+    dataVizExtn.updateSurfaceShading(getSensorValue);
+}
+// In case of multiple models, pass the model to update the shading for.
+ let model2 = viewer.getAllModels().filter(model => model.id === 'the desired model id')
+ dataVizExtn.updateSurfaceShading(getSensorValue, {model:model2});
+```
+
+## registerSurfaceShadingColors(sensorType, colors, options)
+
+Registers color stops for use in heatmap colorization. The specified color stops evenly spread out across the spectrum that represents the normalized sensor values ranging between 0.0 and 1.0.
+
+### Parameters
+
+sensorType* (string) | The sensor type to define the color stops for.
+colors* (Array.<number>) | An array of color values, each expressed in a3-byte (24-bit) numerical value. Note that it is possible to specify a4-byte (32-bit) number as color, but only 3 lower bytes will be taken.Each of the three bytes represents the intensity value between `0` and `255`,of red, green, blue color component respectively. For example, ``0xff0000``represents a red color with full intensity.
+options* (Object) | Extra configurations for alpha setting and to provide the modelto use for this API in a multi-model setup.
+  alpha (number) | The opacity of the heatmap for the specified sensorType
+  model (Model) | Optional. The model to register the sensor color for.If none is provided, the API will use the model used in the prior call to``setupSurfaceShading`` API
+
+### Examples
+
+```
+ // Register 3 color stops for CO₂ sensor values
+const dataVizExt = await viewer.loadExtension("Autodesk.DataVisualization");
+dataVizExt.registerSurfaceShadingColors("CO₂", [0x0f2027, 0x203a43, 0x2c5364]);
+
+// In case of multiple models, pass the model to register the sensor color for.
+let model2 = viewer.getAllModels().filter(model => model.id === 'the desired model id')
+dataVizExtn.registerSurfaceShadingColors("CO₂", [0x0f2027, 0x203a43, 0x2c5364], {model:model2});
+```
+
+## removeSurfaceShading(model)
+
+Removes any surface shading created by clearing the overlay which holds the meshes used as heatmap representation.
+
+### Parameters
+
+model (Model) | Optional. The model to remove the shading for.Useful in case of multi-model use cases.If none is provided, the API will use the model used in the prior call to``setupSurfaceShading`` API
+
+### Examples
+
+```
+ // In case of multiple models, pass the model to remove the shading for.
+let model2 = viewer.getAllModels().filter(model => model.id === 'the desired model id')
+dataVizExtn.removeSurfaceShading(model2);
+```

@@ -1,0 +1,12 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/MeasureCommon/
+Reference Guide > MeasureCommon
+
+Autodesk.Viewing
+
+# MeasureCommon
+
+Symbols supporting measuring capabilities.
+
+# Properties
+
+SnapType (number) | An enumeration of supported snapping types.

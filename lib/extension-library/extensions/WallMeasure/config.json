@@ -1,0 +1,14 @@
+{
+  "name": "WallMeasure",
+  "displayname": "Wall Measure",
+  "description": "Custom tool: click two points on walls to draw an overlay line and show the distance in model units.",
+  "options": {},
+  "viewerversion": "7.*",
+  "loadonstartup": "false",
+  "filestoload": {
+    "cssfiles": ["main.css"],
+    "jsfiles": ["main.js"]
+  },
+  "includeinlist": "true",
+  "bundleAlias": "WallMeasure"
+}

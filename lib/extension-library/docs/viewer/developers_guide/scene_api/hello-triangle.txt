@@ -1,0 +1,88 @@
+https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/scene_api/hello-triangle/
+Developer's Guide > Scene API > Geometry and First Render > Hello Triangle
+
+# Hello Triangle
+
+This is the minimal end-to-end example — the complete create-and-render loop in a single file.
+
+By the end of this example you will have a single green triangle rendered inside a live Viewer scene. Along the way you will touch every layer of the API at least once: creating a dynamic Model, authoring a BufferGeometry with `position` and `normal` attributes, constructing a StandardMaterial, and handing both to InstanceCollection3D.add to create a renderable instance.
+
+The key insight to carry forward is that Model, InstanceCollection3D, and BufferGeometry are independent objects you assemble and connect — the geometry describes shape, the material describes appearance, and InstanceCollection3D.add binds them together into a single renderable instance placed in the scene. After any change that should be visible on screen, call Viewer3D.refresh to ask the renderer for a new frame.
+
+See the Pen APS Viewer SDK - Hello Triangle by Autodesk Platform Services (@autodesk-platform-services) on CodePen.
+
+## Source
+
+Create a dynamic model and show it
+
+`new Autodesk.Viewing.Model()` allocates an empty, programmatically-owned model. Viewer3D.showModel registers it with the renderer. `model.getInstances()` returns the InstanceCollection3D — the object you use to add, update, and remove renderable instances.
+
+```
+const model = new Autodesk.Viewing.Model();
+viewer.showModel(model);
+const instances = model.getInstances();
+
+// Set camera so the triangle is visible
+viewer.getCamera().setView({
+    position: new avm.Vector3(0, 0, 5),
+    target: new avm.Vector3(0, 0, 0),
+    up: new avm.Vector3(0, 1, 0)
+});
+```
+
+Build geometry
+
+BufferGeometry holds typed-array attribute buffers. The minimum required attributes are `position` (Float32, item size 3) and `normal` (Float32, item size 3). With `setIndices()` we set the index buffer, here a single triangle referencing vertices 0, 1, and 2. Index buffer can be of type Uint16Array or Uint32Array. To get maximal performance and save memory, use Uint16Array wherever possible.
+
+```
+// Step 3: Define triangle vertices
+// (3 vertices, each with x/y/z)
+const positions = new Float32Array([
+    -1.0, -1.0, 0.0,   // vertex 0: bottom-left
+    1.0, -1.0, 0.0,   // vertex 1: bottom-right
+    0.0, 1.0, 0.0    // vertex 2: top-center
+]);
+
+// Step 4: Define normals
+// (all pointing toward the camera along +Z)
+const normals = new Float32Array([
+    0.0, 0.0, 1.0,
+    0.0, 0.0, 1.0,
+    0.0, 0.0, 1.0
+]);
+
+// Step 5: Define triangle indices
+// (one triangle using vertices 0, 1, 2)
+const indices = new Uint16Array([0, 1, 2]);
+
+// Step 6: Build the BufferGeometry
+// Set vertex buffers
+const geometry = new avs.BufferGeometry();
+geometry.setAttribute(
+    'position', new avs.BufferAttribute(positions, 3)
+);
+geometry.setAttribute(
+    'normal', new avs.BufferAttribute(normals, 3)
+);
+// Set index buffer
+geometry.setIndices(indices);
+```
+
+Create a material, add the instance, and trigger rendering
+
+StandardMaterial is a shaded material. Passing `color` sets its base albedo. InstanceCollection3D.add creates the instance and returns a numeric instance id you can use for future updates. The final Viewer3D.refresh call schedules a render frame.
+
+```
+// Step 7: Create a material
+const material = new avs.StandardMaterial({
+    color: 0x00cc88
+});
+
+// Step 8: Add the instance to the scene
+instances.add(geometry, material);
+
+// Step 9: Trigger rendering
+viewer.refresh(true);
+```
+
+Congratulations! You have created a dynamic model, built a triangle geometry, and rendered it in the Viewer.

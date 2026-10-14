@@ -1,0 +1,15 @@
+https://aps.autodesk.com/en/docs/dataviz/v1/reference/globals/TypeDefs/PropertyUpdates/
+Reference Guide > Globals > Type Definitions > PropertyUpdates
+
+Type Definitions
+
+# PropertyUpdates
+
+The object that includes the value for one or more `CustomViewable` properties to be updated when the viewable is being invalidated. If a property is omitted, its value in `CustomViewable` will remain unchanged.
+
+# Properties
+
+scale (number) | An optional property that updates the scaleof the `CustomViewable` must be in the range [0.0, 2.0].
+url (string) | An optional property that represents the sprite URLto be used for the `CustomViewable` as part of its update. If provided, thisvalue should match one of the values added through ``ViewableStyle.preloadSprite``API.
+color (THREE.Color) | An optional property that represents the colorto be used for the `CustomViewable` as part of its update.
+position (THREE.Vector3) | An optional property that represents theposition to be used for the `CustomViewable` as part of its update.

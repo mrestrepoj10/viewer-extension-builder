@@ -1,0 +1,96 @@
+https://aps.autodesk.com/en/docs/dataviz/v1/developers_guide/examples/sprites/create_sprite_style/
+Developer's Guide > Examples > Sprites > Creating Sprites With Styles
+
+# Creating Sprites With Styles
+
+- Live demo: https://aps-iot-extensions-demo.autodesk.io/
+- Source code: https://github.com/autodesk-platform-services/aps-iot-extensions-demo
+
+Sprite viewables are texture-based icons inserted into the 3D view. Unlike conventional HTML-based icons overlaid on top of the 3D canvas, these are actual visual objects in the 3D scene that can be occluded by other objects based on their depth values.
+
+The following image illustrates an example of sprite viewables:
+
+## Adding Sprite Viewables
+
+### Loading the DataVisualization Extension
+
+To use the sprite viewable APIs, you first have to load the `Autodesk.DataVisualization` extension.
+
+```
+// Load 'Autodesk.DataVisualization' and store it as a variable for later use
+const dataVizExtn = await viewer.loadExtension("Autodesk.DataVisualization");
+```
+
+### Defining a visual style
+
+A `ViewableStyle` object defines a style for `SpriteViewable` objects:
+
+```
+const DataVizCore = Autodesk.DataVisualization.Core;
+const viewableType = DataVizCore.ViewableType.SPRITE;
+const spriteColor = new THREE.Color(0xffffff);
+const baseURL = "http://localhost:9081/images/";
+const spriteIconUrl = `${baseURL}fan-00.svg`;
+
+const style = new DataVizCore.ViewableStyle(viewableType, spriteColor, spriteIconUrl);
+```
+
+- `viewableType` - You must set this value to `Autodesk.DataVisualization.Core.ViewableType.SPRITE`.
+- `spriteColor` - The color value of type `THREE.Color` with which the sprite interpolates. To display the sprite in its original color, set this parameter to white (`THREE.Color(0xffffff)`).
+- `spriteIconUrl` - The URL of an image to use as the style icon. There is no restriction on the size of the image, but it should be square in shape. Regardless of the original image size, the final display size of the sprite viewable depends on the value specified in `ViewableData.spriteSize`.
+
+### Creating sprite viewables
+
+The following code snippet shows how to create multiple `SpriteViewable` objects. An instance of `ViewableData` is required to contain and batch-process the `SpriteViewable` objects:
+
+```
+const viewableData = new DataVizCore.ViewableData();
+viewableData.spriteSize = 24; // Sprites as points of size 24 x 24 pixels
+
+const myDataList = [{ position: { x: 10, y: 2, z: 3 } }, { position: { x: 20, y: 22, z: 3 } }];
+
+myDataList.forEach((myData, index) => {
+    const dbId = 10 + index;
+    const position = myData.position;
+    const viewable = new DataVizCore.SpriteViewable(position, style, dbId);
+
+    viewableData.addViewable(viewable);
+});
+```
+
+- `position` - The position of the sprite in world space, specified as a value of type `THREE.Vector3`.
+- `style` - The `ViewableStyle` that defines the style of this sprite viewable. If you want sprites to share an appearance, more than one `SpriteViewable` can share an instance of `ViewableStyle`.
+- `dbId` - The numeric identifier of this sprite viewable. This value should be unique across all instances of `SpriteViewable` as this will identify the target sprite viewable of a mouse event.
+
+### Adding viewables into the scene
+
+For a `SpriteViewable` to show up in the 3D scene, you should finalize the containing `ViewableData` before adding it to the display:
+
+```
+await viewableData.finish();
+dataVizExtn.addViewables(viewableData);
+```
+
+### Removing all viewables from the scene
+
+To remove all sprite viewables from the scene, do the following:
+
+```
+dataVizExtn.removeAllViewables();
+```
+
+## Controlling occlusion
+
+Since sprite viewables are actual visual objects in the 3D scene, they can be occluded by other objects in the scene that are closer to the camera. This can provide a sense of depth to the user.
+
+You can enable or disable the occlusion of sprite viewables by passing `true` or `false` as the second parameter to the `showHideViewables` API:
+
+```
+const showViewables = true;
+const enableOcclusion = true;
+dataVizExtn.showHideViewables(showViewables, enableOcclusion);
+```
+
+## Hiding sprite viewables
+
+To hide all sprite viewables at once, pass `false` as the first parameter of `showHideViewables`.

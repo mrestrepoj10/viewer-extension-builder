@@ -1,0 +1,181 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/ObjectTree/
+Reference Guide > Viewing > ObjectTree
+
+Autodesk.Viewing
+
+# ObjectTree
+
+## new ObjectTree(nodeAccess, objectCount, maxDepth)
+
+### Parameters
+
+nodeAccess*
+objectCount*
+maxDepth*
+
+# Methods
+
+## isNodeHidden(dbId)
+
+Whether a node id is hidden.
+
+### Parameters
+
+dbId* (number) | The node’s database id
+
+### Returns
+
+type | description
+boolean
+
+## isNodeVisibleLocked(dbId)
+
+Whether a node id’s visiblitly is locked.
+
+### Parameters
+
+dbId* (number) | The node’s database id
+
+### Returns
+
+type | description
+boolean
+
+## isNodeExplodeLocked(dbId)
+
+Whether a node id’s explode is locked.
+
+### Parameters
+
+dbId* (number) | The node’s database id
+
+### Returns
+
+type | description
+boolean
+
+## getNodeType(dbId)
+
+Gets the type associated with the node, such as assmebly, layer, model, geometry, etc.
+
+### Parameters
+
+dbId* (number) | The node’s database id
+
+### Returns
+
+type | description
+number | one of NODE_TYPE
+
+## isNodeSelectable(dbId)
+
+Whether the node is a selectable entity.
+
+### Parameters
+
+dbId* (number) | The node’s database id
+
+### Returns
+
+type | description
+boolean
+
+## getNodeParentId(dbId)
+
+Gets the database id of the node’s parent.
+
+### Parameters
+
+dbId* (number) | The node’s database id
+
+### Returns
+
+type | description
+number
+
+## getRootId()
+
+Gets the model’s root database id.
+
+### Returns
+
+type | description
+number
+
+## getNodeName(dbId, includeCount)
+
+Gets the name associated to the id.
+
+### Parameters
+
+dbId* (number) | The node’s database id
+includeCount* (boolean) | True if must include count
+
+### Returns
+
+type | description
+string
+
+## getChildCount(dbId)
+
+Get number of children under the specified id.
+
+### Parameters
+
+dbId* (number) | The node’s database id
+
+### Returns
+
+type | description
+number
+
+## getInstanceCount(dbId)
+
+Get number of instances under the specified id.
+
+### Parameters
+
+dbId* (number) | The node’s database id
+
+### Returns
+
+type | description
+number
+
+## getNodeBox(dbId, dst)
+
+Sets the bounding box values for a particular id on the 2nd argument provided. There is no return value.
+
+### Parameters
+
+dbId* (number) | The node’s database id
+dst* (Float32Array) | An array holding 6 number values: (min-x, min-y, min-z, max-x, max-y, max-z)
+
+## enumNodeInstances(node, callback, recursive)
+
+### Parameters
+
+node* (number) | The id of a node.
+callback* (Autodesk.Viewing.ObjectTree~onEnumNodeInstances) | The function that will be called for each instance. Note that if the callback function returns a truthy value, a loop over the instances and child nodes will be interrupted and the callback result will be forwarded back to the caller.
+recursive (boolean) | Whether the callback function gets called for child nodes, too.
+
+## enumNodeChildren(node, callback, recursive)
+
+### Parameters
+
+node* (number) | The id of a node.
+callback* (Autodesk.Viewing.ObjectTree~onEnumNodeChildren) | The function that will be called for each child node. Note that if the callback function returns a truthy value, a loop over the child nodes will be interrupted and the callback result will be forwarded back to the caller.
+recursive (boolean) | Whether the callback function gets called for indirect child nodes, too.
+
+## search(text)
+
+Search the tree for nodes whose names match the given string.
+
+### Parameters
+
+text* (string) | The search term (not case sensitive).
+
+### Returns
+
+type | description
+Array.<number> | The dbIds of all nodes in the tree matching the search text.

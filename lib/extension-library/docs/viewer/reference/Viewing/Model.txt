@@ -1,0 +1,566 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/Model/
+Reference Guide > Viewing > Model
+
+Autodesk.Viewing
+
+# Model
+
+Core class representing the geometry.
+
+## new Model()
+
+# Methods
+
+## getInstanceTree() (Deprecated)
+
+Deprecated. Use Autodesk.Viewing.Model#getObjectTree instead.
+
+### Returns
+
+type | description
+Autodesk.Viewing.ObjectTree | Object tree of the model if available, otherwise null.
+
+## getFuzzyBox(options)
+
+Computes Bounding box of all instances, but excluding outliers.
+
+### Parameters
+
+options (Object)
+  quantil (float) | in [0,1]. Relative amount of instances that we consider for the computation. By default, we consider the 75% of instances that are closest to the center.
+  center (float) | Center from which we collect the closest shapes. By default, we use the center of mass.
+  ignoreTransforms (boolean) | Ignore modelMatrix and animation transforms
+  allowlist (Array.<number>) | Instances to include in fuzzybox, by index.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Box3
+
+## getBoundingBox(ignoreTransform, excludeShadow)
+
+### Parameters
+
+ignoreTransform (boolean) | Set to true to return the original bounding box in model space coordinates.
+excludeShadow (boolean) | Remove shadow geometry (if exists) from model bounds.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Box3 | Bounding box of the model if available, otherwise null.
+
+## is2d()
+
+### Returns
+
+type | description
+boolean | Whether the model is 2D.
+
+## is3d()
+
+### Returns
+
+type | description
+boolean | Whether the model is 3D.
+
+## isSVF2()
+
+### Returns
+
+type | description
+boolean | True if the model is an SVF2 file - which supports sharing of materials and geometry.
+
+## isPdf(onlyPdfSource)
+
+### Parameters
+
+onlyPdfSource* (boolean) | Set to true in order to verify that the source file of the model is PDF. Some design files can get extracted to PDFs for example, and in that case, when using the flag, we’ll get false as a result.
+
+### Returns
+
+type | description
+boolean | True if the model is created from a PDF file.
+
+## isRevitPdf()
+
+### Returns
+
+type | description
+boolean | True if the model is a PDF that was created from a Revit source file.
+
+## isSmartPdf()
+
+### Returns
+
+type | description
+boolean | True if the model is a Smart PDF that was created by our translation pipeline.
+
+## isLeaflet()
+
+### Returns
+
+type | description
+boolean | True if the model is created from an image file.
+
+## isPageCoordinates()
+
+By default, Leaflet documents are being loaded in a normalized coordinate system. Only when using `fitPaperSize` load option, the model will be loaded in page coordinates, like every other 2D model.
+
+### Returns
+
+type | description
+boolean | True if the model is loaded in page coordinates.
+
+## isSceneBuilder()
+
+### Returns
+
+type | description
+boolean | True if the model is created using Autodesk.Viewing.SceneBuilder extension
+
+## getData()
+
+Returns the geometry data.
+
+### Returns
+
+type | description
+Object | Data that represents the geometry.
+
+## getDocumentNode()
+
+Returns an object wrapping the bubble/manifest entry for the loaded geometry. Contains data such as the viewableID, guid, role…
+
+### Returns
+
+type | description
+Autodesk.Viewing.BubbleNode
+
+## getRoot()
+
+Returns the root of the geometry node graph.
+
+### Returns
+
+type | description
+object | The root of the geometry node graph. Null if it doesn’t exist.
+
+## getRootId()
+
+Returns the root of the geometry node graph.
+
+### Returns
+
+type | description
+number | The ID of the root or 0 if it doesn’t exist.
+
+## getUnitData(unit)
+
+Returns an object that contains the standard unit string (unitString) and the scale value (unitScale).
+
+### Parameters
+
+unit* (string) | Unit name from the metadata
+
+### Returns
+
+type | description
+object | This object contains the standardized unit string (unitString) and a unit scaling value (unitScale)
+
+## getUnitScale()
+
+Returns the scale factor of model’s distance unit to meters.
+
+### Returns
+
+type | description
+number | The scale factor of the model’s distance unit to meters or unity if the units aren’t known.
+
+## getUnitString()
+
+Returns a standard string representation of the model’s distance unit.
+
+### Returns
+
+type | description
+string | Standard representation of model’s unit distance or null if it is not known.
+
+## getDisplayUnit()
+
+Returns a standard string representation of the model’s display unit.
+
+### Returns
+
+type | description
+string | Standard representation of model’s display unit or null if it is not known.
+
+## getMetadata(itemName, subitemName, defaultValue)
+
+Return metadata value.
+
+### Parameters
+
+itemName* (string) | Metadata item name.
+subitemName (string) | Metadata subitem name.
+defaultValue | Default value.
+
+### Returns
+
+type | description
+Metadata value, or defaultValue if no metadata or metadata item/subitem does not exist.
+
+## getDefaultCamera()
+
+Returns the default camera.
+
+## isAEC()
+
+### Returns
+
+type | description
+boolean | True when the “AEC” loader settings were used when loading the model
+
+## hasPageShadow()
+
+### Returns
+
+type | description
+boolean | True when a 2D model has a page shadow
+
+## getUpVector()
+
+Returns up vector as an array of 3.
+
+Note: This returns the up vector as stored in the metadata (or the overridden up vector if specified), but does not take into account the world up rotation.
+
+## getNorthVector()
+
+Returns north vector as an array of 3.
+
+If an up-direction override is set on the model (see Autodesk.Viewing.Model#getUpVector), the returned vector is projected onto the plane orthogonal to the override up vector and normalized. When both north and front metadata are present, they are additionally orthogonalized as a pair, so both are guaranteed to be perpendicular to each other and to up. Without an override, the raw metadata vector is returned unchanged.
+
+### Returns
+
+type | description
+Array.<number>, null | 3-element array, or `null` if no north vector is available.
+
+## getFrontVector()
+
+Returns front vector as an array of 3.
+
+If an up-direction override is set on the model (see Autodesk.Viewing.Model#getUpVector), the returned vector is projected onto the plane orthogonal to the override up vector and normalized. When both north and front metadata are present, they are additionally orthogonalized as a pair, so both are guaranteed to be perpendicular to each other and to up. Without an override, the raw metadata vector is returned unchanged.
+
+### Returns
+
+type | description
+Array.<number>, null | 3-element array, or `null` if no front vector is available.
+
+## geomPolyCount()
+
+Returns the polygon count.
+
+### Returns
+
+type | description
+number
+
+## instancePolyCount()
+
+Returns the instanced polygon count.
+
+### Returns
+
+type | description
+number
+
+## isLoadDone(checkTextures)
+
+Returns true if the model with all its geometries has loaded.
+
+### Parameters
+
+checkTextures (boolean) | Ensures that the model’s textures were completely loaded.
+
+### Returns
+
+type | description
+boolean
+
+## isObjectTreeCreated()
+
+### Returns
+
+type | description
+boolean | True if the frag to node id mapping is done.
+
+## getPropertyDb()
+
+Returns an instance of PropertyDatabase Loader, responsible for communicating with the PropertyDatabase instance hosted in a browser worker thread.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Private.PropDbLoader
+
+## getPropertyHashes(nameRE, categoryRE)
+
+Enumerates all attributes (types of properties) used for the given model. If the property database is available, for each property a triple with the property’s hash, name, and category is created and added to the result array. In addition, regular expression can be used to filter by name and/or category.
+
+### Parameters
+
+nameRE* (RegExp) | Regular expression to use for filtering properties by their name.
+categoryRE* (RegExp) | Regular expression to use for filtering properties by their category.
+
+### Returns
+
+type | description
+Array | Array with triples of the properties’ hashes, names, and categories.
+
+### Examples
+
+```
+ const properties = await model.getPropertyHashes(/category/i);
+// -> Array(8) [ (3) […], (3) […], (3) […], (3) […], (3) […], (3) […], (3) […], (3) […] ]
+//     0: Array(3) [ "p5eddc473", "Category", "__category__" ]
+//     1: Array(3) [ "pa7275c45", "CategoryId", "__categoryId__" ]
+//     2: Array(3) [ "p3ed85946", "Subcategory", "Identity Data" ]
+//     ...
+```
+
+## getProperties(dbId, onSuccessCallback, onErrorCallback) (Deprecated)
+
+Deprecated. Use getProperties2 instead - which makes sure that externalId table is only loaded if really needed.
+
+Asynchronous method that gets object properties
+
+### Parameters
+
+dbId* (number) | The database identifier.
+onSuccessCallback (Callbacks#onPropertiesSuccess) | Callback for when the properties are fetched.
+onErrorCallback (Callbacks#onGenericError) | Callback for when the properties are not found or another error occurs.
+
+## getProperties2(dbId, onSuccessCallback, onErrorCallback, options)
+
+Asynchronous method that gets object properties
+
+### Parameters
+
+dbId* (number) | The database identifier.
+onSuccessCallback (Callbacks#onPropertiesSuccess) | Callback for when the properties are fetched.
+onErrorCallback (Callbacks#onGenericError) | Callback for when the properties are not found or another error occurs.
+options (Object)
+  needsExternalId (boolean) | Ensures loading of externalID table if necessary. This may consume a lot of memory. Only use if you really need externalIds.
+
+## getBulkProperties(dbIds, options, onSuccessCallback, onErrorCallback) (Deprecated)
+
+Deprecated. Use getBulkProperties2 instead.
+
+Returns properties for multiple objects with an optional filter on which properties to retrieve.
+
+### Parameters
+
+dbIds* (Array.<number>) | IDs of the nodes to return the properties for.
+options* (object, undefined) | Dictionary with options.
+  propFilter (Array.<string>) | Array of property names to return values for. Use null for no filtering. Filter applies to “name” and “externalId” fields also.
+  ignoreHidden (boolean) | Ignore hidden properties
+onSuccessCallback* (function) | This method is called when request for property db succeeds.
+onErrorCallback* (function) | This method is called when request for property db fails.
+
+## getBulkProperties2(dbIds, options, onSuccessCallback, onErrorCallback)
+
+Returns properties for multiple objects with an optional filter on which properties to retrieve.
+
+### Parameters
+
+dbIds* (Array.<int>) | IDs of the nodes to return the properties for.
+options* (object, undefined) | Dictionary with options.
+  propFilter (Array.<string>) | Array of property names to return values for. Use null for no filtering. Filter applies to “name” and “externalId” fields also.
+  categoryFilter (Array.<string>) | Array of category names to return values for. Use null for no filtering.
+  ignoreHidden (boolean) | Ignore hidden properties
+  needsExternalId (boolean) | Ensures loading of externalID table if necessary. This may consume a lot of memory. Only use if you really need externalIds.
+onSuccessCallback* (function) | This method is called when request for property db succeeds.
+onErrorCallback* (function) | This method is called when request for property db fails.
+
+## getPropertySetAsync(dbIds, options)
+
+Returns a Promise that resolves with PropertySet for multiple objects. An optional filter can be passed in to specify which properties to retrieve.
+
+### Parameters
+
+dbIds* (Array.<int>) | IDs of the nodes to return the properties for.
+options (Object) | Dictionary with options.
+  propFilter (Array.<string>) | Array of property names to return values for. Use null for no filtering. Filter applies to “name” and “externalId” fields also.
+  ignoreHidden (boolean) | Ignore hidden properties
+  needsExternalId (boolean) | Ensures loading of externalID table if necessary. This may consume a lot of memory. Only use if you really need externalIds.
+
+### Returns
+
+type | description
+Promise (PropertySet) | A promise that resolves with an instance of a Autodesk.Viewing.PropertySet
+
+## getPropertySet(dbIds, onSuccessCallback, onErrorCallback, options)
+
+Gets the property PropertySet for multiple objects. An optional filter can be passed in to specify which properties to retrieve.
+
+For the async version see getPropertySetAsync
+
+### Parameters
+
+dbIds* (Array.<int>) | IDs of the nodes to return the properties for.
+onSuccessCallback* (function) | This method is called when request for property db succeeds.
+onErrorCallback* (function) | This method is called when request for property db fails.
+options (Object) | Dictionary with options.
+  propFilter (Array.<string>) | Array of property names to return values for. Use null for no filtering. Filter applies to “name” and “externalId” fields also.
+  ignoreHidden (boolean) | Ignore hidden properties
+  needsExternalId (boolean) | Ensures loading of externalID table if necessary. This may consume a lot of memory. Only use if you really need externalIds.
+
+### Returns
+
+type | description
+Promise (PropertySet) | Returns a promise that resolves with an instance of a Autodesk.Viewing.PropertySet
+
+## getExternalIdMapping(onSuccessCallback, onErrorCallback)
+
+Returns an object with key values being dbNodeIds and values externalIds. Useful to map LMV node ids to Fusion node ids.
+
+### Parameters
+
+onSuccessCallback* (function) | This method is called when request for property db succeeds.
+onErrorCallback* (function) | This method is called when request for property db fails.
+
+## getLayerToNodeIdMapping(onSuccessCallback, onErrorCallback)
+
+Returns an object with key values being layer names, pointing to Arrays containing dbIds.
+
+### Parameters
+
+onSuccessCallback* (function) | This method is called when request for property db succeeds.
+onErrorCallback* (function) | This method is called when request for property db fails.
+
+## getObjectTree(onSuccessCallback, onErrorCallback)
+
+Asynchronous operation that gets a reference to the object tree.
+
+You can use the model object tree to get information about items in the model. The tree is made up of nodes, which correspond to model components such as assemblies or parts.
+
+When called without callbacks, returns the object tree synchronously if it is already loaded, or null otherwise.
+
+### Parameters
+
+onSuccessCallback (Callbacks#onObjectTreeSuccess) | Success callback invoked once the object tree is available.
+onErrorCallback (Callbacks#onGenericError) | Error callback invoked when the object tree is not found available.
+
+### Returns
+
+type | description
+ObjectTree, null, undefined | The object tree when called without callbacks and the tree is already loaded; otherwise undefined.
+
+## getObjectTreeAsync()
+
+Asynchronous operation that gets the object tree.
+
+### Returns
+
+type | description
+Promise (ObjectTree) | A promise that resolves with the object tree.
+
+## isObjectTreeLoaded()
+
+Returns `true` only when the object tree is loaded into memory. Will return `false` while the object tree is still loading, or when the object tree fails to load.
+
+### Returns
+
+type | description
+boolean
+
+## search(text, onSuccessCallback, onErrorCallback, attributeNames, options)
+
+Async operation to search the object property database.
+
+### Parameters
+
+text* (string) | The search term (not case sensitive).
+onSuccessCallback* (Callbacks#onSearchSuccess) | Invoked when the search results are ready.
+onErrorCallback* (Callbacks#onGenericError) | Invoke when an error occured during search.
+attributeNames (Array.<string>) | Restricts search to specific attribute names.
+options (Object) | Search options. Currently only supported option is searchHidden
+  searchHidden (boolean) | Set to true to also search hidden properties
+
+## findProperty(propertyName)
+
+Searches the property database for all dbIds that contains a specific property name.
+
+### Parameters
+
+propertyName* (string) | The property name to search for (case sensitive).
+
+### Returns
+
+type | description
+Promise (number[]) | The promise, which resolves with an array of dbIds containing the specified property.
+
+## getTopology(index)
+
+Return topology data of one instance.
+
+Requires topology data to have been fetched with fetchTopology().
+
+### Parameters
+
+index* (number) | Topology index.
+
+### Returns
+
+type | description
+object | Topology data.
+
+## hasTopology()
+
+See also fetchTopology().
+
+### Returns
+
+type | description
+boolean | true if topology data has been downloaded and is available in memory
+
+## fetchTopology(maxSizeMB)
+
+Downloads the topology file, if one is available. The file may not get downloaded if the topology content size in memory is bigger than a specified limit (100 MB by default, 20 MB for mobile).
+
+### Parameters
+
+maxSizeMB (number) | Maximum uncompressed topology size allowed (in MegaBytes).
+
+### Returns
+
+type | description
+Promise | A Promise that resolves with the topology object.
+
+## hasGeometry()
+
+### Returns
+
+type | description
+boolean | True if the model loaded contains at least 1 instance.
+
+## getFragmentPointer(fragId)
+
+Returns the FragmentPointer of the specified fragId in the model. This method returns null if the fragId is not passed in.
+
+### Parameters
+
+fragId* (number) | fragment id in the model
+
+### Returns
+
+type | description
+Autodesk.Viewing.Private.FragmentPointer | The FragmentPointer
+
+## clone()
+
+Returns a shallow copy of the model. All the inner state (Instances, Geometries etc.) are shared.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Model | A shallow copy of the model.

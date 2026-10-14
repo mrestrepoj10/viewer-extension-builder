@@ -1,0 +1,16 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/AppScreenModeDelegate/
+Reference Guide > Viewing > AppScreenModeDelegate
+
+Autodesk.Viewing
+
+# AppScreenModeDelegate
+
+Extends Autodesk.Viewing.ScreenModeDelegate
+
+Default screen mode delegate used by the viewer. Supports `kNormal` and `kFullScreen` only — `kFullBrowser` is not supported. Extend this class to customize full-screen behavior.
+
+## new AppScreenModeDelegate(viewer)
+
+### Parameters
+
+viewer* (Autodesk.Viewing.Viewer3D) | Viewer instance.

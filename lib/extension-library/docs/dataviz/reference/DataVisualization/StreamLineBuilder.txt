@@ -1,0 +1,69 @@
+https://aps.autodesk.com/en/docs/dataviz/v1/reference/DataVisualization/StreamLineBuilder/
+Reference Guide > DataVisualization > StreamLineBuilder
+
+Autodesk.DataVisualization
+
+# StreamLineBuilder
+
+An object that assists in building `StreamLine` objects.
+
+## new StreamLineBuilder(viewer)
+
+Constructs an instance of `StreamLineBuilder` object. For proper resource management it is recommended to obtain a `StreamLineBuilder` through `DataVisualization` class.
+
+### Parameters
+
+viewer* (Viewer3D) | The instance a `Viewer3D` to associate this object with.
+
+### Examples
+
+```
+ const dataVizExtn = await viewer.loadExtension("Autodesk.DataVisualization");
+const streamLineBuilder = dataVizExtn.streamLineBuilder;
+```
+
+# Methods
+
+## dispose()
+
+Dispose of all the underlying `StreamLine` objects that are associated with this `StreamLineBuilder` object. This also releases their corresponding material and geometrical data.
+
+## createStreamLine(streamLineSpecs)
+
+Creates `StreamLine` objects using the StreamLineSpecs and associates them with the `StreamLineBuilder` object.
+
+### Parameters
+
+streamLineSpecs* (StreamLineSpecs) | See `StreamLineSpecs` for more details.
+
+### Returns
+
+type | description
+StreamLine
+
+### Examples
+
+```
+ const points = [ 10, 10, 10, 20, 20, 20, ... ];
+const streamLineData = {
+    points: new Float32Array(points),
+};
+
+const streamLineSpecs = {
+    lineWidth: 8.0,
+    lineColor: new THREE.Color(0xff0080),
+    opacity: 1.0,
+    lineData: streamLineData,
+};
+
+const streamLineBuilder = dataVizExtension.streamLineBuilder;
+const streamLine = streamLineBuilder.createStreamLine(streamLineSpecs);
+```
+
+## destroyStreamLine(streamLine)
+
+Removes the `StreamLine` object from the scene. This method releases the geometrical data associated with the `StreamLine` object.
+
+### Parameters
+
+streamLine* (StreamLine) | The `StreamLine` object to be disposed of.

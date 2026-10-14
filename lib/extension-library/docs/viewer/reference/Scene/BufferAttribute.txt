@@ -1,0 +1,50 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/Scene/BufferAttribute/
+Reference Guide > Scene > BufferAttribute
+
+Autodesk.Viewing.Scene
+
+# BufferAttribute
+
+## new BufferAttribute(array, itemSize)
+
+Stores typed-array data for a single vertex attribute (for example `position`, `normal`, or `color`) used by `BufferGeometry`.
+
+Pass a typed array (such as `Float32Array`) and the number of values per vertex (`itemSize`). For example, `new BufferAttribute(new Float32Array([...]), 3)` defines a 3-component position attribute.
+
+### Parameters
+
+array (TypedArray) | Typed array holding attribute data.
+itemSize* (number) | Number of values per vertex (e.g. `3` for XYZ position).
+
+# Properties
+
+array (TypedArray) | Array of attribute data.
+
+# Methods
+
+## isInterleaved()
+
+Returns `true` if this attribute is part of an interleaved vertex buffer.
+
+### Returns
+
+type | description
+boolean
+
+## getOffset()
+
+Returns the offset of this attribute within the interleaved buffer. Returns `0` for non-interleaved attributes.
+
+### Returns
+
+type | description
+number
+
+## getStride()
+
+Returns the stride (number of float32 elements per vertex) for interleaved attributes, or itemSize for non-interleaved attributes.
+
+### Returns
+
+type | description
+number

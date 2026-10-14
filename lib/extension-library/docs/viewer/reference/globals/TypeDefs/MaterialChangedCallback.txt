@@ -1,0 +1,16 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/MaterialChangedCallback/
+Reference Guide > Globals > Type Definitions > MaterialChangedCallback
+
+Type Definitions
+
+# MaterialChangedCallback
+
+## Parameters
+
+instanceId* (number) | The id of the affected instance.
+material* (Material) | The new material of the instance.
+
+## Returns
+
+type | description
+void

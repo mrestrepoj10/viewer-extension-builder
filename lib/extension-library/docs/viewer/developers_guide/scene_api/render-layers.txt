@@ -1,0 +1,40 @@
+https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/scene_api/render-layers/
+Developer's Guide > Scene API > Render Layers > Render Layers
+
+# Render Layers
+
+Custom geometry often needs to render at a precise point relative to the loaded model — before it, after it, or composited on top in a separate pass. `viewer.layers` gives you that control without touching Three.js scene internals directly, and is the unified replacement for two deprecated APIs: OverlayManager (custom geometry rendered always on top) and direct manipulation of `viewer.impl.scene` / `sceneAfter` (geometry injected before or after the main scene). Render layers give you explicit, named control over when in the rendering pipeline your content is drawn. Each layer is identified by a string name and configured with a `renderTarget` and a `renderOrder` that together determine its draw position.
+
+Two targets cover the common cases. Setting `renderTarget: 'main'` places a layer in the main render pass, where it shares the main depth buffer — a positive `renderOrder` draws it after the loaded model, but model geometry in front still occludes it (the replacement for writing to `viewer.impl.sceneAfter`). Use a negative `renderOrder` to draw before the model instead — the `viewer.impl.scene` replacement. With `renderTarget: 'overlay'` models are rendered in a separate render loop and combined with the output of the main render target. While overlays are always updated with the main pass, they can also be refreshed independently. This is interesting for heavy main scenes and frequent updates in the overlays like with animations.
+
+This example loads a model and gives you two custom layers over it: a `main-pass` layer (`renderTarget: 'main'`, `renderOrder: 1`) and an `overlay` layer (`renderTarget: 'overlay'`). Each Add button drops a shape onto its layer — warm colors on the main pass, green colors on the overlay — so you can compare the two. All instances continuously bob up and down. The main-pass shapes only move when refreshing with clear or moving the camera, while the overlay shapes update also without a main clear.
+
+The refresh mode combo box allows you to choose whether to call Viewer3D.refresh with clear or without.
+
+Migrating from deprecated APIs:
+
+- If you are migrating from OverlayManager, use `renderTarget: 'overlay'`.
+- If you were writing to `viewer.impl.scene`, use `renderTarget: 'main'` with a negative `renderOrder` to draw before the model.
+- If you were writing to `viewer.impl.sceneAfter`, use `renderTarget: 'main'` with a positive `renderOrder` to draw after the model.
+
+See the Pen APS Viewer SDK - Render Layers by Autodesk Platform Services (@autodesk-platform-services) on CodePen.
+
+## Source
+
+Creating the layers
+
+Each layer is created with `viewer.layers.create(id, options)`, then a Model is registered to it with `viewer.layers.addModel(model, id)`. Give each layer its own Model so its instances can be added, colored, and transformed independently.
+
+```
+const mainModel = new Autodesk.Viewing.Model();
+viewer.layers.create(
+  'main-pass', { renderTarget: 'main', renderOrder: 1 }
+);
+viewer.layers.addModel(mainModel, 'main-pass');
+
+const overlayModel = new Autodesk.Viewing.Model();
+viewer.layers.create(
+  'overlay', { renderTarget: 'overlay', renderOrder: 1 }
+);
+viewer.layers.addModel(overlayModel, 'overlay');
+```

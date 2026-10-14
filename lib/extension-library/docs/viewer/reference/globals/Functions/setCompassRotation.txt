@@ -1,0 +1,10 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/Functions/setCompassRotation/
+Reference Guide > Globals > Functions > setCompassRotation
+
+Functions
+
+# setCompassRotation
+
+## Parameters
+
+radians (number) | // Angle of north in radians wrt front

@@ -1,0 +1,314 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/Scene/StandardMaterial/
+Reference Guide > Scene > StandardMaterial
+
+Autodesk.Viewing.Scene
+
+# StandardMaterial
+
+Lit surface material for opaque and transparent 3D geometry.
+
+Uses an energy-conserving Blinn-Phong + Schlick-Fresnel BRDF for direct lights, a Lagarde-style PMREM for image-based reflection, and Ashikhmin-Shirley diffuse attenuation to couple diffuse and specular energy at grazing angles.
+
+## new StandardMaterial(params)
+
+### Parameters
+
+params (object)
+  color (Autodesk.Viewing.Scene.Color) | Diffuse albedo. Default: white.
+  opacity (number) | Surface opacity in `[0, 1]`. Default: `1`.
+  specularColor (Autodesk.Viewing.Scene.Color) | Specular tint / F0 (see class description). Default: dark grey.
+  specularPower (number) | Blinn-Phong exponent and PMREM mip selector (see class description). Default: `30`.
+  fresnelStrength (number) | Fresnel intensity scalar. `0.0` bypasses Fresnel entirely. Default: `1`.
+  metal (boolean) | Metal shading branch. Default: `false`.
+  map (Autodesk.Viewing.Scene.Texture) | Diffuse (albedo) texture.
+  specularMap (Autodesk.Viewing.Scene.Texture) | Specular texture.
+  normalMap (Autodesk.Viewing.Scene.Texture) | Tangent-space normal map. Mutually exclusive with `bumpMap`.
+  normalScale (Autodesk.Viewing.Math.Vector2) | Normal-map intensity. Default: `(1, 1)`.
+  bumpMap (Autodesk.Viewing.Scene.Texture) | Height-based bump map. Mutually exclusive with `normalMap`.
+  bumpScale (number) | Bump-map intensity. Default: `1`.
+  alphaMap (Autodesk.Viewing.Scene.Texture) | Alpha mask texture.
+  vertexColors (boolean) | Multiply surface color by per-vertex colors. Default: `false`.
+  side (Autodesk.Viewing.Scene.Side) | Faces to render. Default: `Side.Front`.
+  depthWrite (boolean) | Write to the depth buffer. Default: `true`.
+  depthTest (boolean) | Depth-test against the depth buffer. Default: `true`.
+  transparent (boolean) | Render in the transparent pass with alpha blending. Default: `false`.
+
+# Methods
+
+## getColor()
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Color | A defensive clone of the diffuse albedo color.
+
+## setColor(c)
+
+### Parameters
+
+c* (Autodesk.Viewing.Scene.Color) | Diffuse albedo. Copied into the existing Color.
+
+## getOpacity()
+
+### Returns
+
+type | description
+number | Surface opacity in `[0, 1]`.
+
+## setOpacity(o)
+
+### Parameters
+
+o* (number) | Surface opacity in `[0, 1]`. Requires `setTransparent(true)` for `< 1`.
+
+## getSpecularColor()
+
+Returns the specular color.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Color | A defensive clone of the specular color.
+
+## setSpecularColor(c)
+
+Sets the specular color. Drives the direct-light specular tint, the Schlick F0 in the IBL term, and the reflection tint when `metal = true`.
+
+### Parameters
+
+c* (Autodesk.Viewing.Scene.Color) | Specular tint / F0 color. Copied into the existing Color.
+
+## getSpecularPower()
+
+Returns the Blinn-Phong specular exponent.
+
+### Returns
+
+type | description
+number
+
+## setSpecularPower(s)
+
+Sets the Blinn-Phong specular exponent. Drives both the direct-light highlight sharpness and the PMREM mip selector for IBL reflections — a single value controls both. Not in `[0, 1]`; typical range `[1, 2048]`. Not equivalent to a roughness or glossiness factor.
+
+### Parameters
+
+s* (number) | Blinn-Phong exponent. Typical range `[1, 2048]`.
+
+## getFresnelStrength()
+
+Returns the Fresnel intensity scalar.
+
+### Returns
+
+type | description
+number
+
+## setFresnelStrength(r)
+
+Sets the Fresnel intensity scalar. Scales the alpha-Fresnel applied to transparent materials and the clearcoat Fresnel strength. Setting exactly `0.0` bypasses Fresnel entirely. Not a BRDF F0 — F0 is `specularColor`.
+
+### Parameters
+
+r* (number) | Fresnel intensity. `0.0` disables Fresnel.
+
+## getNormalScale()
+
+Returns the normal-map intensity scale.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | A defensive clone of the normal-map intensity scale.
+
+## setNormalScale(v)
+
+Sets the normal-map intensity scale. Note: `normalScale.x` damps Fresnel as a side-effect — high values implicitly read as “rougher” surfaces, reducing reflection sharpness.
+
+### Parameters
+
+v* (Autodesk.Viewing.Math.Vector2) | Normal-map intensity. Copied into the existing Vector2.
+
+## getBumpScale()
+
+Returns the bump-map intensity scale.
+
+### Returns
+
+type | description
+number | Bump-map intensity scale.
+
+## setBumpScale(s)
+
+Sets the bump-map intensity scale. Note: high values damp Fresnel as a side-effect — bumpy surfaces implicitly read as rougher, reducing reflection sharpness.
+
+### Parameters
+
+s* (number) | Bump-map intensity.
+
+## getMap()
+
+Returns the diffuse (albedo) texture.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Texture | Diffuse (albedo) texture, or `null`.
+
+## setMap(t)
+
+Sets the diffuse (albedo) texture.
+
+### Parameters
+
+t* (Autodesk.Viewing.Scene.Texture) | Diffuse (albedo) texture, or `null`.
+
+## getSpecularMap()
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Texture | Specular texture, or `null`.
+
+## setSpecularMap(t)
+
+Sets the specular texture.
+
+### Parameters
+
+t* (Autodesk.Viewing.Scene.Texture) | Specular texture, or `null`.
+
+## getNormalMap()
+
+Note: `bumpMap` and `normalMap` share a single texture slot in WebGPU — only one can be active at a time.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Texture | Tangent-space normal map, or `null`.
+
+## setNormalMap(t)
+
+Sets the tangent-space normal map. Note: setting both `normalMap` and `bumpMap` are mutually exclusive.
+
+### Parameters
+
+t* (Autodesk.Viewing.Scene.Texture) | Normal map, or `null`.
+
+## getBumpMap()
+
+Gets the height-based bump map.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Texture | Height-based bump map, or `null`.
+
+## setBumpMap(t)
+
+Sets the height-based bump map. Note: setting both `bumpMap` and `normalMap` are mutually exclusive.
+
+### Parameters
+
+t* (Autodesk.Viewing.Scene.Texture) | Bump map, or `null`.
+
+## getAlphaMap()
+
+Gets the alpha mask texture.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Texture | Alpha mask texture, or `null`.
+
+## setAlphaMap(t)
+
+Sets the alpha mask texture.
+
+### Parameters
+
+t* (Autodesk.Viewing.Scene.Texture) | Alpha mask texture, or `null`.
+
+## getMetal()
+
+Whether the metal shading branch is active. When `true`, the shader skips Fresnel in the IBL term and tints the reflection by `specularColor`.
+
+### Returns
+
+type | description
+boolean
+
+## setMetal(v)
+
+### Parameters
+
+v* (boolean) | Metal shading flag. Avoid toggling at runtime in WebGPU.
+
+## getVertexColors()
+
+### Returns
+
+type | description
+boolean | Whether to multiply the surface color by per-vertex colors.
+
+## setVertexColors(v)
+
+### Parameters
+
+v* (boolean) | Whether to multiply the surface color by per-vertex colors.
+
+## getSide()
+
+Gets which face(s) of a polygon are rendered.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Side | Faces to render.
+
+## setSide(s)
+
+Sets which face(s) of a polygon are rendered.
+
+### Parameters
+
+s* (Autodesk.Viewing.Scene.Side) | Faces to render.
+
+## getDepthWrite()
+
+### Returns
+
+type | description
+boolean | Whether to write to the depth buffer.
+
+## setDepthWrite(v)
+
+### Parameters
+
+v* (boolean) | Whether to write to the depth buffer.
+
+## getDepthTest()
+
+### Returns
+
+type | description
+boolean | Whether to depth-test against the depth buffer.
+
+## setDepthTest(v)
+
+### Parameters
+
+v* (boolean) | Whether to depth-test against the depth buffer.
+
+## getTransparent()
+
+### Returns
+
+type | description
+boolean | Whether the material renders in the transparent pass.
+
+## setTransparent(v)
+
+### Parameters
+
+v* (boolean) | Whether the material renders in the transparent pass with alpha blending.

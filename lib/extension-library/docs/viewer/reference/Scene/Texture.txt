@@ -1,0 +1,147 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/Scene/Texture/
+Reference Guide > Scene > Texture
+
+Autodesk.Viewing.Scene
+
+# Texture
+
+## new Texture(image, mapping, wrapS, wrapT, magFilter, minFilter, format, type, anisotropy)
+
+Represents a texture: image data together with the sampling, wrapping and mapping parameters used when it is applied to a material.
+
+The numeric `mapping`, `wrapS`/`wrapT`, `magFilter`/`minFilter`, `format` and `type` parameters take the corresponding texture constants.
+
+### Parameters
+
+image (Object) | Image data for the texture (e.g. an `HTMLImageElement`, `HTMLCanvasElement` or `HTMLVideoElement`).
+mapping (Autodesk.Viewing.Scene.Mapping) | How the texture is mapped to the surface. Default: UV mapping.
+wrapS (Autodesk.Viewing.Scene.Wrapping) | Horizontal (U) wrapping mode. Default: clamp to edge.
+wrapT (Autodesk.Viewing.Scene.Wrapping) | Vertical (V) wrapping mode. Default: clamp to edge.
+magFilter (Autodesk.Viewing.Scene.Filter) | Magnification filter. Default: linear.
+minFilter (Autodesk.Viewing.Scene.Filter) | Minification filter. Default: linear mip-map linear.
+format (Autodesk.Viewing.Scene.TextureFormat) | Pixel format. Default: RGBA.
+type (Autodesk.Viewing.Scene.TextureType) | Pixel data type. Default: unsigned byte.
+anisotropy (number) | Number of samples taken along the axis of highest anisotropy. Default: `1`.
+
+# Methods
+
+## getName()
+
+### Returns
+
+type | description
+string | Optional name of this texture.
+
+## setName(name)
+
+### Parameters
+
+name* (string) | Optional name of this texture.
+
+## getImage()
+
+### Returns
+
+type | description
+Object | Image data for the texture.
+
+## setImage(image)
+
+### Parameters
+
+image* (Object) | Image data for the texture. Flags the texture for re-upload.
+
+## getWrapS()
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Wrapping | Horizontal (U) wrapping mode.
+
+## setWrapS(wrapS)
+
+### Parameters
+
+wrapS* (Autodesk.Viewing.Scene.Wrapping) | Horizontal (U) wrapping mode. Flags the texture for re-upload.
+
+## getWrapT()
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Wrapping | Vertical (V) wrapping mode.
+
+## setWrapT(wrapT)
+
+### Parameters
+
+wrapT* (Autodesk.Viewing.Scene.Wrapping) | Vertical (V) wrapping mode. Flags the texture for re-upload.
+
+## getMagFilter()
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Filter | Magnification filter.
+
+## setMagFilter(magFilter)
+
+### Parameters
+
+magFilter* (Autodesk.Viewing.Scene.Filter) | Magnification filter. Flags the texture for re-upload.
+
+## getMinFilter()
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Filter | Minification filter.
+
+## setMinFilter(minFilter)
+
+### Parameters
+
+minFilter* (Autodesk.Viewing.Scene.Filter) | Minification filter. Flags the texture for re-upload.
+
+## getOffset()
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | A defensive clone of how many times the texture is offset, in each direction.
+
+## setOffset(offset)
+
+### Parameters
+
+offset* (Autodesk.Viewing.Math.Vector2) | How many times the texture is offset, in each direction. Copied into the existing Vector2. Flags the texture for re-upload.
+
+## getRepeat()
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | A defensive clone of how many times the texture is repeated, in each direction.
+
+## setRepeat(repeat)
+
+### Parameters
+
+repeat* (Autodesk.Viewing.Math.Vector2) | How many times the texture is repeated, in each direction. Copied into the existing Vector2. Flags the texture for re-upload.
+
+## clone(texture)
+
+Copies this texture’s properties into the given texture.
+
+### Parameters
+
+texture (Autodesk.Viewing.Scene.Texture) | Texture to copy into. A new texture is created if omitted.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Scene.Texture | The target texture.
+
+## dispose()
+
+Releases GPU resources held by this texture by dispatching a `dispose` event.

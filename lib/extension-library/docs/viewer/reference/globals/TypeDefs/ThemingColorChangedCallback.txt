@@ -1,0 +1,16 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/ThemingColorChangedCallback/
+Reference Guide > Globals > Type Definitions > ThemingColorChangedCallback
+
+Type Definitions
+
+# ThemingColorChangedCallback
+
+## Parameters
+
+instanceIds* (number, Array.<number>, undefined) | The ids of the affected instances or undefined if all instances are affected.
+color* (Autodesk.Viewing.Math.Vector4, undefined) | The new theming color of the instance. Undefined means that theming is cleared.
+
+## Returns
+
+type | description
+void

@@ -1,0 +1,204 @@
+https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/scene_api/beyond-position-and-normal/
+Developer's Guide > Scene API > Geometry and First Render > Beyond Position and Normal
+
+# Beyond Position and Normal
+
+Hello Triangle uses only the two required attributes — `position` and `normal`. Most real geometry needs more: UV coordinates to drive textures, per-vertex colors for data visualization, and edge indices for CAD-style wireframe overlays. This example explores each of those optional attributes in isolation so you can see exactly what each one contributes.
+
+Initialization, that we already covered in Hello Triangle, is wrapped in a helper function called `initViewer()`.
+
+Four cubes share the same underlying shape and the same `createCubeGeometry()` helper. What differs is the set of optional attributes passed in: - Cube A carries only positions and normals (basic lit shading from the material color) - Cube B adds UV coordinates paired with a checkerboard texture - Cube C replaces the material color with per-vertex colors stored in a `color` attribute - Cube D adds edge indices that the renderer draws as a wireframe overlay when `viewer.setDisplayEdges(true)` is active.
+
+Comparing the four side by side makes the contribution of each attribute immediately apparent.
+
+`BufferAttribute(data, itemSize)` is the common wrapper for all attribute data. The first argument takes the raw data buffer. The second argument tells the renderer how many floats form a single attribute value: 3 for positions and normals, 2 for UVs, 3 for RGB vertex colors. For vertex colors to take effect the material must also set `vertexColors: true` — that flag switches the material from using its flat `color` property to reading color from the geometry attribute. Edge indices are set with a dedicated `setEdgeIndices()` call rather than through `setAttribute()`, since they describe connectivity between vertices rather than a per-vertex value.
+
+See the Pen APS Viewer SDK - Beyond Position and Normal by Autodesk Platform Services (@autodesk-platform-services) on CodePen.
+
+## Sharing Geometries and Materials
+
+Cubes A–D above each get their own `geom*`/`mat*` pair (`geomA`/`matA`, `geomB`/`matB`, and so on) because each cube needs a different set of optional attributes, so `createCubeGeometry()` is called once per cube. That is a consequence of the four cubes being genuinely different shapes — not a rule that every instance needs its own geometry and material.
+
+When instances do share the same shape and appearance, reuse the objects instead of building new ones. For example, a second blue cube identical to Cube A would not call `createCubeGeometry()` or `new avs.StandardMaterial()` again — it would call `instances.add(geomA, matA, newTransform)` directly, passing the same `geomA` and `matA` references with only the transform changed. Within a single model this is supported, encouraged, and saves GPU memory, since one geometry upload can back many draw calls that differ only in transform or material parameters. The material showcase examples (`standard-material`, `line-material`, `points-material`) follow this pattern: one shared geometry, many instances with different materials or transforms.
+
+Sharing a material works the same way: passing `matA` into further InstanceCollection3D.add or InstanceCollection3D.setMaterial calls reuses the same material object across instances. Each instance keeps its own transform and visibility; sharing only deduplicates the GPU-side geometry and material resources.
+
+## Source
+
+Geometry builder helper
+
+The helper accepts an `options` object to include or omit each optional attribute. `position` and `normal` are always present; `uv`, `color`, and edge indices are conditional.
+
+```
+const createCubeGeometry = (options) => {
+    const geom = new avs.BufferGeometry();
+    const s = (options.size || 1) / 2;
+
+    // 6 faces x 4 vertices = 24 vertices
+    const positions = new Float32Array([
+        // +Z face
+        -s, -s,  s,   s, -s,  s,   s,  s,  s,  -s,  s,  s,
+        // -Z face
+         s, -s, -s,  -s, -s, -s,  -s,  s, -s,   s,  s, -s,
+        // +X face
+         s, -s,  s,   s, -s, -s,   s,  s, -s,   s,  s,  s,
+        // -X face
+        -s, -s, -s,  -s, -s,  s,  -s,  s,  s,  -s,  s, -s,
+        // +Y face
+        -s,  s,  s,   s,  s,  s,   s,  s, -s,  -s,  s, -s,
+        // -Y face
+        -s, -s, -s,   s, -s, -s,   s, -s,  s,  -s, -s,  s
+    ]);
+
+    const normals = new Float32Array([
+         0, 0, 1,  0, 0, 1,  0, 0, 1,  0, 0, 1,   // +Z
+         0, 0,-1,  0, 0,-1,  0, 0,-1,  0, 0,-1,   // -Z
+         1, 0, 0,  1, 0, 0,  1, 0, 0,  1, 0, 0,   // +X
+        -1, 0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0,   // -X
+         0, 1, 0,  0, 1, 0,  0, 1, 0,  0, 1, 0,   // +Y
+         0,-1, 0,  0,-1, 0,  0,-1, 0,  0,-1, 0    // -Y
+    ]);
+
+    // 6 faces x 2 triangles x 3 indices = 36 indices
+    const indices = new Uint16Array([
+         0, 1, 2,  0, 2, 3,    4, 5, 6,  4, 6, 7,
+         8, 9,10,  8,10,11,   12,13,14, 12,14,15,
+        16,17,18, 16,18,19,   20,21,22, 20,22,23
+    ]);
+
+    geom.setAttribute(
+        'position', new avs.BufferAttribute(positions, 3)
+    );
+    geom.setAttribute(
+        'normal', new avs.BufferAttribute(normals, 3)
+    );
+    geom.setIndices(indices);
+
+    // UV coordinates — one full 0-1 mapping per face
+    if (options.uvs) {
+        const uvs = new Float32Array([
+            0,0, 1,0, 1,1, 0,1,  0,0, 1,0, 1,1, 0,1,
+            0,0, 1,0, 1,1, 0,1,  0,0, 1,0, 1,1, 0,1,
+            0,0, 1,0, 1,1, 0,1,  0,0, 1,0, 1,1, 0,1
+        ]);
+        geom.setAttribute(
+            'uv', new avs.BufferAttribute(uvs, 2)
+        );
+    }
+
+    // Vertex colors — each face gets a distinct color
+    // (RGB float, 0-1 range)
+    if (options.vertexColors) {
+        const faceColors = [
+            [1, 0, 0], [0, 1, 0], [0, 0, 1],
+            [1, 1, 0], [1, 0, 1], [0, 1, 1]
+        ];
+        const colors = new Float32Array(24 * 3);
+        for (let f = 0; f < 6; f++) {
+            for (let v = 0; v < 4; v++) {
+                const idx = (f * 4 + v) * 3;
+                colors[idx] = faceColors[f][0];
+                colors[idx + 1] = faceColors[f][1];
+                colors[idx + 2] = faceColors[f][2];
+            }
+        }
+        geom.setAttribute(
+            'color', new avs.BufferAttribute(colors, 3)
+        );
+    }
+
+    // Edge wireframe — 12 edges of the cube as index
+    // pairs
+    if (options.edges) {
+        const edgeIndices = new Uint16Array([
+            // +Z face edges
+             0, 1,  1, 2,  2, 3,  3, 0,
+            // -Z face edges
+             4, 5,  5, 6,  6, 7,  7, 4,
+            // connecting edges (front-to-back)
+             0, 5,  1, 4,  2, 7,  3, 6
+        ]);
+        geom.setEdgeIndices(edgeIndices);
+    }
+
+    return geom;
+};
+```
+
+Four instances — one per attribute combination
+
+- Cube A carries only positions and normals (basic lit shading from the material color)
+
+```
+// Cube A: Position + Normals only — basic lit
+// shading from material color
+const geomA = createCubeGeometry({ size: 2 });
+const matA = new avs.StandardMaterial({
+    color: 0x4488ff
+});
+instances.add(
+    geomA,
+    matA,
+    new avm.Matrix4().makeTranslation(-4.5, 0, 0)
+);
+```
+
+- Cube B adds UV coordinates paired with a checkerboard texture
+
+```
+// Cube B: Position + Normals + UVs — texture-mapped
+// from an image file
+const geomB = createCubeGeometry({
+    size: 2,
+    uvs: true
+});
+
+const textureB = await loadTexture('checkerboard.png');
+const matB = new avs.StandardMaterial({
+    color: 0xffffff,
+    map: textureB,
+});
+instances.add(
+    geomB,
+    matB,
+    new avm.Matrix4().makeTranslation(-1.5, 0, 0)
+);
+```
+
+- Cube C replaces the material color with per-vertex colors stored in a `color` attribute
+
+```
+// Cube C: Position + Normals + Vertex Colors —
+// per-face coloring from vertex data
+const geomC = createCubeGeometry({
+    size: 2,
+    vertexColors: true
+});
+const matC = new avs.StandardMaterial({
+    vertexColors: true
+});
+instances.add(
+    geomC,
+    matC,
+    new avm.Matrix4().makeTranslation(1.5, 0, 0)
+);
+```
+
+- Cube D adds edge indices that the renderer draws as a wireframe overlay when `viewer.setDisplayEdges(true)` is active.
+
+```
+// Cube D: Position + Normals + Edges — wireframe
+// overlay for CAD visualization
+const geomD = createCubeGeometry({
+    size: 2,
+    edges: true
+});
+const matD = new avs.UnlitMaterial({
+    color: 0xffbb00
+});
+instances.add(
+    geomD,
+    matD,
+    new avm.Matrix4().makeTranslation(4.5, 0, 0)
+);
+```

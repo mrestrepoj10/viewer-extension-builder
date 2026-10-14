@@ -1,0 +1,55 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/NavToolsExtension/
+Reference Guide > Extensions > NavToolsExtension
+
+Autodesk.Viewing.Extensions
+
+# NavToolsExtension
+
+## new NavToolsExtension(viewer, options)
+
+Adds toolbar buttons to Orbit, Pan and Dolly. It also adds camera interaction buttons for Fit to View, Focal Length and Roll
+
+The extension id is: `Autodesk.DefaultTools.NavTools`
+
+### Parameters
+
+viewer* (Viewer3D) | Viewer instance
+options* (object) | Configurations for the extension
+
+### Examples
+
+```
+viewer.loadExtension('Autodesk.DefaultTools.NavTools')
+```
+
+# Methods
+
+## activate(mode)
+
+Performs the corresponding button action.
+
+### Parameters
+
+mode* (string) | one of the supported modes, see getModes().
+
+## deactivate()
+
+Deactivates the current mode and activates the default viewer’s navigation tool.
+
+### Returns
+
+type | description
+boolean | true when deactivation is successful.
+
+## isActive(mode)
+
+Checks whether a specific supported mode is currently active.
+
+### Parameters
+
+mode* (string) | one of the supported modes.
+
+### Returns
+
+type | description
+boolean | true is the mode queried is currently active.

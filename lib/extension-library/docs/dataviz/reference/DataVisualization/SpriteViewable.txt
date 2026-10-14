@@ -1,0 +1,55 @@
+https://aps.autodesk.com/en/docs/dataviz/v1/reference/DataVisualization/SpriteViewable/
+Reference Guide > DataVisualization > SpriteViewable
+
+Autodesk.DataVisualization
+
+# SpriteViewable
+
+Extends CustomViewable
+
+A sprite (image) based custom viewable object.
+
+## new SpriteViewable(position, style, dbId)
+
+Constructs an instance of `SpriteViewable` object
+
+### Parameters
+
+position* (THREE.Vector3) | The position of the viewable in world coordinates.
+style* (ViewableStyle) | The style definition of this custom viewable object.
+dbId* (number) | The `DbId` of this custom viewable object. This value is usedto identify the viewable when user input events such as mouse clicks are handled.
+
+### Examples
+
+```
+ const dbId = 100;
+const positions = [
+    {
+        x: -97.94954550038506,
+        y: -50.21776820050724,
+        z: 12.444056161946492,
+    },
+    {
+        x: -12.59026829087645,
+        y: -50.20446526068116,
+        z: 14.35526278705748,
+    },
+];
+
+const viewables = [];
+
+// Create multiple SpriteViewable that share the same 'style'.
+positions.forEach((pos) => {
+    const viewable = new Autodesk.DataVisualization.Core.SpriteViewable(
+        pos, style, dbId);
+
+    dbId++; // Assign each viewable a unique identifier
+    viewables.push(viewable);
+});
+```
+
+# Properties
+
+type | The type of this `SpriteViewable` object. This value will alwaysbe equal to `ViewableType.SPRITE`.
+color | The color of this `SpriteViewable` object. The color is multiplied withthe sprite pixel colors in shader prior to display.
+highlightedColor | The color of this sprite viewable object. The color is multiplied with thehighlighted sprite pixel colors in shader for display.

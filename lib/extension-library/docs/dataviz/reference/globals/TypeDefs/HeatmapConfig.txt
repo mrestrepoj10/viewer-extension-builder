@@ -1,0 +1,14 @@
+https://aps.autodesk.com/en/docs/dataviz/v1/reference/globals/TypeDefs/HeatmapConfig/
+Reference Guide > Globals > Type Definitions > HeatmapConfig
+
+Type Definitions
+
+# HeatmapConfig
+
+The configuration used in `renderSurfaceShading` and `updateSurfaceShading` APIs to control the appearance of the resulting heatmap.
+
+# Properties
+
+confidence (number) | Optional. The distance from the sensor that itsvalue will affect the heatmap before dropping off. Measured in world coordinatesof the current model. The default value is `160.0`.
+powerParameter (number) | Optional. A positive real number. Greatervalues of power parameter assign greater influence to values closest to theinterpolated point. This parameter is default to `2.0`.
+alpha (number) | Optional. The transparency level of the resultingfragment on the heatmap, ranging from `0.0` (completely transparent) to `1.0``(fully opaque). The default value is ``1.0`.

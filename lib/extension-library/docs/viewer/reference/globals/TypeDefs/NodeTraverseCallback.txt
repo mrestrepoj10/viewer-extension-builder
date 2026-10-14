@@ -1,0 +1,17 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/NodeTraverseCallback/
+Reference Guide > Globals > Type Definitions > NodeTraverseCallback
+
+Type Definitions
+
+# NodeTraverseCallback
+
+Callback invoked for each node during a Autodesk.Viewing.Scene.Node3D#traverse walk.
+
+## Parameters
+
+node* (Autodesk.Viewing.Scene.Node3D) | The node being visited.
+
+## Returns
+
+type | description
+void

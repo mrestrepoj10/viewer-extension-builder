@@ -1,0 +1,37 @@
+https://aps.autodesk.com/en/docs/dataviz/v1/reference/DataVisualization/SurfaceShadingData/
+Reference Guide > DataVisualization > SurfaceShadingData
+
+Autodesk.DataVisualization
+
+# SurfaceShadingData
+
+Data that describes the hierarchical object relationship the surface shading is based on.
+
+## new SurfaceShadingData()
+
+# Methods
+
+## initialize(model)
+
+Initialize the `SurfaceShadingData` object so that it can be used as an input to `setupSurfaceShading` API.
+
+### Parameters
+
+model* (Model) | The model to initialize the surface shading for.
+
+### Examples
+
+```
+ const id = "engine-cylinder-02";
+const dbIds = [1060, 1062, 1064, 1065]; // Objects to be shaded together as one.
+const shadingNode = new Autodesk.DataVisualization.Core.SurfaceShadingNode(id, dbIds);
+
+const vibrationSensor02 = new Autodesk.DataVisualization.Core.SurfaceShadingPoint(...);
+shadingNode.addPoint(vibrationSensor02); // Associate a sensor to the cylinder.
+
+const shadingData = new Autodesk.DataVisualization.Core.SurfaceShadingData();
+shadingData.addChild(shadingNode);
+shadingData.initialize(model);
+
+dataVizExt.setupSurfaceShading(model, shadingData);
+```

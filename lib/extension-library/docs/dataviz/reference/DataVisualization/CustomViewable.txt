@@ -1,0 +1,24 @@
+https://aps.autodesk.com/en/docs/dataviz/v1/reference/DataVisualization/CustomViewable/
+Reference Guide > DataVisualization > CustomViewable
+
+Autodesk.DataVisualization
+
+# CustomViewable
+
+The generic base class of custom viewable types.
+
+## new CustomViewable(position, style, dbId)
+
+Constructs an instance of `CustomViewable` object. This class is not meant to be used directly, use the `SpriteViewable` class instead.
+
+### Parameters
+
+position* (THREE.Vector3) | The position of the viewable in world coordinates.
+style* (ViewableStyle) | The style definition of this custom viewable object.
+dbId* (number) | The `DbId` of this custom viewable object. This value is usedto identify the viewable when user input events such as mouse clicks are handled.
+
+# Properties
+
+style | The style definition of this viewable object.
+position | The position of the viewable object in world coordinates.
+dbId | The `DbId` of this viewable object. This value is used to identify theviewable when user input events such as mouse clicks are handled.

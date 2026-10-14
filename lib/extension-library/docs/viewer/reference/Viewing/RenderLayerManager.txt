@@ -1,0 +1,174 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/RenderLayerManager/
+Reference Guide > Viewing > RenderLayerManager
+
+Autodesk.Viewing
+
+# RenderLayerManager
+
+Manages render layers for adding custom content that renders alongside the main scene.
+
+Render layers allow extra content to render at specific points in the pipeline:
+
+- Main target (`renderTarget: 'main'`): Layers render during the main pass. Use `renderOrder < 0` to render before the main scene, `renderOrder > 0` to render after.
+- Overlay target (`renderTarget: 'overlay'`): Layers render during the overlay pass, after all main content has been rendered.
+
+## new RenderLayerManager()
+
+# Methods
+
+## create(id, options)
+
+Creates a new render layer with the specified options.
+
+### Parameters
+
+id* (string) | Unique identifier for the layer
+options (RenderLayerOptions) | Layer configuration options
+
+### Returns
+
+type | description
+boolean | True if the layer was created, false if it already exists or no id was provided
+
+### Examples
+
+```
+// Create an overlay layer
+viewer.layers.create('annotations', {
+    renderTarget: 'overlay',
+    renderOrder: 10
+});
+```
+
+```
+// Create a layer that renders before the main scene
+viewer.layers.create('background', {
+    renderTarget: 'main',
+    renderOrder: -5
+});
+```
+
+## remove(id)
+
+Removes a render layer and all its contents.
+
+### Parameters
+
+id* (string) | The layer identifier
+
+### Returns
+
+type | description
+boolean | True if the layer was removed, false if it doesn’t exist or no id was provided
+
+## has(id)
+
+Checks whether a render layer exists.
+
+### Parameters
+
+id* (string) | The layer identifier
+
+### Returns
+
+type | description
+boolean | True if the layer exists
+
+## addModel(model, layerId)
+
+Adds a Model to a render layer. A layer can contain multiple models.
+
+### Parameters
+
+model* (Model) | The model to add
+layerId* (string) | The layer identifier
+
+### Returns
+
+type | description
+boolean | True if the model was added successfully
+
+## removeModel(model, layerId)
+
+Removes a Model from a render layer.
+
+### Parameters
+
+model* (Model) | The model to remove
+layerId* (string) | The layer identifier
+
+### Returns
+
+type | description
+boolean | True if the model was removed successfully
+
+## getModels(layerId)
+
+Gets all models from a render layer.
+
+### Parameters
+
+layerId* (string) | The layer identifier
+
+### Returns
+
+type | description
+Array.<Model> | Array of models in the layer, or empty array if layer doesn’t exist
+
+## clear(layerId)
+
+Clears all content (scene and models) from a render layer. The layer itself is not removed.
+
+### Parameters
+
+layerId* (string) | The layer identifier
+
+### Returns
+
+type | description
+boolean | True if the layer was cleared successfully
+
+## setLayerOptions(layerId, options)
+
+Updates the options for a render layer.
+
+### Parameters
+
+layerId* (string) | The layer identifier
+options* (RenderLayerOptions) | Options to update
+
+### Returns
+
+type | description
+boolean | True if the options were updated successfully
+
+## getLayerOptions(layerId)
+
+Gets the current options for a render layer.
+
+### Parameters
+
+layerId* (string) | The layer identifier
+
+### Returns
+
+type | description
+RenderLayerOptions, null | The layer options, or null if layer doesn’t exist
+
+## getOverlayRenderLayers()
+
+Gets render layers for the overlay pass.
+
+### Returns
+
+type | description
+Array | Array of visible overlay render layers
+
+## getMainPassRenderLayers()
+
+Gets render layers for the main pass, split by renderOrder.
+
+### Returns
+
+type | description
+Object | Layers before and after main scene

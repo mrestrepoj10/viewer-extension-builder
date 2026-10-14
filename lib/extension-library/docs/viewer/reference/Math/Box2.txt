@@ -1,0 +1,300 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/Math/Box2/
+Reference Guide > Math > Box2
+
+Autodesk.Viewing.Math
+
+# Box2
+
+## new Box2(min, max)
+
+Represents a 2D axis-aligned bounding box.
+
+### Parameters
+
+min (Autodesk.Viewing.Math.Vector2) | The minimum (lower-left) corner. Defaults to (+Infinity, +Infinity).
+max (Autodesk.Viewing.Math.Vector2) | The maximum (upper-right) corner. Defaults to (-Infinity, -Infinity).
+
+# Properties
+
+min (Autodesk.Viewing.Math.Vector2) | The minimum (lower-left) corner of the box.
+max (Autodesk.Viewing.Math.Vector2) | The maximum (upper-right) corner of the box.
+
+# Methods
+
+## set(min, max)
+
+Sets the min and max corners of this box.
+
+### Parameters
+
+min* (Autodesk.Viewing.Math.Vector2) | The minimum corner.
+max* (Autodesk.Viewing.Math.Vector2) | The maximum corner.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Box2 | This box.
+
+## setFromPoints(points)
+
+Sets this box to the minimum bounding box that contains all the given points.
+
+### Parameters
+
+points* (Array.<Autodesk.Viewing.Math.Vector2>) | Array of points to enclose.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Box2 | This box.
+
+## setFromCenterAndSize(center, size)
+
+Sets this box from a center point and a size vector.
+
+### Parameters
+
+center* (Autodesk.Viewing.Math.Vector2) | The center point.
+size* (Autodesk.Viewing.Math.Vector2) | The width and height.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Box2 | This box.
+
+## copy(box)
+
+Copies the min and max from the given box into this box.
+
+### Parameters
+
+box* (Autodesk.Viewing.Math.Box2) | The box to copy.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Box2 | This box.
+
+## makeEmpty()
+
+Makes this box empty (min > max).
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Box2 | This box.
+
+## isEmpty()
+
+Returns true if this box is empty (min > max in any axis).
+
+### Returns
+
+type | description
+boolean
+
+## getCenter(optionalTarget)
+
+Returns the center point of this box.
+
+### Parameters
+
+optionalTarget (Autodesk.Viewing.Math.Vector2) | Optional vector to store the result.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | The center point.
+
+## getSize(target)
+
+Returns the width and height of this box as a Vector2.
+
+### Parameters
+
+target* (Autodesk.Viewing.Math.Vector2) | Vector to store the result.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | The size (width, height).
+
+## expandByPoint(point)
+
+Expands this box to include the given point.
+
+### Parameters
+
+point* (Autodesk.Viewing.Math.Vector2) | The point to include.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Box2 | This box.
+
+## expandByVector(vector)
+
+Expands each dimension of this box by the given vector.
+
+### Parameters
+
+vector* (Autodesk.Viewing.Math.Vector2) | The amount to expand in each dimension.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Box2 | This box.
+
+## expandByScalar(scalar)
+
+Expands each dimension of this box by the given scalar.
+
+### Parameters
+
+scalar* (number) | The amount to expand.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Box2 | This box.
+
+## containsPoint(point)
+
+Returns true if the given point lies within or on the boundary of this box.
+
+### Parameters
+
+point* (Autodesk.Viewing.Math.Vector2) | The point to test.
+
+### Returns
+
+type | description
+boolean
+
+## containsBox(box)
+
+Returns true if this box entirely contains the given box.
+
+### Parameters
+
+box* (Autodesk.Viewing.Math.Box2) | The box to test.
+
+### Returns
+
+type | description
+boolean
+
+## getParameter(point, optionalTarget)
+
+Returns a point as a proportion of this box’s width and height (0–1 range).
+
+### Parameters
+
+point* (Autodesk.Viewing.Math.Vector2) | The point to parameterize.
+optionalTarget (Autodesk.Viewing.Math.Vector2) | Optional vector to store the result.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | The parameterized point.
+
+## intersectsBox(box)
+
+Returns true if the given box intersects this box.
+
+### Parameters
+
+box* (Autodesk.Viewing.Math.Box2) | The box to test.
+
+### Returns
+
+type | description
+boolean
+
+## clampPoint(point, optionalTarget)
+
+Clamps the given point to lie within this box.
+
+### Parameters
+
+point* (Autodesk.Viewing.Math.Vector2) | The point to clamp.
+optionalTarget (Autodesk.Viewing.Math.Vector2) | Optional vector to store the result.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Vector2 | The clamped point.
+
+## distanceToPoint(point)
+
+Returns the distance from the given point to the nearest edge of this box (0 if inside).
+
+### Parameters
+
+point* (Autodesk.Viewing.Math.Vector2) | The point to measure from.
+
+### Returns
+
+type | description
+number | The distance.
+
+## intersect(box)
+
+Shrinks this box to the intersection of this box and the given box.
+
+### Parameters
+
+box* (Autodesk.Viewing.Math.Box2) | The box to intersect with.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Box2 | This box.
+
+## union(box)
+
+Expands this box to contain the union of this box and the given box.
+
+### Parameters
+
+box* (Autodesk.Viewing.Math.Box2) | The box to union with.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Box2 | This box.
+
+## translate(offset)
+
+Translates this box by the given offset.
+
+### Parameters
+
+offset* (Autodesk.Viewing.Math.Vector2) | The offset to apply.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Box2 | This box.
+
+## equals(box)
+
+Returns true if the given box has the same min and max as this box.
+
+### Parameters
+
+box* (Autodesk.Viewing.Math.Box2) | The box to compare.
+
+### Returns
+
+type | description
+boolean
+
+## clone()
+
+Returns a new Box2 with the same min and max as this box.
+
+### Returns
+
+type | description
+Autodesk.Viewing.Math.Box2 | A new clone.

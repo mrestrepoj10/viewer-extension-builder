@@ -1,0 +1,93 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/Scene/GeometryFactory/
+Reference Guide > Scene > GeometryFactory
+
+Autodesk.Viewing.Scene
+
+# GeometryFactory
+
+## new GeometryFactory()
+
+Factory helpers for creating standard geometry primitives as BufferGeometry. Each method returns a mutable BufferGeometry with positions, normals, UVs, indices and optional edge indices pre-filled.
+
+# Methods
+
+## createSphere(radius, widthSegments, heightSegments)
+
+Creates a sphere geometry.
+
+### Parameters
+
+radius* (number) | Sphere radius
+widthSegments* (number) | Number of horizontal segments (min 3).
+heightSegments* (number) | Number of vertical segments (min 2).
+
+### Returns
+
+type | description
+BufferGeometry
+
+## createBox(width, height, depth, generateEdges)
+
+Creates a box geometry.
+
+### Parameters
+
+width* (number) | Box width
+height* (number) | Box height
+depth* (number) | Box depth
+generateEdges (boolean) | If true, also generates an edge index buffer with the 12 box edges.
+
+### Returns
+
+type | description
+BufferGeometry
+
+## createCylinder(radius, height, radialSegments, generateEdges)
+
+Creates a cylinder geometry.
+
+### Parameters
+
+radius* (number) | Cylinder radius
+height* (number) | Cylinder height
+radialSegments (number) | Number of circle segments
+generateEdges (boolean) | If true, also generates an edge index buffer with the top and bottom circle edges.
+
+### Returns
+
+type | description
+BufferGeometry
+
+## createCone(radiusTop, radiusBottom, height, radialSegments, generateEdges)
+
+Creates a cone frustum geometry (a cone with the tip cut off, leaving a flat top). A regular cone is the special case where radiusTop is 0.
+
+### Parameters
+
+radiusTop* (number) | Radius of the top circle. 0 for a regular cone.
+radiusBottom* (number) | Radius of the bottom circle.
+height* (number) | Cone height
+radialSegments (number) | Number of circle segments
+generateEdges (boolean) | If true, also generates an edge index buffer with the top and bottom circle edges.
+
+### Returns
+
+type | description
+BufferGeometry
+
+## createPlane(width, height, widthSegments, heightSegments, generateEdges)
+
+Creates a plane geometry lying in the XY plane.
+
+### Parameters
+
+width* (number) | Plane width
+height* (number) | Plane height
+widthSegments (number) | Number of segments in X axis
+heightSegments (number) | Number of segments in Y axis
+generateEdges (boolean) | If true, also generates an edge index buffer with the 4 outer edges.
+
+### Returns
+
+type | description
+BufferGeometry

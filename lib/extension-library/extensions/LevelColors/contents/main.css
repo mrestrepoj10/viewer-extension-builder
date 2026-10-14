@@ -1,0 +1,73 @@
+.level-colors-button .adsk-button-icon {
+  min-width: 24px;
+  min-height: 24px;
+  background-color: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m12 2 10 5-10 5L2 7z'/%3E%3Cpath d='m2 12 10 5 10-5'/%3E%3Cpath d='m2 17 10 5 10-5'/%3E%3C/svg%3E")
+    center / 22px no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m12 2 10 5-10 5L2 7z'/%3E%3Cpath d='m2 12 10 5 10-5'/%3E%3Cpath d='m2 17 10 5 10-5'/%3E%3C/svg%3E")
+    center / 22px no-repeat;
+}
+
+.level-colors-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+}
+
+.level-colors-row {
+  display: grid;
+  grid-template-columns: 16px 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 10px;
+  align-items: center;
+  min-height: 44px;
+  padding: 6px 10px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.level-colors-row:hover {
+  background: color-mix(in srgb, currentColor 8%, transparent);
+}
+
+.level-colors-row:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 1px;
+}
+
+.level-colors-row[aria-pressed="true"] {
+  border-color: color-mix(in srgb, currentColor 35%, transparent);
+  background: color-mix(in srgb, currentColor 12%, transparent);
+}
+
+.level-colors-swatch {
+  grid-row: span 2;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+}
+
+.level-colors-swatch--all {
+  background: conic-gradient(#2563eb 0 25%, #16a34a 0 50%, #d97706 0 75%, #dc2626 0);
+}
+
+.level-colors-label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.level-colors-detail,
+.level-colors-message {
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+.level-colors-message {
+  margin: 8px;
+}

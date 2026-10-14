@@ -1,0 +1,6 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/Snapping/
+Reference Guide > Snapping
+
+Autodesk.Viewing.Extensions
+
+# Snapping

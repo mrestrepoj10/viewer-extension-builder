@@ -19,6 +19,7 @@ import {
   type AgentUnavailableReason,
   describeAgentUnavailableReason,
 } from '@/lib/agent-types'
+import type { ExtensionRuntime } from '@/lib/extensions/runtime'
 import { cn } from '@/lib/utils'
 import type { ViewerAgentTools } from '@/lib/viewer-agent-tools'
 
@@ -29,6 +30,8 @@ interface FxTerminalHandle {
 
 interface FxTerminalProps {
   tools: ViewerAgentTools
+  /** Page-side loader behind the workspace `ext` command. */
+  extensions?: ExtensionRuntime
   /** Same-origin proxy that holds the AI Gateway key. */
   gatewayBase?: string
   model?: string
@@ -93,6 +96,7 @@ function serverScheme(): FxColorScheme {
 
 function FxTerminal({
   tools,
+  extensions,
   gatewayBase = '/api/agent/gateway',
   model = 'anthropic/claude-haiku-5.5',
   effort = 'low',
@@ -140,6 +144,7 @@ function FxTerminal({
         const { startFxTerminal } = await import('@/components/ui/fx-terminal/runtime')
         const started = await startFxTerminal(container, {
           tools,
+          extensions,
           gatewayBase,
           model,
           effort,
@@ -185,7 +190,7 @@ function FxTerminal({
       current?.dispose()
       setSession(null)
     }
-  }, [container, tools, gatewayBase, model, effort, speed])
+  }, [container, tools, extensions, gatewayBase, model, effort, speed])
 
   const retry = () => {
     setStatus({ kind: 'starting' })

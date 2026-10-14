@@ -1,0 +1,50 @@
+https://aps.autodesk.com/en/docs/dataviz/v1/reference/DataVisualization/ViewableStyle/
+Reference Guide > DataVisualization > ViewableStyle
+
+Autodesk.DataVisualization
+
+# ViewableStyle
+
+A visual style definition for a CustomViewable object.
+
+## new ViewableStyle(type, color, url, highlightedColor, highlightedUrl, animatedUrls)
+
+Constructs an instance of `ViewableStyle` object that describes the style to be applied for any given `CustomViewable` object.
+
+### Parameters
+
+type* (number) | The type of viewable. Possible values are listedin `ViewableType`.
+color* (THREE.Color) | The color of the viewable, default to white.
+url* (string) | The URL of the sprite to be used for the viewable.Image formats supported are the same as those of `HTMLImageElement`.
+highlightedColor* (THREE.Color) | The highlighted color of the viewable,default to white. This color will be used when a `CustomViewable` ishighlighted with a call to `highlightViewables` API.
+highlightedUrl* (string) | The URL of the highlighted sprite to be usedfor the viewable. This sprite will be used when a `CustomViewable` ishighlighted with a call to `highlightViewables` API. Image formatssupported are the same as those of `HTMLImageElement`.
+animatedUrls* (Array.<string>) | Array of sprite urls that can be used toanimate the icon.
+
+### Examples
+
+```
+ const white = 0xffffff;
+const iconUrl = "http://localhost:9081/images/device-type-01.svg";
+
+const style = new Autodesk.DataVisualization.Core.ViewableStyle(
+    "DeviceType01",
+    Autodesk.DataVisualization.Core.ViewableType.SPRITE,
+    new THREE.Color(white),
+    iconUrl
+);
+```
+
+# Properties
+
+spriteUrls (Set.<string>)
+preloadedSprites | An array of sprite URL strings to be preloaded.
+
+# Methods
+
+## preloadSprite(spriteUrl)
+
+Preloads a sprite into `ViewableStyle` object for later use.
+
+### Parameters
+
+spriteUrl* (string) | The URL of the sprite image to be preloaded forsubsequent use in `CustomViewable` objects. Image formats supported arethe same as those of `HTMLImageElement`. Calling this method with the sameURL will only preload the image once.

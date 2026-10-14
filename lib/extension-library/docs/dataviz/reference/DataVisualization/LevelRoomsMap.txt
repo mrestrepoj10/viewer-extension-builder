@@ -1,0 +1,53 @@
+https://aps.autodesk.com/en/docs/dataviz/v1/reference/DataVisualization/LevelRoomsMap/
+Reference Guide > DataVisualization > LevelRoomsMap
+
+Autodesk.DataVisualization
+
+# LevelRoomsMap
+
+A class that maps level names to one or more `Room` objects that are found on the corresponding levels. See Room for details
+
+## new LevelRoomsMap()
+
+### Examples
+
+```
+ // Gets the level-to-rooms mapping from the structural model
+const info = new Autodesk.DataVisualization.Core.ModelStructureInfo(model);
+const levelRoomsMap = await info.getLevelRoomsMap();
+```
+
+# Methods
+
+## addRoomToLevel(levelName, room)
+
+Adds a Room object to a named level.
+
+### Parameters
+
+levelName* (string) | Name of the level to add the `Room` to.
+room* (Autodesk.DataVisualization.Room) | The ``Room``object to be added to the level.
+
+## getRoomsOnLevel(levelName, onlyRoomsWithDevices)
+
+Gets all the rooms on a given level.
+
+### Parameters
+
+levelName* (string) | Name of the level for which roomsare to be retrieved.
+onlyRoomsWithDevices* (boolean) | Set this to `true` to return only roomswith devices in them, or `false` to return all rooms on the level.
+
+### Returns
+
+type | description
+Array.<Room> | List of all the rooms found on the level, or an empty listif no room is found.
+
+### Examples
+
+```
+ // Get all Room objects on "Level 1", with or without devices
+const roomsOnLevelOne = levelRoomsMap.getRoomsOnLevel("Level 1", false);
+
+// Get only Room objects on "Level 1" that contain devices
+const roomsWithDevices = levelRoomsMap.getRoomsOnLevel("Level 1", true);
+```

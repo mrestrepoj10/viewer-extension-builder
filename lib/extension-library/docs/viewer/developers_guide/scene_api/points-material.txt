@@ -1,0 +1,83 @@
+https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/scene_api/points-material/
+Developer's Guide > Scene API > Materials > Points Material
+
+# Points Material
+
+PointsMaterial renders each vertex in a geometry as a square sprite of a configurable pixel size. No index buffer is needed, every vertex in the `position` attribute becomes one point on screen. This makes point geometry the simplest possible geometry to author. Typical uses include point cloud visualization, particle systems, and sprite overlays.
+
+There are several properties that can be used to customize the points material: - `size` sets the sprite side length in pixels and is the primary dimension control. - `color` tints all sprites uniformly. - `vertexColors: true` reads per-vertex color from a `color` attribute on the geometry (three floats per vertex) and multiplies it into the base color. - `map` attaches a sprite texture that is sampled across each square sprite, enabling circular soft glows, icons, or any other 2D graphic. When using `map` you almost always want `transparent: true` to alpha-blend the sprite edges.
+
+The example displays a 5×5 Color × Size grid of a shared Fibonacci spiral disc geometry. A right column demonstrates `vertexColors` with a rainbow disc, a sprite `map`, and the two depth flags `depthWrite` and `depthTest`.
+
+See the Pen APS Viewer SDK - PointsMaterial by Autodesk Platform Services (@autodesk-platform-services) on CodePen.
+
+## Source
+
+1. Build a Fibonacci disc geometry
+
+```
+function createDisc(n, radius) {
+  const goldenAngle = Math.PI * (3 - Math.sqrt(5));
+  const positions   = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) {
+    const r     = radius * Math.sqrt(n > 1 ? i / (n - 1) : 0);
+    const theta = i * goldenAngle;
+    positions[i * 3]     = r * Math.cos(theta);
+    positions[i * 3 + 1] = r * Math.sin(theta);
+    positions[i * 3 + 2] = 0;
+  }
+  const geom = new avs.BufferGeometry();
+  geom.setAttribute(
+    'position', new avs.BufferAttribute(positions, 3)
+  );
+  return geom;
+}
+```
+
+2. Color × Size grid
+
+The geometry is shared across all 25 cells. Each cell gets its own PointsMaterial with a distinct color and size.
+
+```
+for (let row = 0; row < ROWS; row++) {
+  for (let col = 0; col < COLS; col++) {
+    const mat = new avs.PointsMaterial({
+      color: COLORS[col],
+      size:  SIZES[row],
+    });
+    instances.add(
+      disc,
+      mat,
+      new avm.Matrix4().makeTranslation(
+        OFFSET_X + col * SPACING,
+        OFFSET_Y + row * SPACING,
+        0
+      )
+    );
+  }
+}
+```
+
+3. Sprite map with transparency
+
+Load a PNG sprite texture and pass it as `map`. Set `transparent: true` to alpha-blend sprite edges and `depthWrite: false` so nearer sprites do not occlude farther ones.
+
+```
+const spriteDisc = createDisc(40, 0.85);
+const spriteTex = await loadTexture('./sprite.png');
+// canvas top = sprite top; no vertical flip on upload
+spriteTex.flipY = false;
+instances.add(
+  spriteDisc,
+  new avs.PointsMaterial({
+    color: 0x88aaff,
+    size: 14,
+    map: spriteTex,
+    transparent: true,
+    depthWrite: false,
+  }),
+  new avm.Matrix4().makeTranslation(
+    TEX_X, OFFSET_Y + 3 * SPACING, 0
+  )
+);
+```

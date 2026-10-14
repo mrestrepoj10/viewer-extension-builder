@@ -1,0 +1,71 @@
+https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/viewer_basics/feature-flags/
+Developer's Guide > Viewer Basics > Feature Flags
+
+# Feature Flags
+
+Feature flags let you enable or expose optional capabilities of the Viewer. They come in two flavors:
+
+- Enabling a functionality: turning the flag on activates the feature directly.
+- Exposing a capability: turning the flag on makes an option available (for example, a settings toggle), but the user still has to opt in before the capability is actually used.
+
+Feature flags are managed by the static class `Autodesk.Viewing.FeatureFlags`. It exposes `set()`, `isEnabled()`, and `print()` — see the FeatureFlags reference for the full method signatures.
+
+Note
+
+Feature flags must be set before you call `Autodesk.Viewing.Initializer()`. After initialization the flags become immutable: calling `set()` afterwards logs a warning and has no effect.
+
+## Setting a Flag
+
+Set the feature flags you need before calling `Autodesk.Viewing.Initializer()`, then create your Viewer instance inside the initializer callback.
+
+```
+var options = {
+    env: 'AutodeskProduction2',
+    api: 'streamingV2',
+    getAccessToken: function(onTokenReady) {
+        var token = 'YOUR_ACCESS_TOKEN';
+        var timeInSeconds = 3600; // Use value provided by APS Authentication (OAuth) API
+        onTokenReady(token, timeInSeconds);
+    }
+};
+
+// Set feature flags BEFORE initialization.
+Autodesk.Viewing.FeatureFlags.set(Autodesk.Viewing.PublicFeatureFlags.SceneAPI, true);
+
+Autodesk.Viewing.Initializer(options, function() {
+    var htmlDiv = document.getElementById('forgeViewer');
+    var viewer = new Autodesk.Viewing.GuiViewer3D(htmlDiv);
+    viewer.start();
+});
+```
+
+## Available Public Flags
+
+The publicly available flag identifiers are exposed as constants on `Autodesk.Viewing.PublicFeatureFlags` — see the PublicFeatureFlags reference for the full list. You can pass either the constant or its string value to `set()`.
+
+## Scene API
+
+The Scene API is gated behind the `PublicFeatureFlags.SceneAPI` feature flag, which is disabled by default. Enabling it switches models over to the instance-collection code path and unlocks `Model.getInstances()`.
+
+Enable it before initialization, using either the constant or the string value:
+
+```
+// Using the public constant
+Autodesk.Viewing.FeatureFlags.set(Autodesk.Viewing.PublicFeatureFlags.SceneAPI, true);
+
+// ...or the equivalent string value
+Autodesk.Viewing.FeatureFlags.set('SCENE_API', true);
+```
+
+Note
+
+Models created without a loader (dynamic models) always use the Scene API code path, regardless of whether `PublicFeatureFlags.SceneAPI` is set.
+
+## WebGPU
+
+WebGPU is an alternative rendering backend that uses modern browser graphics technology instead of WebGL. It is not controlled through the public feature flags described above; instead, when it is available in your Viewer build, end users choose it themselves.
+
+- Users toggle it from the Viewer’s Settings panel via the WebGPU Graphics option.
+- The choice is stored in the browser as the `webgpu` preference and persists across sessions, which also allows users to opt out.
+- Switching the renderer takes effect after the page is reloaded.
+- If the current browser does not support WebGPU, the option is shown as unavailable.

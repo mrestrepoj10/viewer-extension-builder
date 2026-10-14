@@ -1,0 +1,71 @@
+https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/scene_api/working-with-buffers/
+Developer's Guide > Scene API > Geometry and First Render > Working with Buffers
+
+# Working with Buffers
+
+In the previous examples you learned how to define geometry and pass it to the viewer. After the viewer takes ownership of the geometry, it may optimize the layout of the vertex buffers for GPU efficiency. This example shows how to access vertex data safely.
+
+Once you pass that geometry to InstanceCollection3D.add, the viewer optimizes the buffers. After that point the BufferGeometry object is still accessible, but the internal layout and data may have changed.
+
+Whenever you need to read vertex data back — for example to compute a bounding box, extract surface samples, or debug geometry values, you cannot read the data directly. The safe pattern is to call BufferGeometry.getPosition with the vertex index to read each vertex’s position into a Vector3. For normals there are similar methods. Those methods work correctly independently of the geometry’s internal representation, so the same loop body works regardless of when you read the geometry.
+
+In this example we create a sphere via GeometryFactory, computes a manual bounding box before and after calling InstanceCollection3D.add using BufferGeometry.getVertexCount / BufferGeometry.getPosition iteration, and then visualizes the bounding box as a wireframe overlay using BufferGeometry.setEdgeIndices. The two computed boxes are identical — that is the whole point — even though the geometry’s internal structure has changed between the two reads.
+
+See the Pen APS Viewer SDK - Working with Buffers by Autodesk Platform Services (@autodesk-platform-services) on CodePen.
+
+## Source
+
+Layout-safe bounding box computation
+
+BufferGeometry.getVertexCount returns the number of vertices in the geometry, and BufferGeometry.getPosition writes the position of a given vertex into the supplied Vector3. Both methods account for the geometry’s current layout internally, so the same loop works whether the data is non-interleaved or interleaved.
+
+```
+function computeBoundingBoxManual(geom) {
+  const count = geom.getVertexCount();
+  const pos = new avm.Vector3();
+  const box = new avm.Box3();
+
+  for (let i = 0; i < count; i++) {
+    geom.getPosition(i, pos);
+    box.expandByPoint(pos);
+  }
+
+  return box;
+}
+```
+
+Wireframe bounding-box overlay using edge indices
+
+A geometry can carry two separate index lists: the triangle index list (BufferGeometry.setIndices) drives shaded rendering, and the edge index list (BufferGeometry.setEdgeIndices) drives line rendering when Viewer3D.setDisplayEdges is active. The wireframe box below uses only edge indices — the triangle index list is set to an empty array so the renderer draws no filled faces.
+
+Main: compute box before and after `InstanceCollection3D.add </en/docs/viewer/v7/reference/Scene/InstanceCollection3D/#add/>`_, then visualize
+
+```
+// --- 1. Create a sphere via GeometryFactory ---
+const geom = avs.GeometryFactory.createSphere(2, 32, 16);
+
+// --- 2. Manual bounding box (Original Data) ---
+let manualBox = computeBoundingBoxManual(geom);
+console.log('Manual bounding box (', geom.isCommitted()
+    ? 'optimized data' : 'original data', '):', manualBox);
+
+// --- 3. Visualize Sphere ---
+const sphereMat = new avs.StandardMaterial({
+  color: 0x4488ff,
+});
+
+// Geometry is added to the viewer and optimized
+// internally.
+instances.add(geom, sphereMat);
+
+// --- 4. Manual bounding box (Optimized Data) ---
+manualBox = computeBoundingBoxManual(geom);
+console.log('Manual bounding box (', geom.isCommitted()
+  ? 'optimized data': 'original data', '):', manualBox);
+
+const wireGeom = createBoundsWireframe(manualBox);
+const wireMat = new avs.UnlitMaterial({ color: 0xff4444 });
+instances.add(wireGeom, wireMat);
+
+viewer.setDisplayEdges(true);
+```

@@ -1,0 +1,50 @@
+https://aps.autodesk.com/en/docs/dataviz/v1/reference/DataVisualization/SurfaceShadingNode/
+Reference Guide > DataVisualization > SurfaceShadingNode
+
+Autodesk.DataVisualization
+
+# SurfaceShadingNode
+
+A basic rendering unit that represents one or more `DbId`, each corresponds to a geometry.
+
+## new SurfaceShadingNode(id, dbIds, shadingPoints, name)
+
+Constructs an instance of `SurfaceShadingNode` object that represents a basic rendering unit. A `SurfaceShadingNode` contains one or more `DbId`, each corresponds a geometry.
+
+### Parameters
+
+id* (string) | The identifier of this `SurfaceShadingNode` object.
+dbIds* (number, Array.<number>) | A `DbId` or an array of `DbIds`, each ofwhich represents a geometry that will be rendered when the `SurfaceShadingNode``is included in calls to ``renderSurfaceShading` or `updateSurfaceShading` APIs.
+shadingPoints* (Array.<SurfaceShadingPoint>) | An optional arrayof `SurfaceShadingPoint` objects.
+name (string) | Optional identifier associated withthis `SurfaceShadingNode` object. Equivalent to `id` by default.
+
+### Examples
+
+```
+ const id = "engine-cylinder-02";
+const dbIds = [1060, 1062, 1064, 1065]; // Objects to be shaded together as one.
+const shadingNode = new Autodesk.DataVisualization.Core.SurfaceShadingNode(id, dbIds);
+
+const vibrationSensor02 = new Autodesk.DataVisualization.Core.SurfaceShadingPoint(...);
+shadingNode.addPoint(vibrationSensor02); // Associate a sensor to the cylinder.
+
+// User selects to visualize one cylinder from the UI
+onEngineCylinderSelected(cylinderName) {
+    const sensorType = "vibration";
+    const confidenceSize = 300;
+
+    // 'cylinderName' can be "engine-cylinder-02"
+    dataVizExt.renderSurfaceShading([cylinderName],
+        sensorType, getSensorValue, confidenceSize);
+}
+```
+
+# Methods
+
+## addPoint(point)
+
+Adds a `SurfaceShadingPoint` object to the `SurfaceShadingNode` object.
+
+### Parameters
+
+point* (SurfaceShadingPoint) | The `SurfaceShadingPoint` object to beadded to the `SurfaceShadingNode` object.

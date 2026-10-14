@@ -1,0 +1,228 @@
+/docs/dataviz/developers_guide/examples.txt	Developer's Guide > Examples	https://aps.autodesk.com/en/docs/dataviz/v1/developers_guide/examples/
+/docs/dataviz/developers_guide/examples/heatmap/create_heatmap_for_rooms.txt	Developer's Guide > Examples > Heatmap > Creating a Heatmap for Rooms	https://aps.autodesk.com/en/docs/dataviz/v1/developers_guide/examples/heatmap/create_heatmap_for_rooms/
+/docs/dataviz/developers_guide/examples/heatmap/heatmap_for_arbitrary_models.txt	Developer's Guide > Examples > Heatmap > Applying Heatmaps to Arbitrary Models	https://aps.autodesk.com/en/docs/dataviz/v1/developers_guide/examples/heatmap/heatmap_for_arbitrary_models/
+/docs/dataviz/developers_guide/examples/heatmap/planar_heatmap.txt	Developer's Guide > Examples > Heatmap > Creating a Planar Heatmap	https://aps.autodesk.com/en/docs/dataviz/v1/developers_guide/examples/heatmap/planar_heatmap/
+/docs/dataviz/developers_guide/examples/heatmap/planar_heatmap_advanced.txt	Developer's Guide > Examples > Heatmap > Using Advanced Planar Heatmap Options	https://aps.autodesk.com/en/docs/dataviz/v1/developers_guide/examples/heatmap/planar_heatmap_advanced/
+/docs/dataviz/developers_guide/examples/heatmap/sensor_to_room.txt	Developer's Guide > Examples > Heatmap > Mapping Sensors to Rooms	https://aps.autodesk.com/en/docs/dataviz/v1/developers_guide/examples/heatmap/sensor_to_room/
+/docs/dataviz/developers_guide/examples/sprites/animate_sprites.txt	Developer's Guide > Examples > Sprites > Animating Sprite Viewables	https://aps.autodesk.com/en/docs/dataviz/v1/developers_guide/examples/sprites/animate_sprites/
+/docs/dataviz/developers_guide/examples/sprites/create_sprite_style.txt	Developer's Guide > Examples > Sprites > Creating Sprites With Styles	https://aps.autodesk.com/en/docs/dataviz/v1/developers_guide/examples/sprites/create_sprite_style/
+/docs/dataviz/developers_guide/examples/sprites/handling_sprite_events.txt	Developer's Guide > Examples > Sprites > Handling Sprite Events	https://aps.autodesk.com/en/docs/dataviz/v1/developers_guide/examples/sprites/handling_sprite_events/
+/docs/dataviz/developers_guide/examples/sprites/override_sprite_selection_behavior.txt	Developer's Guide > Examples > Sprites > Overriding Sprite Default Selection Behavior	https://aps.autodesk.com/en/docs/dataviz/v1/developers_guide/examples/sprites/override_sprite_selection_behavior/
+/docs/dataviz/developers_guide/overview.txt	Developer's Guide > Overview	https://aps.autodesk.com/en/docs/dataviz/v1/developers_guide/overview/
+/docs/dataviz/reference/DataVisualization.txt	Reference Guide > DataVisualization	https://aps.autodesk.com/en/docs/dataviz/v1/reference/DataVisualization/
+/docs/dataviz/reference/DataVisualization/CustomViewable.txt	Reference Guide > DataVisualization > CustomViewable	https://aps.autodesk.com/en/docs/dataviz/v1/reference/DataVisualization/CustomViewable/
+/docs/dataviz/reference/DataVisualization/DataVisualization.txt	Reference Guide > DataVisualization > DataVisualization	https://aps.autodesk.com/en/docs/dataviz/v1/reference/DataVisualization/DataVisualization/
+/docs/dataviz/reference/DataVisualization/LevelRoomsMap.txt	Reference Guide > DataVisualization > LevelRoomsMap	https://aps.autodesk.com/en/docs/dataviz/v1/reference/DataVisualization/LevelRoomsMap/
+/docs/dataviz/reference/DataVisualization/ModelStructureInfo.txt	Reference Guide > DataVisualization > ModelStructureInfo	https://aps.autodesk.com/en/docs/dataviz/v1/reference/DataVisualization/ModelStructureInfo/
+/docs/dataviz/reference/DataVisualization/Room.txt	Reference Guide > DataVisualization > Room	https://aps.autodesk.com/en/docs/dataviz/v1/reference/DataVisualization/Room/
+/docs/dataviz/reference/DataVisualization/SpriteViewable.txt	Reference Guide > DataVisualization > SpriteViewable	https://aps.autodesk.com/en/docs/dataviz/v1/reference/DataVisualization/SpriteViewable/
+/docs/dataviz/reference/DataVisualization/StreamLineBuilder.txt	Reference Guide > DataVisualization > StreamLineBuilder	https://aps.autodesk.com/en/docs/dataviz/v1/reference/DataVisualization/StreamLineBuilder/
+/docs/dataviz/reference/DataVisualization/SurfaceShadingData.txt	Reference Guide > DataVisualization > SurfaceShadingData	https://aps.autodesk.com/en/docs/dataviz/v1/reference/DataVisualization/SurfaceShadingData/
+/docs/dataviz/reference/DataVisualization/SurfaceShadingGroup.txt	Reference Guide > DataVisualization > SurfaceShadingGroup	https://aps.autodesk.com/en/docs/dataviz/v1/reference/DataVisualization/SurfaceShadingGroup/
+/docs/dataviz/reference/DataVisualization/SurfaceShadingNode.txt	Reference Guide > DataVisualization > SurfaceShadingNode	https://aps.autodesk.com/en/docs/dataviz/v1/reference/DataVisualization/SurfaceShadingNode/
+/docs/dataviz/reference/DataVisualization/SurfaceShadingPoint.txt	Reference Guide > DataVisualization > SurfaceShadingPoint	https://aps.autodesk.com/en/docs/dataviz/v1/reference/DataVisualization/SurfaceShadingPoint/
+/docs/dataviz/reference/DataVisualization/ViewableData.txt	Reference Guide > DataVisualization > ViewableData	https://aps.autodesk.com/en/docs/dataviz/v1/reference/DataVisualization/ViewableData/
+/docs/dataviz/reference/DataVisualization/ViewableStyle.txt	Reference Guide > DataVisualization > ViewableStyle	https://aps.autodesk.com/en/docs/dataviz/v1/reference/DataVisualization/ViewableStyle/
+/docs/dataviz/reference/globals/Functions/filterShadingPointsByType.txt	Reference Guide > Globals > Functions > filterShadingPointsByType	https://aps.autodesk.com/en/docs/dataviz/v1/reference/globals/Functions/filterShadingPointsByType/
+/docs/dataviz/reference/globals/TypeDefs/HeatmapConfig.txt	Reference Guide > Globals > Type Definitions > HeatmapConfig	https://aps.autodesk.com/en/docs/dataviz/v1/reference/globals/TypeDefs/HeatmapConfig/
+/docs/dataviz/reference/globals/TypeDefs/PropertyUpdates.txt	Reference Guide > Globals > Type Definitions > PropertyUpdates	https://aps.autodesk.com/en/docs/dataviz/v1/reference/globals/TypeDefs/PropertyUpdates/
+/docs/dataviz/reference/globals/TypeDefs/RoomDevice.txt	Reference Guide > Globals > Type Definitions > RoomDevice	https://aps.autodesk.com/en/docs/dataviz/v1/reference/globals/TypeDefs/RoomDevice/
+/docs/dataviz/reference/globals/TypeDefs/SensorValueCallback.txt	Reference Guide > Globals > Type Definitions > SensorValueCallback	https://aps.autodesk.com/en/docs/dataviz/v1/reference/globals/TypeDefs/SensorValueCallback/
+/docs/dataviz/reference/globals/TypeDefs/StreamLineData.txt	Reference Guide > Globals > Type Definitions > StreamLineData	https://aps.autodesk.com/en/docs/dataviz/v1/reference/globals/TypeDefs/StreamLineData/
+/docs/dataviz/reference/globals/TypeDefs/StreamLineSpecs.txt	Reference Guide > Globals > Type Definitions > StreamLineSpecs	https://aps.autodesk.com/en/docs/dataviz/v1/reference/globals/TypeDefs/StreamLineSpecs/
+/docs/dataviz/reference/globals/TypeDefs/ViewableInvalidatedCallback.txt	Reference Guide > Globals > Type Definitions > ViewableInvalidatedCallback	https://aps.autodesk.com/en/docs/dataviz/v1/reference/globals/TypeDefs/ViewableInvalidatedCallback/
+/docs/viewer/developers_guide/advanced_options/aggregated-view.txt	Developer's Guide > Advanced Options > Using Aggregated View	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/advanced_options/aggregated-view/
+/docs/viewer/developers_guide/advanced_options/custom-geometry.txt	Developer's Guide > Advanced Options > Adding Custom Geometry	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/advanced_options/custom-geometry/
+/docs/viewer/developers_guide/advanced_options/edit2d-customize.txt	Developer's Guide > Advanced Options > Customizing Edit2D	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/advanced_options/edit2d-customize/
+/docs/viewer/developers_guide/advanced_options/edit2d-manual.txt	Developer's Guide > Advanced Options > Drawing Edit2D Shapes Manually	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/advanced_options/edit2d-manual/
+/docs/viewer/developers_guide/advanced_options/edit2d-setup.txt	Developer's Guide > Advanced Options > Setting Up Edit2D	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/advanced_options/edit2d-setup/
+/docs/viewer/developers_guide/advanced_options/edit2d-use.txt	Developer's Guide > Advanced Options > Using the Edit2D Toolset	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/advanced_options/edit2d-use/
+/docs/viewer/developers_guide/advanced_options/profiles.txt	Developer's Guide > Advanced Options > Using Profile APIs	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/advanced_options/profiles/
+/docs/viewer/developers_guide/advanced_options/propdb-queries.txt	Developer's Guide > Advanced Options > Querying the Property Database	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/advanced_options/propdb-queries/
+/docs/viewer/developers_guide/advanced_options/scene-builder.txt	Developer's Guide > Advanced Options > Adding Custom Geometry with Scene Builder	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/advanced_options/scene-builder/
+/docs/viewer/developers_guide/advanced_options/selective-loading.txt	Developer's Guide > Advanced Options > Selective Loading Using Queries	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/advanced_options/selective-loading/
+/docs/viewer/developers_guide/glossary.txt	Developer's Guide > Glossary of Terms	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/glossary/
+/docs/viewer/developers_guide/interactive_examples.txt	Developer's Guide > Interactive Examples	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/interactive_examples/
+/docs/viewer/developers_guide/interactive_examples/example_1.txt	Developer's Guide > Interactive Examples > Controlling Viewer State	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/interactive_examples/example_1/
+/docs/viewer/developers_guide/interactive_examples/example_2.txt	Developer's Guide > Interactive Examples > Handling Viewer Events	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/interactive_examples/example_2/
+/docs/viewer/developers_guide/interactive_examples/example_3.txt	Developer's Guide > Interactive Examples > Querying Model Properties	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/interactive_examples/example_3/
+/docs/viewer/developers_guide/interactive_examples/example_4.txt	Developer's Guide > Interactive Examples > Customizing Viewer UI	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/interactive_examples/example_4/
+/docs/viewer/developers_guide/interactive_examples/example_5.txt	Developer's Guide > Interactive Examples > Customizing Viewer Scene	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/interactive_examples/example_5/
+/docs/viewer/developers_guide/interactive_examples/example_6.txt	Developer's Guide > Interactive Examples > Aggregated View	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/interactive_examples/example_6/
+/docs/viewer/developers_guide/overview.txt	Developer's Guide > Overview	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/overview/
+/docs/viewer/developers_guide/requirements.txt	Developer's Guide > System Requirements	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/requirements/
+/docs/viewer/developers_guide/scene_api/beyond-position-and-normal.txt	Developer's Guide > Scene API > Geometry and First Render > Beyond Position and Normal	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/scene_api/beyond-position-and-normal/
+/docs/viewer/developers_guide/scene_api/building-a-hierarchy.txt	Developer's Guide > Scene API > Scene Graph > Building a Hierarchy	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/scene_api/building-a-hierarchy/
+/docs/viewer/developers_guide/scene_api/concepts.txt	Developer's Guide > Scene API > Concepts	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/scene_api/concepts/
+/docs/viewer/developers_guide/scene_api/copy-instances.txt	Developer's Guide > Scene API > Loaded Models > Copy Instances	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/scene_api/copy-instances/
+/docs/viewer/developers_guide/scene_api/detach-and-reattach.txt	Developer's Guide > Scene API > Scene Graph > Detach and Reattach	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/scene_api/detach-and-reattach/
+/docs/viewer/developers_guide/scene_api/geometry-factory.txt	Developer's Guide > Scene API > Geometry and First Render > Geometry Factory	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/scene_api/geometry-factory/
+/docs/viewer/developers_guide/scene_api/hello-triangle.txt	Developer's Guide > Scene API > Geometry and First Render > Hello Triangle	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/scene_api/hello-triangle/
+/docs/viewer/developers_guide/scene_api/line-material.txt	Developer's Guide > Scene API > Materials > Line Material	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/scene_api/line-material/
+/docs/viewer/developers_guide/scene_api/managing-instances.txt	Developer's Guide > Scene API > Manipulating Instances > Managing Instances	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/scene_api/managing-instances/
+/docs/viewer/developers_guide/scene_api/points-material.txt	Developer's Guide > Scene API > Materials > Points Material	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/scene_api/points-material/
+/docs/viewer/developers_guide/scene_api/render-layers.txt	Developer's Guide > Scene API > Render Layers > Render Layers	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/scene_api/render-layers/
+/docs/viewer/developers_guide/scene_api/standard-material.txt	Developer's Guide > Scene API > Materials > Standard Material	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/scene_api/standard-material/
+/docs/viewer/developers_guide/scene_api/unlit-material.txt	Developer's Guide > Scene API > Materials > Unlit Material	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/scene_api/unlit-material/
+/docs/viewer/developers_guide/scene_api/visibility-states.txt	Developer's Guide > Scene API > Manipulating Instances > Visibility States	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/scene_api/visibility-states/
+/docs/viewer/developers_guide/scene_api/working-with-buffers.txt	Developer's Guide > Scene API > Geometry and First Render > Working with Buffers	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/scene_api/working-with-buffers/
+/docs/viewer/developers_guide/scene_api/wrapping-loaded-instances.txt	Developer's Guide > Scene API > Loaded Models > Wrapping Loaded Instances	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/scene_api/wrapping-loaded-instances/
+/docs/viewer/developers_guide/viewer_basics/GLTFExtension.txt	Developer's Guide > Viewer Basics > Loading glTF 2.0 Models	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/viewer_basics/GLTFExtension/
+/docs/viewer/developers_guide/viewer_basics/difftool.txt	Developer's Guide > Viewer Basics > Using DiffTool to Compare Models	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/viewer_basics/difftool/
+/docs/viewer/developers_guide/viewer_basics/events.txt	Developer's Guide > Viewer Basics > Reacting to Events	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/viewer_basics/events/
+/docs/viewer/developers_guide/viewer_basics/extensions.txt	Developer's Guide > Viewer Basics > Writing an Extension	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/viewer_basics/extensions/
+/docs/viewer/developers_guide/viewer_basics/feature-flags.txt	Developer's Guide > Viewer Basics > Feature Flags	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/viewer_basics/feature-flags/
+/docs/viewer/developers_guide/viewer_basics/starting-html.txt	Developer's Guide > Viewer Basics > Getting Started	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/viewer_basics/starting-html/
+/docs/viewer/developers_guide/viewer_basics/toolbar-button.txt	Developer's Guide > Viewer Basics > Customizing the Toolbar	https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/viewer_basics/toolbar-button/
+/docs/viewer/reference/ErrorCodes.txt	Reference Guide > ErrorCodes	https://aps.autodesk.com/en/docs/viewer/v7/reference/ErrorCodes/
+/docs/viewer/reference/Extensions.txt	Reference Guide > Extensions	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/
+/docs/viewer/reference/Extensions/AnimationExtension.txt	Reference Guide > Extensions > AnimationExtension	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/AnimationExtension/
+/docs/viewer/reference/Extensions/BimWalkExtension.txt	Reference Guide > Extensions > BimWalkExtension	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/BimWalkExtension/
+/docs/viewer/reference/Extensions/CrossFadeEffects.txt	Reference Guide > Extensions > CrossFadeEffects	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/CrossFadeEffects/
+/docs/viewer/reference/Extensions/DocumentBrowser.txt	Reference Guide > Extensions > DocumentBrowser	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/DocumentBrowser/
+/docs/viewer/reference/Extensions/Edit2DExtension.txt	Reference Guide > Extensions > Edit2DExtension	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/Edit2DExtension/
+/docs/viewer/reference/Extensions/ExplodeExtension.txt	Reference Guide > Extensions > ExplodeExtension	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/ExplodeExtension/
+/docs/viewer/reference/Extensions/FullScreenExtension.txt	Reference Guide > Extensions > FullScreenExtension	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/FullScreenExtension/
+/docs/viewer/reference/Extensions/FusionOrbitExtension.txt	Reference Guide > Extensions > FusionOrbitExtension	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/FusionOrbitExtension/
+/docs/viewer/reference/Extensions/GeolocationExtension.txt	Reference Guide > Extensions > GeolocationExtension	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/GeolocationExtension/
+/docs/viewer/reference/Extensions/GestureDocumentNavigationExtension.txt	Reference Guide > Extensions > GestureDocumentNavigationExtension	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/GestureDocumentNavigationExtension/
+/docs/viewer/reference/Extensions/GoHomeExtension.txt	Reference Guide > Extensions > GoHomeExtension	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/GoHomeExtension/
+/docs/viewer/reference/Extensions/HyperlinkExtension.txt	Reference Guide > Extensions > HyperlinkExtension	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/HyperlinkExtension/
+/docs/viewer/reference/Extensions/LayerManagerExtension.txt	Reference Guide > Extensions > LayerManagerExtension	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/LayerManagerExtension/
+/docs/viewer/reference/Extensions/MarkupsCore.txt	Reference Guide > Extensions > MarkupsCore	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/MarkupsCore/
+/docs/viewer/reference/Extensions/MeasureExtension.txt	Reference Guide > Extensions > MeasureExtension	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/MeasureExtension/
+/docs/viewer/reference/Extensions/MinimapExtension.txt	Reference Guide > Extensions > MinimapExtension	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/MinimapExtension/
+/docs/viewer/reference/Extensions/ModelBuilder.txt	Reference Guide > Extensions > ModelBuilder	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/ModelBuilder/
+/docs/viewer/reference/Extensions/ModelStructureExtension.txt	Reference Guide > Extensions > ModelStructureExtension	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/ModelStructureExtension/
+/docs/viewer/reference/Extensions/NPR.txt	Reference Guide > Extensions > NPR	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/NPR/
+/docs/viewer/reference/Extensions/NavToolsExtension.txt	Reference Guide > Extensions > NavToolsExtension	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/NavToolsExtension/
+/docs/viewer/reference/Extensions/PDFExtension.txt	Reference Guide > Extensions > PDFExtension	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/PDFExtension/
+/docs/viewer/reference/Extensions/PopoutExtension.txt	Reference Guide > Extensions > PopoutExtension	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/PopoutExtension/
+/docs/viewer/reference/Extensions/PropertiesManagerExtension.txt	Reference Guide > Extensions > PropertiesManagerExtension	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/PropertiesManagerExtension/
+/docs/viewer/reference/Extensions/RollCameraExtension.txt	Reference Guide > Extensions > RollCameraExtension	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/RollCameraExtension/
+/docs/viewer/reference/Extensions/SceneBuilder.txt	Reference Guide > Extensions > SceneBuilder	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/SceneBuilder/
+/docs/viewer/reference/Extensions/SectionExtension.txt	Reference Guide > Extensions > SectionExtension	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/SectionExtension/
+/docs/viewer/reference/Extensions/SnappingExtension.txt	Reference Guide > Extensions > SnappingExtension	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/SnappingExtension/
+/docs/viewer/reference/Extensions/SplitScreenExtension.txt	Reference Guide > Extensions > SplitScreenExtension	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/SplitScreenExtension/
+/docs/viewer/reference/Extensions/ViewCubeUi.txt	Reference Guide > Extensions > ViewCubeUi	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/ViewCubeUi/
+/docs/viewer/reference/Extensions/ViewerSettingsExtension.txt	Reference Guide > Extensions > ViewerSettingsExtension	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/ViewerSettingsExtension/
+/docs/viewer/reference/Extensions/WireframesExtension.txt	Reference Guide > Extensions > WireframesExtension	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/WireframesExtension/
+/docs/viewer/reference/Extensions/ZoomWindow.txt	Reference Guide > Extensions > ZoomWindow	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/ZoomWindow/
+/docs/viewer/reference/Extensions/glTF.txt	Reference Guide > Extensions > glTF	https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/glTF/
+/docs/viewer/reference/Math.txt	Reference Guide > Math	https://aps.autodesk.com/en/docs/viewer/v7/reference/Math/
+/docs/viewer/reference/Math/Box2.txt	Reference Guide > Math > Box2	https://aps.autodesk.com/en/docs/viewer/v7/reference/Math/Box2/
+/docs/viewer/reference/Math/Box3.txt	Reference Guide > Math > Box3	https://aps.autodesk.com/en/docs/viewer/v7/reference/Math/Box3/
+/docs/viewer/reference/Math/Matrix3.txt	Reference Guide > Math > Matrix3	https://aps.autodesk.com/en/docs/viewer/v7/reference/Math/Matrix3/
+/docs/viewer/reference/Math/Matrix4.txt	Reference Guide > Math > Matrix4	https://aps.autodesk.com/en/docs/viewer/v7/reference/Math/Matrix4/
+/docs/viewer/reference/Math/Quaternion.txt	Reference Guide > Math > Quaternion	https://aps.autodesk.com/en/docs/viewer/v7/reference/Math/Quaternion/
+/docs/viewer/reference/Math/Vector2.txt	Reference Guide > Math > Vector2	https://aps.autodesk.com/en/docs/viewer/v7/reference/Math/Vector2/
+/docs/viewer/reference/Math/Vector3.txt	Reference Guide > Math > Vector3	https://aps.autodesk.com/en/docs/viewer/v7/reference/Math/Vector3/
+/docs/viewer/reference/Math/Vector4.txt	Reference Guide > Math > Vector4	https://aps.autodesk.com/en/docs/viewer/v7/reference/Math/Vector4/
+/docs/viewer/reference/MeasureCommon.txt	Reference Guide > MeasureCommon	https://aps.autodesk.com/en/docs/viewer/v7/reference/MeasureCommon/
+/docs/viewer/reference/MeasureCommon/SnapResult.txt	Reference Guide > MeasureCommon > SnapResult	https://aps.autodesk.com/en/docs/viewer/v7/reference/MeasureCommon/SnapResult/
+/docs/viewer/reference/Private.txt	Reference Guide > Private	https://aps.autodesk.com/en/docs/viewer/v7/reference/Private/
+/docs/viewer/reference/Private/InstanceTree.txt	Reference Guide > Private > InstanceTree	https://aps.autodesk.com/en/docs/viewer/v7/reference/Private/InstanceTree/
+/docs/viewer/reference/Private/Preferences.txt	Reference Guide > Private > Preferences	https://aps.autodesk.com/en/docs/viewer/v7/reference/Private/Preferences/
+/docs/viewer/reference/Private/PropDbLoader.txt	Reference Guide > Private > PropDbLoader	https://aps.autodesk.com/en/docs/viewer/v7/reference/Private/PropDbLoader/
+/docs/viewer/reference/Private/PropertyDatabase.txt	Reference Guide > Private > PropertyDatabase	https://aps.autodesk.com/en/docs/viewer/v7/reference/Private/PropertyDatabase/
+/docs/viewer/reference/Private/ViewerPreferences.txt	Reference Guide > Private > ViewerPreferences	https://aps.autodesk.com/en/docs/viewer/v7/reference/Private/ViewerPreferences/
+/docs/viewer/reference/ProfileSettings.txt	Reference Guide > ProfileSettings	https://aps.autodesk.com/en/docs/viewer/v7/reference/ProfileSettings/
+/docs/viewer/reference/Scene.txt	Reference Guide > Scene	https://aps.autodesk.com/en/docs/viewer/v7/reference/Scene/
+/docs/viewer/reference/Scene/BufferAttribute.txt	Reference Guide > Scene > BufferAttribute	https://aps.autodesk.com/en/docs/viewer/v7/reference/Scene/BufferAttribute/
+/docs/viewer/reference/Scene/BufferGeometry.txt	Reference Guide > Scene > BufferGeometry	https://aps.autodesk.com/en/docs/viewer/v7/reference/Scene/BufferGeometry/
+/docs/viewer/reference/Scene/Color.txt	Reference Guide > Scene > Color	https://aps.autodesk.com/en/docs/viewer/v7/reference/Scene/Color/
+/docs/viewer/reference/Scene/GeometryFactory.txt	Reference Guide > Scene > GeometryFactory	https://aps.autodesk.com/en/docs/viewer/v7/reference/Scene/GeometryFactory/
+/docs/viewer/reference/Scene/InstanceCollection3D.txt	Reference Guide > Scene > InstanceCollection3D	https://aps.autodesk.com/en/docs/viewer/v7/reference/Scene/InstanceCollection3D/
+/docs/viewer/reference/Scene/InstanceNode3D.txt	Reference Guide > Scene > InstanceNode3D	https://aps.autodesk.com/en/docs/viewer/v7/reference/Scene/InstanceNode3D/
+/docs/viewer/reference/Scene/LineMaterial.txt	Reference Guide > Scene > LineMaterial	https://aps.autodesk.com/en/docs/viewer/v7/reference/Scene/LineMaterial/
+/docs/viewer/reference/Scene/Node3D.txt	Reference Guide > Scene > Node3D	https://aps.autodesk.com/en/docs/viewer/v7/reference/Scene/Node3D/
+/docs/viewer/reference/Scene/PointsMaterial.txt	Reference Guide > Scene > PointsMaterial	https://aps.autodesk.com/en/docs/viewer/v7/reference/Scene/PointsMaterial/
+/docs/viewer/reference/Scene/StandardMaterial.txt	Reference Guide > Scene > StandardMaterial	https://aps.autodesk.com/en/docs/viewer/v7/reference/Scene/StandardMaterial/
+/docs/viewer/reference/Scene/Texture.txt	Reference Guide > Scene > Texture	https://aps.autodesk.com/en/docs/viewer/v7/reference/Scene/Texture/
+/docs/viewer/reference/Scene/UnlitMaterial.txt	Reference Guide > Scene > UnlitMaterial	https://aps.autodesk.com/en/docs/viewer/v7/reference/Scene/UnlitMaterial/
+/docs/viewer/reference/Snapping.txt	Reference Guide > Snapping	https://aps.autodesk.com/en/docs/viewer/v7/reference/Snapping/
+/docs/viewer/reference/Snapping/Snapper.txt	Reference Guide > Snapping > Snapper	https://aps.autodesk.com/en/docs/viewer/v7/reference/Snapping/Snapper/
+/docs/viewer/reference/UI.txt	Reference Guide > UI	https://aps.autodesk.com/en/docs/viewer/v7/reference/UI/
+/docs/viewer/reference/UI/Button.txt	Reference Guide > UI > Button	https://aps.autodesk.com/en/docs/viewer/v7/reference/UI/Button/
+/docs/viewer/reference/UI/ComboButton.txt	Reference Guide > UI > ComboButton	https://aps.autodesk.com/en/docs/viewer/v7/reference/UI/ComboButton/
+/docs/viewer/reference/UI/Control.txt	Reference Guide > UI > Control	https://aps.autodesk.com/en/docs/viewer/v7/reference/UI/Control/
+/docs/viewer/reference/UI/ControlGroup.txt	Reference Guide > UI > ControlGroup	https://aps.autodesk.com/en/docs/viewer/v7/reference/UI/ControlGroup/
+/docs/viewer/reference/UI/DataTable.txt	Reference Guide > UI > DataTable	https://aps.autodesk.com/en/docs/viewer/v7/reference/UI/DataTable/
+/docs/viewer/reference/UI/DockingPanel.txt	Reference Guide > UI > DockingPanel	https://aps.autodesk.com/en/docs/viewer/v7/reference/UI/DockingPanel/
+/docs/viewer/reference/UI/Filterbox.txt	Reference Guide > UI > Filterbox	https://aps.autodesk.com/en/docs/viewer/v7/reference/UI/Filterbox/
+/docs/viewer/reference/UI/ModelStructurePanel.txt	Reference Guide > UI > ModelStructurePanel	https://aps.autodesk.com/en/docs/viewer/v7/reference/UI/ModelStructurePanel/
+/docs/viewer/reference/UI/ObjectContextMenu.txt	Reference Guide > UI > ObjectContextMenu	https://aps.autodesk.com/en/docs/viewer/v7/reference/UI/ObjectContextMenu/
+/docs/viewer/reference/UI/PropertyPanel.txt	Reference Guide > UI > PropertyPanel	https://aps.autodesk.com/en/docs/viewer/v7/reference/UI/PropertyPanel/
+/docs/viewer/reference/UI/RadioButtonGroup.txt	Reference Guide > UI > RadioButtonGroup	https://aps.autodesk.com/en/docs/viewer/v7/reference/UI/RadioButtonGroup/
+/docs/viewer/reference/UI/SettingsPanel.txt	Reference Guide > UI > SettingsPanel	https://aps.autodesk.com/en/docs/viewer/v7/reference/UI/SettingsPanel/
+/docs/viewer/reference/UI/ToolBar.txt	Reference Guide > UI > ToolBar	https://aps.autodesk.com/en/docs/viewer/v7/reference/UI/ToolBar/
+/docs/viewer/reference/UI/Tree.txt	Reference Guide > UI > Tree	https://aps.autodesk.com/en/docs/viewer/v7/reference/UI/Tree/
+/docs/viewer/reference/Viewing.txt	Reference Guide > Viewing	https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/
+/docs/viewer/reference/Viewing/AggregatedView.txt	Reference Guide > Viewing > AggregatedView	https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/AggregatedView/
+/docs/viewer/reference/Viewing/AppScreenModeDelegate.txt	Reference Guide > Viewing > AppScreenModeDelegate	https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/AppScreenModeDelegate/
+/docs/viewer/reference/Viewing/BubbleNode.txt	Reference Guide > Viewing > BubbleNode	https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/BubbleNode/
+/docs/viewer/reference/Viewing/CoordinateSystem.txt	Reference Guide > Viewing > CoordinateSystem	https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/CoordinateSystem/
+/docs/viewer/reference/Viewing/Document.txt	Reference Guide > Viewing > Document	https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/Document/
+/docs/viewer/reference/Viewing/EventUtils.txt	Reference Guide > Viewing > EventUtils	https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/EventUtils/
+/docs/viewer/reference/Viewing/Extension.txt	Reference Guide > Viewing > Extension	https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/Extension/
+/docs/viewer/reference/Viewing/ExtensionManager.txt	Reference Guide > Viewing > ExtensionManager	https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/ExtensionManager/
+/docs/viewer/reference/Viewing/FeatureFlags.txt	Reference Guide > Viewing > FeatureFlags	https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/FeatureFlags/
+/docs/viewer/reference/Viewing/FileLoader.txt	Reference Guide > Viewing > FileLoader	https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/FileLoader/
+/docs/viewer/reference/Viewing/GuiViewer3D.txt	Reference Guide > Viewing > GuiViewer3D	https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/GuiViewer3D/
+/docs/viewer/reference/Viewing/HotkeyManager.txt	Reference Guide > Viewing > HotkeyManager	https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/HotkeyManager/
+/docs/viewer/reference/Viewing/Model.txt	Reference Guide > Viewing > Model	https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/Model/
+/docs/viewer/reference/Viewing/Navigation.txt	Reference Guide > Viewing > Navigation	https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/Navigation/
+/docs/viewer/reference/Viewing/NullScreenModeDelegate.txt	Reference Guide > Viewing > NullScreenModeDelegate	https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/NullScreenModeDelegate/
+/docs/viewer/reference/Viewing/ObjectTree.txt	Reference Guide > Viewing > ObjectTree	https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/ObjectTree/
+/docs/viewer/reference/Viewing/OverlayManager.txt	Reference Guide > Viewing > OverlayManager	https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/OverlayManager/
+/docs/viewer/reference/Viewing/Profile.txt	Reference Guide > Viewing > Profile	https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/Profile/
+/docs/viewer/reference/Viewing/ProfileManager.txt	Reference Guide > Viewing > ProfileManager	https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/ProfileManager/
+/docs/viewer/reference/Viewing/PropertySet.txt	Reference Guide > Viewing > PropertySet	https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/PropertySet/
+/docs/viewer/reference/Viewing/PublicFeatureFlags.txt	Reference Guide > Viewing > PublicFeatureFlags	https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/PublicFeatureFlags/
+/docs/viewer/reference/Viewing/RenderLayerManager.txt	Reference Guide > Viewing > RenderLayerManager	https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/RenderLayerManager/
+/docs/viewer/reference/Viewing/ScreenModeDelegate.txt	Reference Guide > Viewing > ScreenModeDelegate	https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/ScreenModeDelegate/
+/docs/viewer/reference/Viewing/ToolController.txt	Reference Guide > Viewing > ToolController	https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/ToolController/
+/docs/viewer/reference/Viewing/ToolInterface.txt	Reference Guide > Viewing > ToolInterface	https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/ToolInterface/
+/docs/viewer/reference/Viewing/Viewer3D.txt	Reference Guide > Viewing > Viewer3D	https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/Viewer3D/
+/docs/viewer/reference/Viewing/ViewingUtilities.txt	Reference Guide > Viewing > ViewingUtilities	https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/ViewingUtilities/
+/docs/viewer/reference/globals/Classes/GlobalManagerProvider.txt	Reference Guide > Globals > Classes > GlobalManagerProvider	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/Classes/GlobalManagerProvider/
+/docs/viewer/reference/globals/Classes/SearchResults.txt	Reference Guide > Globals > Classes > SearchResults	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/Classes/SearchResults/
+/docs/viewer/reference/globals/Functions/GlobalManagerMixin.txt	Reference Guide > Globals > Functions > GlobalManagerMixin	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/Functions/GlobalManagerMixin/
+/docs/viewer/reference/globals/Functions/cloneHTMLElementsToWrapperElement.txt	Reference Guide > Globals > Functions > cloneHTMLElementsToWrapperElement	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/Functions/cloneHTMLElementsToWrapperElement/
+/docs/viewer/reference/globals/Functions/create.txt	Reference Guide > Globals > Functions > create	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/Functions/create/
+/docs/viewer/reference/globals/Functions/setCompassRotation.txt	Reference Guide > Globals > Functions > setCompassRotation	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/Functions/setCompassRotation/
+/docs/viewer/reference/globals/Functions/setViewType.txt	Reference Guide > Globals > Functions > setViewType	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/Functions/setViewType/
+/docs/viewer/reference/globals/Functions/showCompass.txt	Reference Guide > Globals > Functions > showCompass	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/Functions/showCompass/
+/docs/viewer/reference/globals/Properties/AttributeType.txt	Reference Guide > Globals > Properties > AttributeType	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/Properties/AttributeType/
+/docs/viewer/reference/globals/Properties/InitParametersSetting.txt	Reference Guide > Globals > Properties > InitParametersSetting	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/Properties/InitParametersSetting/
+/docs/viewer/reference/globals/Properties/LMV_RASTER_PDF.txt	Reference Guide > Globals > Properties > LMV_RASTER_PDF	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/Properties/LMV_RASTER_PDF/
+/docs/viewer/reference/globals/Properties/LMV_THIRD_PARTY_COOKIE.txt	Reference Guide > Globals > Properties > LMV_THIRD_PARTY_COOKIE	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/Properties/LMV_THIRD_PARTY_COOKIE/
+/docs/viewer/reference/globals/Properties/LMV_VECTOR_PDF.txt	Reference Guide > Globals > Properties > LMV_VECTOR_PDF	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/Properties/LMV_VECTOR_PDF/
+/docs/viewer/reference/globals/Properties/LMV_VIEWER_VERSION.txt	Reference Guide > Globals > Properties > LMV_VIEWER_VERSION	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/Properties/LMV_VIEWER_VERSION/
+/docs/viewer/reference/globals/TypeDefs/AggregatedResult.txt	Reference Guide > Globals > Type Definitions > AggregatedResult	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/AggregatedResult/
+/docs/viewer/reference/globals/TypeDefs/AttributeLayout.txt	Reference Guide > Globals > Type Definitions > AttributeLayout	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/AttributeLayout/
+/docs/viewer/reference/globals/TypeDefs/EventHistoryChangedData.txt	Reference Guide > Globals > Type Definitions > EventHistoryChangedData	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/EventHistoryChangedData/
+/docs/viewer/reference/globals/TypeDefs/Extensions.txt	Reference Guide > Globals > Type Definitions > Extensions	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/Extensions/
+/docs/viewer/reference/globals/TypeDefs/FPS_TARGET_MODES.txt	Reference Guide > Globals > Type Definitions > FPS_TARGET_MODES	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/FPS_TARGET_MODES/
+/docs/viewer/reference/globals/TypeDefs/GeometryChangedCallback.txt	Reference Guide > Globals > Type Definitions > GeometryChangedCallback	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/GeometryChangedCallback/
+/docs/viewer/reference/globals/TypeDefs/GetPropertiesResult.txt	Reference Guide > Globals > Type Definitions > GetPropertiesResult	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/GetPropertiesResult/
+/docs/viewer/reference/globals/TypeDefs/InitOptions.txt	Reference Guide > Globals > Type Definitions > InitOptions	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/InitOptions/
+/docs/viewer/reference/globals/TypeDefs/InstancesCallback.txt	Reference Guide > Globals > Type Definitions > InstancesCallback	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/InstancesCallback/
+/docs/viewer/reference/globals/TypeDefs/Intersection.txt	Reference Guide > Globals > Type Definitions > Intersection	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/Intersection/
+/docs/viewer/reference/globals/TypeDefs/MaterialChangedCallback.txt	Reference Guide > Globals > Type Definitions > MaterialChangedCallback	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/MaterialChangedCallback/
+/docs/viewer/reference/globals/TypeDefs/NavToolsConfig.txt	Reference Guide > Globals > Type Definitions > NavToolsConfig	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/NavToolsConfig/
+/docs/viewer/reference/globals/TypeDefs/NodeTraverseCallback.txt	Reference Guide > Globals > Type Definitions > NodeTraverseCallback	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/NodeTraverseCallback/
+/docs/viewer/reference/globals/TypeDefs/Prefs.txt	Reference Guide > Globals > Type Definitions > Prefs	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/Prefs/
+/docs/viewer/reference/globals/TypeDefs/Prefs2D.txt	Reference Guide > Globals > Type Definitions > Prefs2D	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/Prefs2D/
+/docs/viewer/reference/globals/TypeDefs/Prefs3D.txt	Reference Guide > Globals > Type Definitions > Prefs3D	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/Prefs3D/
+/docs/viewer/reference/globals/TypeDefs/ProfileSettings.txt	Reference Guide > Globals > Type Definitions > ProfileSettings	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/ProfileSettings/
+/docs/viewer/reference/globals/TypeDefs/PropertyResult.txt	Reference Guide > Globals > Type Definitions > PropertyResult	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/PropertyResult/
+/docs/viewer/reference/globals/TypeDefs/RenderLayerOptions.txt	Reference Guide > Globals > Type Definitions > RenderLayerOptions	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/RenderLayerOptions/
+/docs/viewer/reference/globals/TypeDefs/SelectionDef.txt	Reference Guide > Globals > Type Definitions > SelectionDef	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/SelectionDef/
+/docs/viewer/reference/globals/TypeDefs/Settings.txt	Reference Guide > Globals > Type Definitions > Settings	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/Settings/
+/docs/viewer/reference/globals/TypeDefs/SnapProvider.txt	Reference Guide > Globals > Type Definitions > SnapProvider	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/SnapProvider/
+/docs/viewer/reference/globals/TypeDefs/ThemingColorChangedCallback.txt	Reference Guide > Globals > Type Definitions > ThemingColorChangedCallback	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/ThemingColorChangedCallback/
+/docs/viewer/reference/globals/TypeDefs/VIEW_TYPES.txt	Reference Guide > Globals > Type Definitions > VIEW_TYPES	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/VIEW_TYPES/
+/docs/viewer/reference/globals/TypeDefs/VertexAttributeReader.txt	Reference Guide > Globals > Type Definitions > VertexAttributeReader	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/VertexAttributeReader/
+/docs/viewer/reference/globals/TypeDefs/Viewer3DExtraScene.txt	Reference Guide > Globals > Type Definitions > Viewer3DExtraScene	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/Viewer3DExtraScene/
+/docs/viewer/reference/globals/TypeDefs/forEachCallback.txt	Reference Guide > Globals > Type Definitions > forEachCallback	https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/forEachCallback/

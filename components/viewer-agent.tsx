@@ -13,6 +13,7 @@ import {
   useSyncExternalStore,
 } from 'react'
 import { createPortal } from 'react-dom'
+import { ExtensionsOverlay } from '@/components/extensions-overlay'
 import { APSViewer } from '@/components/ui/aps-viewer/aps-viewer'
 import { useAPSViewerStore } from '@/components/ui/aps-viewer/context'
 import {
@@ -29,6 +30,7 @@ import { Sheet, SheetClose, SheetContent, SheetTitle } from '@/components/ui/she
 import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { statusInkClasses, statusToneClasses } from '@/components/ui/token-status'
 import type { AgentRuntimeStatus } from '@/lib/agent-types'
+import { createExtensionRuntime } from '@/lib/extensions/runtime'
 import { cn } from '@/lib/utils'
 import { type ColorLedger, createViewerAgentTools } from '@/lib/viewer-agent-tools'
 import { AEC_STARTER_EXTENSIONS } from '@/lib/viewer-extension-types'
@@ -311,6 +313,7 @@ function ViewerAgent({
   const [panelWidth, setPanelWidth] = usePersistedPanelWidth()
   const [viewerSource] = useState(createViewerSource)
   const [tools] = useState(() => createViewerAgentTools(viewerSource.getViewer))
+  const [extensions] = useState(() => createExtensionRuntime(viewerSource.getViewer))
   const [terminalHost] = useState(createTerminalHost)
   const [parkingSlot, setParkingSlot] = useState<HTMLDivElement | null>(null)
   const [dockSlot, setDockSlot] = useState<HTMLElement | null>(null)
@@ -324,6 +327,7 @@ function ViewerAgent({
   }, [])
 
   useEffect(() => () => tools.dispose(), [tools])
+  useEffect(() => () => extensions.dispose(), [extensions])
 
   const getAccessToken = useCallback<GetAccessToken>(async () => {
     const response = await fetch(viewerTokenEndpoint, { cache: 'no-store' })
@@ -375,7 +379,7 @@ function ViewerAgent({
     >
       <header className="flex h-14 shrink-0 items-center gap-2 border-border border-b ps-4 pe-2 sm:gap-3">
         <h1 className="min-w-0 flex-1 truncate font-medium font-mono text-sm lowercase">
-          canterafx
+          extension builder
         </h1>
         <ThemeToggle />
         <Button
@@ -409,6 +413,10 @@ function ViewerAgent({
               resetValue={STARTER_VIEWER_SETTINGS}
             />
             <ColorLegend colors={tools.colors} className="top-3 left-3" />
+            <ExtensionsOverlay
+              runtime={extensions}
+              className="absolute bottom-20 left-3 z-10 max-sm:bottom-34"
+            />
           </APSViewer>
           {viewerError && (
             <div
@@ -487,6 +495,7 @@ function ViewerAgent({
             <FxTerminal
               ref={terminalRef}
               tools={tools}
+              extensions={extensions}
               gatewayBase={gatewayBase}
               model={model}
               effort={effort}

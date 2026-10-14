@@ -1,0 +1,23 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/Scene/
+Reference Guide > Scene
+
+Autodesk.Viewing
+
+# Scene
+
+Classes related to scene management and rendering. This includes materials, geometries, and scene graph nodes.
+
+# Constants
+
+## VisibilityState
+
+Visibility states for scene graph nodes and geometry instances.
+
+type
+number
+
+# Properties
+
+Visible (number) | Object is fully visible.
+Ghosted (number) | Object is ghosted (translucent).
+Hidden (number) | Object is not visible.

@@ -1,0 +1,12 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/Private/InstanceTree/
+Reference Guide > Private > InstanceTree
+
+Autodesk.Viewing.Private
+
+# InstanceTree (Deprecated)
+
+Deprecated. Use Autodesk.Viewing.ObjectTree instead.
+
+## new InstanceTree()
+
+See Autodesk.Viewing.ObjectTree for the current object tree API.

@@ -1,0 +1,103 @@
+https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/scene_api/line-material/
+Developer's Guide > Scene API > Materials > Line Material
+
+# Line Material
+
+LineMaterial renders line geometry where the index buffer contains pairs of vertex indices. Each pair defines one line segment.
+
+Building line geometry follows the same BufferGeometry + BufferAttribute pattern as solid triangle based geometry, with one difference in the index call. After setting a `position` attribute you call `setIndices()` with a flat array of index pairs. Each consecutive pair `[a, b]` draws one segment from vertex `a` to vertex `b`. Pairs do not need to be contiguous, so you can author any topology — open polylines, closed rings, wireframe boxes, or arbitrary line networks — from the same vertex pool without duplication.
+
+LineMaterial accepts `color`, `opacity`/`transparent`, `vertexColors`, `depthTest`, and `depthWrite` — the same compositing parameters as UnlitMaterial. There is no `size` or `width` property since the line width is currently limited to one pixel. The example lays out a 5×5 Color × Opacity grid of a shared ring geometry and a right column demonstrating `vertexColors`, `depthTest: false`, and `depthWrite: false`.
+
+See the Pen APS Viewer SDK - LineMaterial by Autodesk Platform Services (@autodesk-platform-services) on CodePen.
+
+## Source
+
+1. Build a ring with line index pairs
+
+Each pair `[i, (i+1) % N]` closes the ring back to vertex 0. No triangle indices are involved.
+
+```
+function createRing(radius, segments) {
+  const positions = new Float32Array(segments * 3);
+  for (let i = 0; i < segments; i++) {
+    const a = (i / segments) * Math.PI * 2;
+    positions[i * 3]     = Math.cos(a) * radius;
+    positions[i * 3 + 1] = Math.sin(a) * radius;
+    positions[i * 3 + 2] = 0;
+  }
+  const indices = new Uint16Array(segments * 2);
+  for (let i = 0; i < segments; i++) {
+    indices[i * 2]     = i;
+    indices[i * 2 + 1] = (i + 1) % segments;
+  }
+  const geom = new avs.BufferGeometry();
+  geom.setAttribute(
+    'position', new avs.BufferAttribute(positions, 3)
+  );
+  geom.setIndices(indices);
+  return geom;
+}
+```
+
+2. Color × Opacity grid
+
+The ring geometry is shared across all 25 cells. Each cell gets its own LineMaterial with a distinct color and opacity combination.
+
+```
+for (let row = 0; row < ROWS; row++) {
+  for (let col = 0; col < COLS; col++) {
+    const mat = new avs.LineMaterial({
+      color:       COLORS[col],
+      opacity:     OPACITIES[row],
+      transparent: true,
+    });
+    instances.add(
+      ring,
+      mat,
+      new avm.Matrix4().makeTranslation(
+        OFFSET_X + col * SPACING,
+        OFFSET_Y + row * SPACING,
+        0
+      )
+    );
+  }
+}
+```
+
+3. Vertex colors on line geometry
+
+Add a `color` attribute (Float32, item size 3) to the geometry and set `vertexColors: true` on the material. Hue cycles once around the ring so each segment has a distinct color.
+
+```
+function createRainbowRing(radius, segments) {
+  const geom    = createRing(radius, segments);
+  const colors  = new Float32Array(segments * 3);
+  for (let i = 0; i < segments; i++) {
+    const h6 = (i / segments) * 6;
+    const f  = h6 - Math.floor(h6);
+    const q  = h6 % 6;
+    colors[i * 3] = q < 1 ? 1
+      : q < 2 ? 1 - f
+        : q < 3 ? 0
+          : q < 4 ? 0
+            : q < 5 ? f
+              : 1;
+    colors[i * 3 + 1] = q < 1 ? f
+      : q < 2 ? 1
+        : q < 3 ? 1
+          : q < 4 ? 1 - f
+            : 0;
+    colors[i * 3 + 2] = q < 1 ? 0
+      : q < 2 ? 0
+        : q < 3 ? f
+          : q < 4 ? 1
+            : q < 5 ? 1
+              : 1 - f;
+  }
+  geom.setAttribute(
+    'color', new avs.BufferAttribute(colors, 3)
+  );
+  return geom;
+}
+```

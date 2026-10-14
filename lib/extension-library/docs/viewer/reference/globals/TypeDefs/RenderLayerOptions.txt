@@ -1,0 +1,15 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/RenderLayerOptions/
+Reference Guide > Globals > Type Definitions > RenderLayerOptions
+
+Type Definitions
+
+# RenderLayerOptions
+
+Options for configuring a render layer.
+
+# Properties
+
+renderOrder (number) | Global ordering within the same renderTarget. For ‘main’ target: negative values render before the main scene, positive values render after. For ‘overlay’ target: higher values render later.
+renderTarget (string) | Where to render this layer. ‘main’ - Rendered during the main pass (before/after main scene based on renderOrder) ‘overlay’ - Rendered during the overlay pass (after all main content)
+clearDepthAfter (boolean) | Clear the depth buffer after rendering this layer. Useful when subsequent layers should render without depth interference from this layer. Only available for ‘main’ renderTarget.
+visible (boolean) | Whether this layer is visible.

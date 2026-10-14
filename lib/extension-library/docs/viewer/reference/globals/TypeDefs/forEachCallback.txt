@@ -1,0 +1,13 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/forEachCallback/
+Reference Guide > Globals > Type Definitions > forEachCallback
+
+Type Definitions
+
+# forEachCallback
+
+This callback is displayed as a global member.
+
+## Parameters
+
+key* (string) | string with a property’s name and category separated by ‘/’
+properties* (Array.<Object>) | an array of property objects associated with the key

@@ -1,0 +1,246 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/Scene/BufferGeometry/
+Reference Guide > Scene > BufferGeometry
+
+Autodesk.Viewing.Scene
+
+# BufferGeometry
+
+## new BufferGeometry()
+
+Constructs a new BufferGeometry.
+
+# Methods
+
+## clone()
+
+Clones the geometry.
+
+### Returns
+
+type | description
+BufferGeometry | The cloned geometry.
+
+## computeBoundingBox()
+
+Computes the axis-aligned bounding box of the geometry.
+
+## computeBoundingSphere()
+
+Computes the bounding sphere of the geometry.
+
+## setAttribute(name, attribute)
+
+Sets a named vertex attribute.
+
+### Parameters
+
+name* (string) | Attribute name: ‘position’, ‘normal’, ‘uv’, ‘color’.
+attribute* (BufferAttribute) | A BufferAttribute wrapping the vertex data.
+
+### Returns
+
+type | description
+BufferGeometry | this
+
+## getAttribute(name)
+
+Returns the BufferAttribute for a named attribute. Before commit, returns the original BufferAttribute. After commit, the BufferAttribute data has been processed and might differ from the original.
+
+### Parameters
+
+name* (string) | Attribute name.
+
+### Returns
+
+type | description
+BufferAttribute, null
+
+## hasAttribute(name)
+
+Returns true if the named attribute is set.
+
+### Parameters
+
+name* (string) | Attribute name.
+
+### Returns
+
+type | description
+boolean
+
+## getVertexCount()
+
+Number of vertices, derived from position attribute or interleaved buffer.
+
+### Returns
+
+type | description
+number
+
+## setInterleavedBuffer(data, stride, layout)
+
+Sets a pre-interleaved vertex buffer with attribute layout. Mutually exclusive with setAttribute() — mixing the two throws.
+
+### Parameters
+
+data* (Float32Array) | Interleaved vertex buffer.
+stride* (number) | Number of float32 elements per vertex.
+layout* (Object.<string, AttributeLayout>) | Map of attribute names to their layouts.
+
+### Returns
+
+type | description
+BufferGeometry | this
+
+## setIndices(data)
+
+Sets the index buffer of the geometry.
+
+### Parameters
+
+data* (Uint16Array, Uint32Array) | Index buffer.
+
+### Returns
+
+type | description
+BufferGeometry | this
+
+## getIndices()
+
+Returns the index buffer, or null.
+
+### Returns
+
+type | description
+Uint16Array, Uint32Array, null
+
+## setEdgeIndices(data)
+
+Sets edge wireframe indices. Every 2 consecutive values form a line segment.
+
+### Parameters
+
+data* (Uint16Array, Uint32Array) | Edge index buffer.
+
+### Returns
+
+type | description
+BufferGeometry | this
+
+## getEdgeIndices()
+
+Returns edge index buffer, or null.
+
+### Returns
+
+type | description
+Uint16Array, Uint32Array, null
+
+## getEdgeCount()
+
+Number of edge line segments (edgeIndices.length / 2).
+
+### Returns
+
+type | description
+number
+
+## isCommitted()
+
+Returns true after the geometry has been added to an InstanceCollection3D.
+
+### Returns
+
+type | description
+boolean
+
+## getByteSize()
+
+Total byte size of all buffers.
+
+### Returns
+
+type | description
+number
+
+## setBoundingBox(min, max)
+
+Explicitly sets the bounding box.
+
+### Parameters
+
+min* (Vector3)
+max* (Vector3)
+
+### Returns
+
+type | description
+BufferGeometry | this
+
+## getBoundingBox(target)
+
+Returns the bounding box. If target is provided, copies into it, otherwise returns a clone. Returns null if neither computed nor set.
+
+### Parameters
+
+target (Box3)
+
+### Returns
+
+type | description
+Box3, null
+
+## isInterleaved()
+
+Returns true if the geometry uses an interleaved vertex buffer.
+
+### Returns
+
+type | description
+boolean
+
+## getPositionReader()
+
+Returns a function(vertexIndex, outVec3) that reads a decoded position into outVec3.
+
+### Returns
+
+type | description
+VertexAttributeReader, null
+
+## getNormalReader()
+
+Returns a function(vertexIndex, outVec3) that reads a decoded normal into outVec3.
+
+### Returns
+
+type | description
+VertexAttributeReader, null
+
+## getNormal(index, target)
+
+Decodes a normal from the vertex buffer. For performance critical readbacks of large parts of the geometry use getNormalReader instead.
+
+### Parameters
+
+index* (number) | The index of the vertex.
+target* (Vector3) | The target vector to store the decoded normal.
+
+### Returns
+
+type | description
+Vector3, null | The decoded normal or null if the normal is not set.
+
+## getPosition(index, target)
+
+Decodes a position from the vertex buffer. For performance critical readbacks of large parts of the geometry use getPositionReader instead.
+
+### Parameters
+
+index* (number) | The index of the vertex.
+target* (Vector3) | The target vector to store the decoded position.
+
+### Returns
+
+type | description
+Vector3, null | The decoded position or null if the position is not set.

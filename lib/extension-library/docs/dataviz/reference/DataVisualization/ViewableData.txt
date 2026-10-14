@@ -1,0 +1,73 @@
+https://aps.autodesk.com/en/docs/dataviz/v1/reference/DataVisualization/ViewableData/
+Reference Guide > DataVisualization > ViewableData
+
+Autodesk.DataVisualization
+
+# ViewableData
+
+An object that manages a collection of `CustomViewable` object. A `ViewableData` object is added for display through `DataVisualization.addViewables` API before any of its `CustomViewable` can be displayed.
+
+## new ViewableData(options)
+
+Constructs an instance of `ViewableData` object
+
+### Parameters
+
+options* (Object) | The options to configure `ViewableData` object with.
+  atlasWidth* (number) | The initial sprite atlas width inpixels, to accommodate subsequent `CustomViewable` object that are added.If not specified, the atlas width of `1920` pixels is used.
+  atlasHeight* (number) | The initial sprite atlas height inpixels, to accommodate subsequent `CustomViewable` object that are added.If not specified, the atlas height of `1080` pixels is used.
+
+### Examples
+
+```
+ const viewableData = new Autodesk.DataVisualization.Core.ViewableData({
+  atlasWidth: 512,
+  atlasHeight: 512
+});
+```
+
+# Properties
+
+viewables | All the `CustomViewable` that are added to this `ViewableData` object.
+
+# Methods
+
+## addViewable(viewable)
+
+Adds a custom viewable object to the `ViewableData`.
+
+### Parameters
+
+viewable* (CustomViewable) | The custom viewable to be addedto the `ViewableData` object.
+
+## getViewableUV(dbId, highlighted)
+
+Get the UV values of a viewable from the sprite atlas
+
+### Parameters
+
+dbId* (String) | Id of the viewable to obtain the UV of.
+highlighted* (boolean) | Boolean value to obtain the normal sprite UV or the highlighted version
+
+### Returns
+
+type | description
+Object | UV values of the requested viewable
+
+## getViewableColor(dbId, highlighted)
+
+Get the color values of a viewable
+
+### Parameters
+
+dbId* (String) | Id of the viewable to obtain the UV of.
+highlighted* (boolean) | Boolean value to obtain the normal sprite UV or the highlighted version
+
+### Returns
+
+type | description
+THREE.Color | Color of the requested viewable
+
+## finish()
+
+Marks the `ViewableData` as completed. The final sprite atlas will be generated based on all the `CustomViewable` objects added prior to this. This function must be called before the `ViewableData` is added for display through `DataVisualization.addViewables` API.

@@ -1,0 +1,98 @@
+https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/scene_api/unlit-material/
+Developer's Guide > Scene API > Materials > Unlit Material
+
+# Unlit Material
+
+UnlitMaterial renders geometry without any lighting calculation. That makes it the right choice for content where perceptual accuracy matters more than physical realism: wireframes, color-coded diagnostic overlays, HUD elements, sprite billboards, and annotations that must read clearly regardless of light direction.
+
+The material supports several compositing controls. `color` sets the base color, `opacity` and `transparent: true` enable alpha blending against whatever is behind it. `vertexColors: true` multiplies the base `color` by per-vertex color data stored in a `color` attribute on the geometry (three floats per vertex, R/G/B in the 0–1 range). The `map` property attaches a diffuse texture that modulates surface color per texel. `alphaMap` attaches a greyscale texture whose luminance controls per-texel opacity — white is fully opaque, black is fully transparent. Both require `transparent: true` to produce visible blending.
+
+Two depth flags give precise control over compositing order. `depthTest: false` tells the renderer to skip the depth-buffer comparison entirely, so the material always renders on top of whatever was drawn before it regardless of actual Z position, useful for UI overlays and always-visible markers. `depthWrite: false` keeps depth testing active but prevents the material from writing its depth values, so geometry drawn later can overdraw it in overlapping regions even when it lies geometrically behind it. The example displays a 5×5 Color × Opacity grid plus a right column with one sphere per parameter to make each effect immediately visible.
+
+See the Pen APS Viewer SDK - UnlitMaterial by Autodesk Platform Services (@autodesk-platform-services) on CodePen.
+
+## Source
+
+1. Color × Opacity grid
+
+The main 5×5 grid sweeps five hues across columns and five opacity levels up rows. Every sphere with opacity < 1.0 sets `transparent: true` so they get blended with each other and the dark backdrop.
+
+```
+for (let row = 0; row < ROWS; row++) {
+  for (let col = 0; col < COLS; col++) {
+    const mat = new UnlitMaterial({
+      color: COLORS[col],
+      opacity: OPACITIES[row],
+      transparent: OPACITIES[row] < 1.0,
+    });
+    const m = new Matrix4().makeTranslation(
+      OFFSET_X + col * SPACING,
+      OFFSET_Y + row * SPACING,
+      0
+    );
+    instances.add(geom, mat, m);
+  }
+}
+```
+
+2. Vertex colors
+
+The geometry must carry a `color` attribute (`Float32Array`, item size 3). Setting `vertexColors: true` on the material multiplies that per-vertex data into the base `color`. Use `color: 0xffffff` to let the vertex data come through unchanged.
+
+```
+// vertexColors: per-vertex color multiplied into
+// material color. Geometry needs a 'color'
+// attribute (Float32, 3 components).
+const vcGeom = makeVertexColoredSphere(RADIUS, 32, 16);
+const vcMat = new Matrix4().makeTranslation(
+  TEX_X, OFFSET_Y + 4 * SPACING, 0
+);
+instances.add(vcGeom, new UnlitMaterial({
+  color: 0xffffff, vertexColors: true,
+}), vcMat);
+
+// map: diffuse texture modulates surface color
+// per texel. color:white leaves it unmodified.
+const mapMat = new Matrix4().makeTranslation(
+  TEX_X, OFFSET_Y + 3 * SPACING, 0
+);
+instances.add(geom,
+  new UnlitMaterial({color: 0xffffff, map: diffuseTex}),
+  mapMat);
+```
+
+3. Depth flags
+
+Two overlapping sphere pairs demonstrate the depth flags. In each pair the smaller sphere is geometrically behind the larger one. The flag determines which wins visually.
+
+```
+// depthTest: false — the small orange sphere is
+// farther from the camera, but ignoring the depth
+// buffer makes it render on top anyway.
+const dtY = OFFSET_Y + 2 * SPACING;
+instances.add(
+  geom,
+  new UnlitMaterial({ color: 0x2060c0 }),
+  new Matrix4().makeTranslation(TEX_X, dtY, DZ)
+); // blue, in front
+instances.add(
+  smallGeom,
+  new UnlitMaterial({color: 0xe07030, depthTest: false}),
+  new Matrix4().makeTranslation(TEX_X, dtY, -DZ)
+); // orange, behind but rendered on top
+
+// depthWrite: false — the front teal sphere skips
+// writing depth, so the red sphere behind it still
+// passes the depth test and shows through.
+const dwY = OFFSET_Y + 1 * SPACING;
+instances.add(
+  geom,
+  new UnlitMaterial({color: 0x20a080, depthWrite: false}),
+  new Matrix4().makeTranslation(TEX_X, dwY, DZ)
+); // teal, in front, no depth write
+instances.add(
+  smallGeom,
+  new UnlitMaterial({ color: 0xc03030 }),
+  new Matrix4().makeTranslation(TEX_X, dwY, -DZ)
+); // red, behind, shows through teal
+```

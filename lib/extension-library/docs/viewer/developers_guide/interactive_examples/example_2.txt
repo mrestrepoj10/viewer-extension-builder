@@ -1,0 +1,12 @@
+https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/interactive_examples/example_2/
+Developer's Guide > Interactive Examples > Handling Viewer Events
+
+# Handle Viewer Events
+
+This example implements an event listener for the `SELECTION_CHANGED_EVENT`.
+
+Selecting an object calls the specified inline function, which asynchronously retrieves the ID of the selected object and displays it in an alert box with the message: The user has selected objects with IDs. The message is followed by the retrieved object ID.
+
+See the Pen Handling Viewer Events by Autodesk Platform Services (@autodesk-platform-services) on CodePen.
+
+Tip Open the example in CodePen and change the message text.

@@ -1,0 +1,222 @@
+https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/scene_api/building-a-hierarchy/
+Developer's Guide > Scene API > Scene Graph > Building a Hierarchy
+
+# Building a Hierarchy
+
+The scene graph is an optional third hierarchy that sits alongside the object tree and the flat InstanceCollection3D. The object tree organises logical design objects and the `InstanceCollection` manages individual renderable instances, the scene graph gives you a programmatic parent–child transform structure you author yourself. Use it when groups of instances need to change together — for example, the segments of a robot arm that all rotate when the base turns. Building a scene graph node does not affect the object tree. It purely controls how world transforms are computed.
+
+Two node types compose the graph. Node3D is an invisible transform node: it has `position`, `quaternion`, and `scale` properties but renders nothing on its own. InstanceNode3D extends Node3D with a geometry and a material, so it is a transform node and represents an instance. You build the hierarchy with `parent.add(child)`. Children inherit their parent’s world transform automatically. By default, the scene graph does not exist. In this case InstanceCollection3D.getSceneGraph will create it and return its root node.
+
+When properties on a node change during animation, call `node.markDirty()` to flag that subtree for recomputation. A single `root.updateTransformWorld()` call then walks the graph and recomputes world matrices only for dirty subtrees, the rest are skipped. This makes per-frame animation efficient even for deep hierarchies.
+
+The example shows a factory robot arm that picks up a box and carries it to the other side.
+
+See the Pen APS Viewer SDK - Building a Hierarchy by Autodesk Platform Services (@autodesk-platform-services) on CodePen.
+
+## Source
+
+1. Build the hierarchy
+
+Each joint is modeled as a InstanceNode3D referencing a sphere instance and positioned at the joint centre. Arm segments are attached to the joints, so that they move when the joint rotates. The red box is added as a permanent child of the wrist, at the fingertips, so it always moves with the gripper. Only its visibility toggles to show it being grabbed and dropped.
+
+```
+// Base pedestal — sits at origin, stays fixed
+const base = new InstanceNode3D(baseGeom, baseMat);
+
+// Shoulder joint — yaws the whole arm around Y and
+// bends it around Z
+const shoulderBall = new InstanceNode3D(
+  jointGeom, jointMat
+);
+shoulderBall.position.set(0, 0.3, 0);
+base.add(shoulderBall);
+
+// Upper arm
+const upperArm = new InstanceNode3D(upperGeom, armMat);
+upperArm.position.set(0, 0.75, 0);
+shoulderBall.add(upperArm);
+
+// Elbow joint — bends around Z
+const elbowBall = new InstanceNode3D(jointGeom, jointMat);
+elbowBall.position.set(0, 0.75, 0);
+upperArm.add(elbowBall);
+
+// Forearm
+const forearm = new InstanceNode3D(forearmGeom, armMat);
+forearm.position.set(0, 0.6, 0);
+elbowBall.add(forearm);
+
+// Wrist joint — bends around Z
+const wristBall = new InstanceNode3D(jointGeom, jointMat);
+wristBall.scale.set(0.7, 0.7, 0.7);
+wristBall.position.set(0, 0.6, 0);
+forearm.add(wristBall);
+
+// Gripper fingers
+const gripL = new InstanceNode3D(gripGeom, gripMat);
+gripL.position.set(-0.11, 0.275, 0);
+wristBall.add(gripL);
+
+const gripR = new InstanceNode3D(gripGeom, gripMat);
+gripR.position.set(0.11, 0.275, 0);
+wristBall.add(gripR);
+
+// Box the arm picks up — a permanent child of the
+// wrist, at the fingertips, so it always moves with
+// the gripper. Only its visibility toggles, to show
+// it being carried instead of resting on the ground.
+const box = new InstanceNode3D(boxGeom, boxMat);
+box.position.set(0, 0.5, 0);
+wristBall.add(box);
+
+// Attach to scene
+root.add(base);
+```
+
+2. Drive the animation loop
+
+Each frame interpolates between hand-tuned joint poses to move through a pick-and-place cycle - bend down and grab the box - lift it - carry it across - release it - swing back empty-handed
+
+With `applyPose` we updated the transformations of multiple nodes, but only set `markDirty()` on the `shoulderBall`. As all other nodes are children of it, `root.updateTransformWorld()` will update the whole hierarchy.
+
+```
+const yAxis = new Vector3(0, 1, 0);
+const zAxis = new Vector3(0, 0, 1);
+const yawQuat = new Quaternion();
+const bendQuat = new Quaternion();
+
+const lerp = (a, b, t) => a + (b - a) * t;
+const smoothstep = (t) => t * t * (3 - 2 * t);
+
+// Two hand-tuned joint poses; phases interpolate
+// between them. Shoulder and elbow rotate the same
+// direction so the forearm bends further than the
+// upper arm — a natural elbow crook that opens
+// toward the ground.
+const REACH = {
+  shoulder: -0.7, elbow: -1.8, wrist: 0,
+}; // bent down, gripper near the ground
+const TRANSPORT = {
+  shoulder: -0.3, elbow: -0.4, wrist: 0.1,
+}; // arm raised, compact, for carrying
+const GRIP_OPEN = 0.15;
+const GRIP_CLOSED = 0;
+
+// The two spots the arm shuttles between (a shoulder
+// yaw, in radians).
+const SIDE_A = 0;
+const SIDE_B = Math.PI / 2;
+
+// One full cycle: grab the box at A, carry it to B,
+// drop it, then swing back to A empty-handed — ready
+// to grab a new box and repeat.
+const phases = [
+  {
+    duration: 0.8, yawFrom: SIDE_A, yawTo: SIDE_A,
+    poseFrom: TRANSPORT, poseTo: REACH,
+    gripFrom: GRIP_OPEN, gripTo: GRIP_CLOSED,
+    hold: false,
+  }, // bend down and grab at A
+  {
+    duration: 0.6, yawFrom: SIDE_A, yawTo: SIDE_A,
+    poseFrom: REACH, poseTo: TRANSPORT,
+    gripFrom: GRIP_CLOSED, gripTo: GRIP_CLOSED,
+    hold: true,
+  }, // lift
+  {
+    duration: 1.2, yawFrom: SIDE_A, yawTo: SIDE_B,
+    poseFrom: TRANSPORT, poseTo: TRANSPORT,
+    gripFrom: GRIP_CLOSED, gripTo: GRIP_CLOSED,
+    hold: true,
+  }, // carry A → B
+  {
+    duration: 0.8, yawFrom: SIDE_B, yawTo: SIDE_B,
+    poseFrom: TRANSPORT, poseTo: REACH,
+    gripFrom: GRIP_CLOSED, gripTo: GRIP_OPEN,
+    hold: true,
+  }, // bend down and release at B
+  {
+    duration: 0.6, yawFrom: SIDE_B, yawTo: SIDE_B,
+    poseFrom: REACH, poseTo: TRANSPORT,
+    gripFrom: GRIP_OPEN, gripTo: GRIP_OPEN,
+    hold: false,
+  }, // lift (empty)
+  {
+    duration: 1.2, yawFrom: SIDE_B, yawTo: SIDE_A,
+    poseFrom: TRANSPORT, poseTo: TRANSPORT,
+    gripFrom: GRIP_OPEN, gripTo: GRIP_OPEN,
+    hold: false,
+  }, // return B → A, empty
+];
+
+const applyPose = (yaw, pose, grip) => {
+  // Everything is attached to the shoulderBall, so
+  // we only need to mark that node dirty to update
+  // the whole arm.
+  yawQuat.setFromAxisAngle(yAxis, yaw);
+  bendQuat.setFromAxisAngle(zAxis, pose.shoulder);
+
+  shoulderBall.quaternion
+    .copy(yawQuat)
+    .multiply(bendQuat);
+  shoulderBall.markDirty();
+
+  elbowBall.quaternion.setFromAxisAngle(
+    zAxis, pose.elbow
+  );
+  wristBall.quaternion.setFromAxisAngle(
+    zAxis, pose.wrist
+  );
+
+  gripL.position.set(-0.11 - grip, 0.275, 0);
+  gripR.position.set(0.11 + grip, 0.275, 0);
+};
+
+// The box starts out not being carried.
+box.setVisibilityState(VisibilityState.Hidden);
+
+let phaseIndex = 0;
+let phaseStart = timeInSeconds();
+
+const animate = () => {
+  const phase = phases[phaseIndex];
+  const t = Math.min(
+    (timeInSeconds() - phaseStart) / phase.duration, 1
+  );
+  const e = smoothstep(t);
+
+  applyPose(
+    lerp(phase.yawFrom, phase.yawTo, e),
+    {
+      shoulder: lerp(
+        phase.poseFrom.shoulder,
+        phase.poseTo.shoulder, e
+      ),
+      elbow: lerp(
+        phase.poseFrom.elbow, phase.poseTo.elbow, e
+      ),
+      wrist: lerp(
+        phase.poseFrom.wrist, phase.poseTo.wrist, e
+      ),
+    },
+    lerp(phase.gripFrom, phase.gripTo, e)
+  );
+  root.updateTransformWorld();
+
+  box.setVisibilityState(
+    phase.hold
+      ? VisibilityState.Visible
+      : VisibilityState.Hidden
+  );
+
+  if (t >= 1) {
+    phaseStart = timeInSeconds();
+    phaseIndex = (phaseIndex + 1) % phases.length;
+  }
+
+  viewer.refresh(true);
+  requestAnimationFrame(animate);
+};
+
+animate();
+```

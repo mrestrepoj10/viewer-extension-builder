@@ -1,0 +1,808 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/
+Reference Guide > Viewing
+
+Autodesk
+
+# Viewing
+
+Viewing is the top-level namespace in the Viewer SDK library. Use these classes to implement basic viewer functionality.
+
+There are many classes in the Viewing namespace. Depending on what you’re doing, you won’t need to use most of them. Here are a few essential methods and classes to get started using Viewer SDK.
+
+- Initializer: Use this method to initialize the viewer environment and runtime. You’ll need to initialize the viewer before loading models into the viewer.
+- Viewer3D: Use Viewer3D to connect to Autodesk Platform Services and display 2D and 3D models in a headless viewer object.
+- GUIViewer3D: Use GUI Viewer3D instead of Viewer3D to create a viewer object with UI elements, including a toolbar.
+- ToolController: Use ToolController if you plan to build your own tools in the viewer.
+
+Check out this tutorial to learn more:
+
+Getting Started
+
+# Methods
+
+## Initializer(options, callback)
+
+Static method for initializing the viewer runtime. Models must be loaded after this step is completed.
+
+Includes:
+
+- End points of cloud services the viewer uses, like Model Derivative
+- Authentication and authorization cookie settings on the client side
+- Misc runtime environment variables and global viewer configurations parameters
+
+### Parameters
+
+options* (object) | The options object contains configuration parameters used to do initializations. If no access token or authentication callback is provided, the Initializer will fall back on an access token provided in the URL query string, or a previous access token stored in the cookie cache, if available.
+  env (string) | Either `AutodeskProduction`, `AutodeskStaging`, or `AutodeskDevelopment`. `Local` can be used to avoid attaching authentication headers to XHR requests.
+  api (string) | If automatic routing (the `DS_ENDPOINTS` feature flag) is enabled, must be `streamingV2` for SVF2 or `derivativeV2` for SVF. If automatic routing is disabled, must be `streamingV2` (SVF2) or `derivativeV2` (SVF) for models stored in a US data center, `streamingV2_EU` (SVF2) or `derivativeV2_EU` (SVF) for models stored in a European data center, or `streamingV2_AUS` (SVF2) or `derivativeV2_AUS` (SVF) for models stored in an Australian data center. Defaults to `derivativeV2` if left undefined.
+  getAccessToken (function) | An function that provides an access token asynchronously. The function signature is `getAccessToken(onSuccess)`, where onSuccess is a callback that getAccessToken function should invoke when a token is granted, with the token being the first input parameter for the onSuccess function, and the token expire time (in seconds) being the second input parameter for the function. Viewer relies on both getAccessToken and the expire time to automatically renew token, so it is critical that getAccessToken must be implemented as described here.
+  accessToken (string) | An access token. Not needed when `options.getAccessToken` is provided.`
+  webGLHelpLink (string) | A link to a help page on webGL if it’s disabled.
+  language (string) | Preferred language code as defined in RFC 4646, such as `en`, `de`, `fr`, etc. If no language is set, viewer will pick it up from the browser. If language is not as defined in RFC, viewer will fall back to “en” (English) but the behavior is undefined.
+  lmvResourceRoot (string) | The root folder that contains LMV resources, will be derived if not specified.
+callback* (function) | A method the client executes when initialization is finished.
+
+### Examples
+
+```
+ var options = {
+   env: "AutodeskProduction",
+   language: "en",
+   getAccessToken: function(onSuccess) {
+       // TODO: Get actual APS token and expiration time.
+       var accessToken = 'your_access_token';
+       var expirationTimeSeconds = 5 * 60; // 5 minutes
+       onSuccess(accessToken, expirationTimeSeconds);
+   }
+};
+var myCallback = function() {
+   console.log("initialization complete, creating the viewer...");
+};
+Autodesk.Viewing.Initializer(options, myCallback);
+```
+
+## shutdown()
+
+Counterpart to Autodesk.Viewing.Initializer, use it to free up memory. Developers need to uninitialize all Autodesk.Viewing.Viewer3D instances before invoking this function.
+
+## getParameterByName(name)
+
+Returns the query parameter value from window url
+
+### Parameters
+
+name* (string) | Parameter name
+
+### Returns
+
+type | description
+string | Parameter value
+
+## getParameterByNameFromPath(name, url)
+
+Parameter from url
+
+### Parameters
+
+name* (string) | Parameter name
+url* (string) | URL
+
+### Returns
+
+type | description
+string | Parameter value
+
+## toUrlSafeBase64(str)
+
+Convert to url-safe base 64 string
+
+### Parameters
+
+str* (string) | String to convert
+
+### Returns
+
+type | description
+Url-safe base64 string
+
+## fromUrlSafeBase64(str)
+
+Decodes a base64 string.
+
+### Parameters
+
+str* (string) | String to convert
+
+### Returns
+
+type | description
+string | String after decoding from base64
+
+## tryFromUrlSafeBase64(str)
+
+Tries to decode a given string. If decoding failed for any reason, the string is returned as is.
+
+### Parameters
+
+str* (string) | String to convert
+
+### Returns
+
+type | description
+string | String after decoding from base64 or string as is if decoding was not possible
+
+# Constants
+
+## DefaultSettings
+
+Default settings of the viewer. For more information about each setting, please reference the Settings.
+
+type
+Settings
+
+# Properties
+
+viewCube (boolean) | Default Value: true. Sets the visibility of the viewcube. Set to false for mobile devices.
+alwaysUsePivot (boolean) | Default Value: false. Orbit controls always orbit around the currently set pivot point.
+zoomTowardsPivot (boolean) | Default Value: false. default direction for camera dolly (zoom) operations to be towards the camera pivot point.
+reverseHorizontalLookDirection (boolean) | Default Value: false. Sets a view navigation option to reverse the default direction for horizontal look operations.
+reverseVerticalLookDirection (boolean) | Default Value: false. Sets a view navigation option to reverse the default direction for vertical look operations.
+orbitPastWorldPoles (boolean) | Default Value: true. Set a view navigation option to allow the orbit controls to move the camera beyond the north and south poles (world up/down direction).
+clickToSetCOI (boolean) | Default Value: false. Modify the default click behavior for the viewer.
+ghosting (boolean) | Default Value: true. Toggles ghosting during search and isolate.
+optimizeNavigation (boolean) | Default Value: false. Toggles whether the navigation should be optimized for performance. Set to true for mobile devices.
+ambientShadows (boolean) | Default Value: true. Enables or disables ambient shadows.
+antialiasing (boolean) | Default Value: true. Enables or disables antialiasing. Set to false for mobile devices.
+groundShadow (boolean) | Default Value: true. Toggles ground shadow.
+groundReflection (boolean) | Default Value: false. Toggles ground reflection.
+lineRendering (boolean) | Default Value: true. Hides all lines in the scene.
+edgeRendering (boolean) | Default Value: false. Turns edge topology display on/off (where available).
+lightPreset (number) | Default Value: 1. Sets the Light Presets (Environments) for the Viewer.
+envMapBackground (boolean) | Default Value: false. Toggles environment map for background.
+bimWalkToolPopup (boolean) | Default Value: true. Toggles the bimwalk tool popup.
+grayscale (boolean) | Default Value: false. Overrides line colors in 2D models to render in shades of gray.
+swapBlackAndWhite (boolean) | Default Value: false. Will switch to white lines on a black background for 2D models.
+progressiveRendering (boolean) | Default Value: true. Toggles whether progressive rendering is used.
+openPropertiesOnSelect (boolean) | Default Value: false. Open property panel when selecting an object (Only for GuiViewer3D).
+pointRendering (boolean) | Default Value: true. Hides all points in the scene.
+backgroundColorPreset | Default Value: null. Sets a color to the background.
+reverseMouseZoomDir (boolean) | Default Value: false. Reverse the default direction for camera dolly (zoom) operations.
+leftHandedMouseSetup (boolean) | Default Value: false. Reverse mouse buttons from their default assignment (i.e. Left mouse operation becomes right mouse and vice versa).
+fusionOrbit (boolean) | Default Value: true. Sets the orbit to fusion orbit.
+fusionOrbitConstrained (boolean) | Default Value: true. Sets the the orbit to the contrained fusion orbit.
+wheelSetsPivot (boolean) | Default Value: false. Sets wheel-zoom action to automatically reset the orbit pivot to the location under the cursor.
+selectionSetsPivot (boolean) | Default Value: false. Sets selection / un-selection action to automatically reset the orbit pivot to be the center of the multiple selection.
+bimWalkNavigatorType (string) | Default Value: ‘default’. Sets the BimWalk tool navigator.
+defaultNavigationTool3D (string) | Default Value: ‘default’. Sets which navigation tool will be used by the viewer. (ie: ‘extractor_defined’ || ‘bimwalk’)
+loadingAnimation (boolean) | Default Value: true. Toggles loading animation for 2D Models.
+zoomDragSpeed (number) | Default value: 100. Sets a sensitivity of mouse movement with the zoom tool.
+zoomScrollSpeed (number) | Default value: 0.6. Sets a sensitivity of the mouse scroll wheel when zooming.
+
+## ScreenMode
+
+List of available screen modes:
+
+- kNormal: 0
+- kFullBrowser: 1
+- kFullScreen: 2
+
+type
+number
+
+## exports.TOOLBAR
+
+Viewer tools sets.
+
+These constants are used to define the standard set of tools.
+
+type
+string
+
+# Events
+
+## ESCAPE_EVENT
+
+Fired when the ESC key is pressed.
+
+## PROGRESS_UPDATE_EVENT
+
+Fired repeatedly throughout the process of opening a model/drawing.
+
+### Properties
+
+percent (number) | Estimated progress.
+state (number) | Value from Autodesk.Viewing.ProgressState, providing details on the progress state.
+model (object) | Model being loaded.
+loaded (number) | Bytes downloaded so far (only set during ProgressState.DOWNLOADING).
+total (number) | Total bytes to download, when known (only set during ProgressState.DOWNLOADING).
+
+## FULLSCREEN_MODE_EVENT
+
+Fired when the screen mode changes.
+
+### Properties
+
+mode (Autodesk.Viewing.ScreenMode) | New screen mode.
+
+## NAVIGATION_MODE_CHANGED_EVENT
+
+Fired then the navigation tool changes.
+
+### Properties
+
+id (string) | Tool identifier.
+
+## VIEWER_STATE_RESTORED_EVENT
+
+Fired when the viewer state is restored.
+
+### Properties
+
+value (boolean) | Success of the state restoration.
+
+## VIEWER_RESIZE_EVENT
+
+Fired when the viewer size changes.
+
+### Properties
+
+width (number) | New width of the viewer.
+height (number) | New height of the viewer.
+
+## VIEWER_INITIALIZED
+
+Fired when the viewer is fully initialized.
+
+## VIEWER_UNINITIALIZED
+
+Fired when the viewer is fully uninitialized.
+
+## LANGUAGE_CHANGED_EVENT
+
+Fired when the viewer’s language/locale is changed.
+
+### Properties
+
+language (string) | The new language code (e.g., ‘en’, ‘de’, ‘ja’).
+
+## LOADER_LOAD_FILE_EVENT
+
+Fired when the viewer begins loading a model, before the Model instance gets created.
+
+### Properties
+
+loader (object) | Instance of the Loader class
+
+## LOADER_LOAD_ERROR_EVENT
+
+Fired when an error is detected during a load.
+
+### Properties
+
+loader (object) | Instance of the Loader class
+error (object) | The error reported by the loader.
+
+## LOADER_REPAINT_REQUEST_EVENT
+
+Fired when a loader thinks its time to repaint the model while loading
+
+### Properties
+
+loader (Object) | Instance of the Loader class
+model (Model) | Loaded model
+
+## MODEL_ROOT_LOADED_EVENT
+
+Fired when the viewer receives and parses the initial model manifest.
+
+### Properties
+
+svf (object) | Parsed SVF/F2D JSON.
+model (object) | Model data.
+
+## GEOMETRY_LOADED_EVENT
+
+Fired when the model/drawing finishes loading.
+
+### Properties
+
+model (object) | Model data.
+
+## TEXTURES_LOADED_EVENT
+
+Fired when the model/drawing textures finish loading.
+
+### Properties
+
+model (object) | Model data.
+
+## OBJECT_TREE_CREATED_EVENT
+
+Fired when the object tree is successfully created.
+
+### Properties
+
+svf (object) | Parsed SVF/F2D JSON.
+model (object) | Model data.
+
+## VIEWPOINT_TREE_UPDATED_EVENT
+
+Fired when the viewpoint tree is updated. Mainly used for loading a ViewpointTreeRoot from a Packfile (Navisworks).
+
+### Properties
+
+model (object) | Model data.
+
+## OBJECT_TREE_UNAVAILABLE_EVENT
+
+Fired when there’s an error while parsing the object tree.
+
+### Properties
+
+svf (object) | Parsed SVF/F2D JSON.
+model (object) | Model data.
+
+## OBJECT_TREE_LOAD_PROGRESS_EVENT
+
+Fired when there’s a progress event during propertyDB loading.
+
+### Properties
+
+svf (object) | Parsed SVF/F2D JSON.
+model (object) | Model data.
+
+## MODEL_UNLOADED_EVENT
+
+Fired when a model is removed from the viewer. Note that this event fires after destructor. If you need to access the model, e.g. via model.getData(), use BEFORE_MODEL_UNLOADED instead.
+
+### Properties
+
+model (object) | Model data (after disposing data)
+
+## BEFORE_MODEL_UNLOAD_EVENT
+
+Fired if a model unload is about to happen, but the model is still fully available.
+
+### Properties
+
+model (object) | Model data.
+
+## MODEL_ADDED_EVENT
+
+Fired when a model is added to model queue so as to be visible.
+
+### Properties
+
+model (object) | Model data.
+
+## MODEL_REMOVED_EVENT
+
+Fired when a model is removed from model queue, i.e. changed to invisible.
+
+### Properties
+
+model (object) | Model data.
+
+## MODEL_LAYERS_LOADED_EVENT
+
+Fired when the layers of the model are successfully loaded.
+
+### Properties
+
+root (object) | Model layers root.
+model (object) | Model data.
+
+## MODEL_TRANSFORM_CHANGED_EVENT
+
+Fired a when model transform matrix has been changed. This usually happens if either placement or globalOffset has changed for a model.
+
+### Properties
+
+model (object) | Model data.
+matrix (object) | Transform matrix.
+
+## EXTENSION_PRE_LOADED_EVENT
+
+Fired before a viewer extension is loaded.
+
+### Properties
+
+extensionId (string) | Extension identifier.
+
+## EXTENSION_LOADED_EVENT
+
+Fired when a viewer extension is successfully loaded.
+
+### Properties
+
+extensionId (string) | Extension identifier.
+
+## EXTENSION_PRE_UNLOADED_EVENT
+
+Fired before a viewer extension is unloaded.
+
+### Properties
+
+extensionId (string) | Extension identifier.
+
+## EXTENSION_UNLOADED_EVENT
+
+Fired when a viewer extension is successfully unloaded.
+
+### Properties
+
+extensionId (string) | Extension identifier.
+
+## EXTENSION_PRE_ACTIVATED_EVENT
+
+Fired before a viewer extension is activated.
+
+### Properties
+
+extensionId (string) | Extension identifier.
+mode (string) | Activated mode.
+
+## EXTENSION_ACTIVATED_EVENT
+
+Fired after a viewer extension is activated.
+
+### Properties
+
+extensionId (string) | Extension identifier.
+mode (string) | Activated mode.
+
+## EXTENSION_PRE_DEACTIVATED_EVENT
+
+Fired before a viewer extension is deactivated.
+
+### Properties
+
+extensionId (string) | Extension identifier.
+
+## EXTENSION_DEACTIVATED_EVENT
+
+Fired after a viewer extension is deactivated.
+
+### Properties
+
+extensionId (string) | Extension identifier.
+
+## SELECTION_CHANGED_EVENT
+
+Fired when the list of selected objects changes.
+
+### Properties
+
+fragIdsArray (Array.<number>) | Fragment IDs of selected objects.
+dbIdArray (Array.<number>) | dbIDs of selected objects.
+nodeArray (Array.<number>) | Same as dbIdArray.
+model (object) | Model data.
+
+## AGGREGATE_SELECTION_CHANGED_EVENT
+
+Fired when the list of selected objects changes in a multi-model context.
+
+### Properties
+
+selections (Array.<object>) | List of objects containing the typical selection properties of {@link Autodesk.Viewing#SELECTION_CHANGED_EVENT} for each model.
+
+## ISOLATE_EVENT
+
+Fired when the viewer isolates a set of objects (i.e., makes everything else invisible or ghosted).
+
+### Properties
+
+nodeIdArray (Array.<number>) | List of isolated node IDs.
+model (object) | Model data.
+
+## AGGREGATE_ISOLATION_CHANGED_EVENT
+
+Fired when the list of isolated objects changes in a multi-model context.
+
+### Properties
+
+isolation (Array.<object>) | List of objects containing the typical selection properties of {@link Autodesk.Viewing#ISOLATE_EVENT} for each model.
+
+## HIDE_EVENT
+
+Fired when the viewer hides a set of objects.
+
+### Properties
+
+nodeIdArray (Array.<number>) | List of hidden node IDs.
+model (object) | Model data.
+
+## AGGREGATE_HIDDEN_CHANGED_EVENT
+
+Fired when the list of hidden objects changes in a multi-model context.
+
+### Properties
+
+hidden (Array.<object>) | List of objects containing the typical selection properties of {@link Autodesk.Viewing#HIDE_EVENT} for each model.
+
+## SHOW_EVENT
+
+Fired when the viewer shows a set of objects.
+
+### Properties
+
+nodeIdArray (Array.<number>) | List of shown node IDs.
+model (object) | Model data.
+
+## SHOW_PROPERTIES_EVENT
+
+Fired to show the properties of the object.
+
+### Properties
+
+dbId (number) | dbId of the object.
+model (object) | Model data.
+
+## SHOW_ALL_EVENT
+
+Fired whenever `viewer.showAll()` is used.
+
+## HIDE_ALL_EVENT
+
+Fired whenever `viewer.hideAll()` is used.
+
+## CAMERA_CHANGE_EVENT
+
+Fired when a camera changes.
+
+### Properties
+
+camera (object) | Affected camera.
+
+## EXPLODE_CHANGE_EVENT
+
+Fired whenever the Explode tool is used.
+
+### Properties
+
+scale (number) | Scale of the current exploded state.
+options (object) | Optional values of the current exploded state.
+
+## FIT_TO_VIEW_EVENT
+
+Fired when a `fitToView` operation is applied.
+
+### Properties
+
+immediate (boolean) | True if the change was immediate.
+nodeIdArray (Array.<number>) | List of node IDs fitted. Array is empty when fitting to the whole model.
+model (object) | Model data.
+
+## AGGREGATE_FIT_TO_VIEW_EVENT
+
+Fired when `fitToView` operation is applied, supports multi-model contexts.
+
+### Properties
+
+selection (Array.<object>) | List of objects each containing a `model` instance and a `selection` array of ids.
+
+## CUTPLANES_CHANGE_EVENT
+
+Fired when the cutting planes change.
+
+### Properties
+
+planes (Array.<object>) | List of cutplanes.
+
+## TOOL_CHANGE_EVENT
+
+Fired when a tool is activated or deactivated.
+
+### Properties
+
+toolName (string) | Name of a specific mode of a tool.
+tool (object) | Tool object.
+active (boolean) | Current status of the tool.
+
+## RENDER_OPTION_CHANGED_EVENT
+
+Fired when rendering options change.
+
+## FINAL_FRAME_RENDERED_CHANGED_EVENT
+
+Fired when the render frame shown by the Viewer is final or complete (it has no more pending geometry or post processing effects which delay incoming frames), or when the Viewer stops showing final frames. The name refers to when the state changes from busy to idle for the renderer, or vice versa. To know when all geometry is fully displayed, also check for GEOMETRY_LOADED_EVENT.
+
+### Properties
+
+finalFrame (boolean) | final frame is displayed this tick.
+
+## RENDERING_TICKED_EVENT
+
+This event is triggered for each tick that performs some form of rendering work, providing information about the frame sequence and rendering completion status.
+
+Note: A series of intermediate frames is not guaranteed to end with isMainSceneDone = true
+
+### Properties
+
+value (object) | Event data object containing frame rendering information.
+
+## RENDER_PRESENTED_EVENT
+
+Fired when the render has presented to the screen.
+
+## LAYER_VISIBILITY_CHANGED_EVENT
+
+Fired when visibility of a 2D layer changes.
+
+## PREF_CHANGED_EVENT
+
+Fired when a user preference property changes.
+
+### Properties
+
+name (string) | Property name.
+value (object) | New property value.
+
+## PREF_RESET_EVENT
+
+Fired when a user preference property is reset.
+
+### Properties
+
+name (string) | Property name.
+value (object) | New property value.
+
+## RESTORE_DEFAULT_SETTINGS_EVENT
+
+Fired as a result of invoking `viewer.restoreDefaultSettings()` to restore default settings. Will get fired after all other Autodesk.Viewing.PREF_CHANGED_EVENT get fired.
+
+## ANIMATION_READY_EVENT
+
+Fired when animations are successfully initialized.
+
+## CAMERA_TRANSITION_COMPLETED
+
+Fired whenever a camera transition is finished, such as Focus, Go to Home View, Restore State, restore Named Views, and others.
+
+## HYPERLINK_EVENT
+
+Fired when user clicks on a hyperlink embedded in the model.
+
+### Properties
+
+data (object) | Hyperlink data.
+
+## LOAD_MISSING_GEOMETRY
+
+Fired when something in the view changes that may expose missing geometry.
+
+### Properties
+
+delay (boolean) | A flag used to aggregate multiple events during user interactions. Defaults to true.
+
+## GPU_CONTEXT_LOST_EVENT
+
+Fired when the WebGL context or WebGPU device is lost.
+
+## WEBGL_CONTEXT_LOST_EVENT
+
+Deprecated. Use GPU_CONTEXT_LOST_EVENT instead.
+
+## WEBGL_CONTEXT_RESTORED_EVENT
+
+Fired when the WebGLRenderingContext was restored
+
+## CANCEL_LEAFLET_SCREENSHOT
+
+Fired when a leaflet screenshot needs to be canceled before downloading all required / pending tiles.
+
+## SET_VIEW_EVENT
+
+Fired after a successful call into {Autodesk.Viewing.Viewer3D#setView}.
+
+### Properties
+
+view (Autodesk.Viewing.BubbleNode) | The view object that was applied.
+
+## RENDER_FIRST_PIXEL
+
+Fired when the first pixel of the model is ready to be rendered.
+
+## NEW_GEOMETRY_ADDED
+
+Fired when new geometry has been added to the scene
+
+## NEW_MATERIAL_ADDED
+
+Fired when a new material has been added to the scene
+
+## PROFILE_CHANGE_EVENT
+
+Fired when a profile is added to the viewer.profileManager
+
+## PROFILE_CHANGE_EVENT
+
+Fired when a scene part is about to be rendered
+
+## OBJECT_UNDER_MOUSE_CHANGED
+
+Fired when object under mouse changed.
+
+## ANIM_ENDED
+
+Fired when AnimController calls Autodesk.Viewing.Private.fadeValue
+
+## TRANSITION_STARTED
+
+Fired when transition started
+
+### Properties
+
+sceneAnimState (object) | // scene state of transition
+
+## TRANSITION_ENDED
+
+Fired when transition ended
+
+### Properties
+
+sceneAnimState (object) | // scene state of transition, this will be null for models that do not have any clusters or animations
+
+## FRAGMENTS_LOADED_EVENT
+
+Fired when fragments are loaded after the initial model load.
+
+### Properties
+
+model (object) | Model data.
+
+## FRAGMENTS_UNLOADED_EVENT
+
+Fired when fragments are unloaded.
+
+### Properties
+
+model (object) | Model data.
+
+## SCENE_UPDATED_EVENT
+
+Fired when scene is updated
+
+### Properties
+
+model (object) | Model data.
+
+## VIEWER_VISIBILITY_CHANGED
+
+Fired when the viewers visibility has changed (i.e. a viewer window got shown or hidden).
+
+NOTE: This event relies on the checkVisibility method being available on DOM elements in the browser. If this feature is missing, the event will not be fired. This should be the case in all up-to-date browsers. Most browsers have added it in 2022, but Safari only at the beginning of 2024.
+
+### Properties
+
+visible (boolean) | True if the viewer is visible, false otherwise.
+
+## VIEWER_RENDER_TICK
+
+Fired each rendering tick regardless of whether the viewer actually needs to render. This event is intended for updates that need to be in sync with the render loop.
+
+Example usage:
+
+``this.viewer.addEventListener(VIEWER_RENDER_TICK, event) => { // do some update that needs to be in sync with the render loop }); ``
+
+## SLOW_GPU_WARNING_EVENT
+
+Fired when the viewer detects that the GPU may be underperforming (e.g. integrated GPU, software renderer).
+
+### Properties
+
+reason (‘integrated-gpu’, ‘software-renderer’) | Detected reason for the warning.
+rendererInfo (Object) | Raw WebGL vendor/renderer strings.
+suppressDefault (function) | Call to prevent the default HudMessage from being shown.
+
+## TOOLBAR_CREATED_EVENT
+
+Fired after the toolbar UI gets instantiated.
+
+## SETTINGS_PANEL_CREATED_EVENT
+
+Fired after the Settings panel gets instantiated.
+
+## VIEW_CUBE_CREATED_EVENT
+
+Fired after the ViewCube gets instantiated.

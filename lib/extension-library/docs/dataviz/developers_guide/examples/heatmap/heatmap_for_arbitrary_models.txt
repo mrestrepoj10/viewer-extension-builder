@@ -1,0 +1,123 @@
+https://aps.autodesk.com/en/docs/dataviz/v1/developers_guide/examples/heatmap/heatmap_for_arbitrary_models/
+Developer's Guide > Examples > Heatmap > Applying Heatmaps to Arbitrary Models
+
+# Applying Heatmaps to Arbitrary Models
+
+You can apply heatmaps to arbitrary models such as machinery or buildings. In this example, we display IoT sensor data for heatmaps in a building.
+
+- Live demo: https://aps-iot-extensions-demo.autodesk.io/
+- Source code: https://github.com/autodesk-platform-services/aps-iot-extensions-demo
+
+## SurfaceShadingData structure
+
+To render heatmaps, we use an object known as `SurfaceShadingData`, which defines the relationship between sections of the model with IoT sensors / devices.
+
+This may look complicated, but each type has a single simple purpose:
+
+- A `SurfaceShadingGroup` defines a group of heatmaps that the `renderSurfaceShading()` function uses to render all of its child heatmaps.
+- A `SurfaceShadingNode` specifies a section to which to apply a heatmap. For buildings this is typically a room, but it can be any available geometry in the model. You can also use it with `renderSurfaceShading()` to render a single heatmap.
+- A `SurfaceShadingPoint` is a point that contributes to the color of the heatmap.
+
+## Generating the SurfaceShadingData
+
+For buildings, you use the levels and rooms to generate the `SurfaceShadingGroup` and `SurfaceShadingNode` objects automatically. But with arbitrary models, you need to provide the hierarchy. Here is an example of how to generate this structure for a hypothetical bridge:
+
+```
+// Group to select both north and southbound
+const shadingGroup = new SurfaceShadingGroup("Bridge");
+
+// Northbound geometry, and a point to contribute to the heatmap color
+const northNode = new SurfaceShadingNode("Northbound", 1234);
+northNode.addPoint(
+    new SurfaceShadingPoint("Northbound sensor", northSensorPosition, ["TrafficDensity"])
+);
+
+// Same for Southbound geometry
+const southNode = new SurfaceShadingNode("Southbound", 5678);
+southNode.addPoint(
+    new SurfaceShadingPoint("Southbound sensor", southSensorPosition, ["TrafficDensity"])
+);
+
+shadingGroup.addChild(northNode);
+shadingGroup.addChild(southNode);
+
+const heatmapData = new SurfaceShadingData();
+heatmapData.addChild(shadingGroup);
+
+// Initialize with model loaded from APS
+heatmapData.initialize(model);
+await dataVizExtn.setupSurfaceShading(model, heatmapData);
+```
+
+Once you have set up the `SurfaceShadingData`, it is ready for you to use it to render heatmaps. The workflow then becomes identical to the one used for buildings. For the example above, you can use the `SurfaceShadingData` as follows:
+
+```
+// Function that provides a [0,1] value for the Heatmap
+function getSensorValue(surfaceShadingPoint, sensorType) {
+    // Our surface shading point id will be equivalent to our deviceId
+    const deviceId = surfaceShadingPoint.id;
+    let sensorValue = readSensorValue(deviceId, sensorType);
+
+    const maxSensorValue = getMaxSensorValue(sensorType);
+    const minSensorValue = getMinSensorValue(sensorType);
+
+    // Normalize sensor value to [0.0, 1.0]
+    sensorValue = (sensorValue - minSensorValue) / (maxSensorValue - minSensorValue);
+    return clamp(sensorValue, 0.0, 1.0);
+}
+
+dataVizExtn.renderSurfaceShading("Bridge", "TrafficDensity", getSensorValue);
+```
+
+This will select which sections of the structure to display heatmaps. If we want to simply update the currently rendered heatmap, we can update it by calling `updateSurfaceShading` as follows:
+
+```
+dataVizExtn.updateSurfaceShading(getSensorValue);
+```
+
+## Worked Example
+
+For this example, we will use the publicly available OTC Conference Center.
+
+Imagine we have a chiller unit, and we want to visualize its temperature.
+
+First we obtain its `DBid` – 21534 in this case.
+
+Then we them to construct the `SurfaceShadingData` as follows:
+
+```
+const {
+    SurfaceShadingData,
+    SurfaceShadingPoint,
+    SurfaceShadingNode,
+} = Autodesk.DataVisualization.Core;
+
+const shadingNode = new SurfaceShadingNode("Air-Cooled Chiller", 21534);
+const shadingPoint = new SurfaceShadingPoint("Chiller", undefined, ["Temperature"]);
+
+// Note that the surface shading point was created without an initial
+// position, but the position can be set to the center point of the
+// bounding box of a given DBid with the function call below.
+shadingPoint.positionFromDBId(data.model, 21534);
+shadingNode.addPoint(shadingPoint);
+
+const heatmapData = new SurfaceShadingData();
+heatmapData.addChild(shadingNode);
+heatmapData.initialize(data.model);
+
+await dataVizExtn.setupSurfaceShading(data.model, heatmapData);
+```
+
+Now that we are set up, we can use the `renderSurfaceShading()` function to specify that this is the object we would like to render with heatmaps.
+
+```
+dataVizExtn.renderSurfaceShading("Air-Cooled Chiller", "Temperature", getSensorValue);
+```
+
+When we need to update the value, we call `updateSurfaceShading()`.
+
+```
+dataVizExtn.updateSurfaceShading(getSensorValue);
+```
+
+Calling `updateSurfaceShading()` in a loop updates the shading color, and produces this effect:

@@ -1,0 +1,34 @@
+https://aps.autodesk.com/en/docs/viewer/v7/developers_guide/requirements/
+Developer's Guide > System Requirements
+
+# Visualization System and Device Requirements
+
+Minimum system and device requirements are necessary for basic visualization workflows and viewing simple models.
+
+Recommended devices are better suited for reliable and performant visualization of large or complex models, including multi-model viewing. RAM, CPU, and GPU requirements depend on project size and complexity and have a significant impact on performance.
+
+Beyond hardware, factors such as internet speed and background applications can also impact viewing performance.
+
+## Desktop
+
+### Minimum System Requirements
+
+Component | Requirement | Notes
+CPU | 2.3 GHz or faster processor
+RAM | 8 GB RAM
+Browser | Latest versions of Chrome, Firefox, Safari, and Edge
+
+### Recommended Device Requirements
+
+Component | Requirement | Notes
+CPU | 3.0+ GHz or faster processor with 16-24 cores
+Operating System | Windows, macOS, Linux | We do not recommend using Chromebooks or other specialized systems.
+Graphics | High-end discrete GPU
+RAM | 16-32 GB RAM
+Browser | Latest 64-bit Chrome version | Ensure that the display is using the correct graphics card. On certain devices, using a discrete GPU for the browser requires enabling it in Windows settings.
+
+### Additional Recommended Settings
+
+Setting | Recommendation | Notes
+WebGPU | Ensure WebGPU is enabled in the web viewer settings when viewing large or complex models. | If it cannot be turned on, the GPU, browser, or other system settings may not be optimized for viewing.
+Target Frame Rate | If many objects are dropping out of view while navigating a model, adjust the Target Frame Rate setting. | To reduce objects dropping out of view, lower the target frame rate.

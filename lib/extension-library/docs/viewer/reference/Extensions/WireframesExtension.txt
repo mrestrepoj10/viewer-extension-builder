@@ -1,0 +1,68 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/WireframesExtension/
+Reference Guide > Extensions > WireframesExtension
+
+Autodesk.Viewing.Extensions
+
+# WireframesExtension
+
+Provides the ability of rendering the model in wireframe mode. The method implemented is not very performant, so it’s best to avoid using it with large models.
+
+The extension id is: `Autodesk.Viewing.Wireframes`
+
+## new WireframesExtension()
+
+### Examples
+
+```
+viewer.loadExtension('Autodesk.Viewing.Wireframes')
+```
+
+# Methods
+
+## activate()
+
+Enters wireframe mode.
+
+## deactivate()
+
+Exits wireframe mode.
+
+## showSolidMaterial(show)
+
+Whether to replace the standard materials with a solid one, or not.
+
+### Parameters
+
+show* (boolean)
+
+## showLines(show)
+
+Whether to render line edges or not.
+
+### Parameters
+
+show* (boolean)
+
+## setSolidMaterial(material)
+
+Replaces the solid material.
+
+### Parameters
+
+material* (THREE.Material)
+
+## setLinesMaterial(material)
+
+Replaces the line material.
+
+### Parameters
+
+material* (THREE.Material)
+
+## setLightPreset(name)
+
+Specifies the light preset to use when wireframe mode is activated.
+
+### Parameters
+
+name* (string) | the name of the light preset

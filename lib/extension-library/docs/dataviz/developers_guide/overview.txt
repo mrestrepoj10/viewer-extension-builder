@@ -1,0 +1,23 @@
+https://aps.autodesk.com/en/docs/dataviz/v1/developers_guide/overview/
+Developer's Guide > Overview
+
+# Data Visualization Extension
+
+This extension enhances your Custom Viewer application by allowing the visualization of data from sensors, and interaction with sprites and surface shading in the context of 3D design models.
+
+These components are designed to be easy to set up and follow. Explore the different capabilities and examples to empower business decisions guided by visual insights. Use these components to incorporate heatmap and sensor data into your Digital Twin solution.
+
+> Please note: To get the Data Visualization extension, you need the Viewer SDK version 7.42 or later.
+
+> It is also recommended to have some knowledge of using the Viewer SDK. You can find a walkthrough for the Viewer API here.
+
+Two-dimensional overlaid into your model to represent sensors and icons.
+Apply heatmaps to areas within your model, to visualize room temperature, model parts, and other spatial information.
+
+## Who is the Data Visualization Extension for?
+
+If you are looking to create a Digital Twin, or just incorporate custom data, like IoT, into your design models, this solution is for you.
+
+## What does it do?
+
+Use the Developer’s Guide to help you customize the Data Visualization extension.

@@ -1,0 +1,331 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/Viewing/BubbleNode/
+Reference Guide > Viewing > BubbleNode
+
+Autodesk.Viewing
+
+# BubbleNode
+
+Wrapper and helper for “bubble” data.
+
+Bubble is a container of various 2D or 3D viewables (and additional data) that may be generated from a single seed file. The bubble is a JSON structure of nodes that have different roles, for example, they may represent sheets, nested 2D/3D geometry, etc.
+
+This class wraps the internal representation of the bubble and adds a couple of helper methods.
+
+## new BubbleNode(data, parent)
+
+### Parameters
+
+data* (object) | Raw node from the bubble JSON.
+parent (object) | Parent node from the bubble JSON.
+
+# Methods
+
+## isSVF2()
+
+### Returns
+
+type | description
+boolean | True if the bubble is from MD API.
+
+## getOtgGraphicsNode()
+
+Returns the OTG viewable from an otg manifest (if available, otherwise undefined)
+
+### Returns
+
+type | description
+Autodesk.Viewing.BubbleNode, undefined
+
+## getPropertyDbManifest(viewableID)
+
+Returns a list of property database files. Previously, for v1, this list was hardcoded in PropWorker/ This function knows about v2 and cross-version sharing of OTG property databases
+
+### Parameters
+
+viewableID (string) | The viewable ID to get the property DB manifest for, defaults to this node’s GUID
+
+## getRootNode()
+
+### Returns
+
+type | description
+Autodesk.Viewing.BubbleNode | Top-most bubble node.
+
+## isForgeManifest()
+
+Whether the manifest comes from APS (modelDerivativeV2) or not (derivativeV2). Applies only to the root node. Used internally.
+
+## findPropertyDbPath(viewableID)
+
+Finds shared property DB if there is one.
+
+### Parameters
+
+viewableID (string) | The viewable ID to use for looking up the property DB, defaults to this node’s GUID
+
+### Returns
+
+type | description
+string, null | Shared property DB path, or null.
+
+## name()
+
+### Returns
+
+type | description
+string | The node’s name.
+
+## guid()
+
+### Returns
+
+type | description
+string | The node’s GUID.
+
+## type()
+
+### Returns
+
+type | description
+string | The node’s type.
+
+## extensions()
+
+### Returns
+
+type | description
+Array.<string> | Either an Array of extension ids, or undefined.
+
+## urn(searchParent)
+
+Retrieves the URN of the node or its closest ancestor.
+
+### Parameters
+
+searchParent* (boolean) | If URN is not available for this node, search through its ancestors, too.
+
+### Returns
+
+type | description
+string | Viewable URN.
+
+## lineageUrn(encode)
+
+Retrieves the lineageUrn of the node. Note that models uploaded to OSS directly (not through WipDM) do not have a lineageUrn.
+
+### Parameters
+
+encode (boolean) | Whether to return the result base64 encoded or not.
+
+### Returns
+
+type | description
+string | Viewable lineageUrn, or null in case of an error.
+
+## isGeomLeaf()
+
+### Returns
+
+type | description
+boolean | True if this is a geometry leaf node.
+
+## isViewable()
+
+### Returns
+
+type | description
+boolean | True if this is a viewable node.
+
+## getLodNode()
+
+### Returns
+
+type | description
+BubbleNode | The LOD node.
+
+## isGeometry()
+
+### Returns
+
+type | description
+boolean | True if this is a geometry node.
+
+## isViewPreset()
+
+### Returns
+
+type | description
+boolean | True if this is a view preset/camera definition node.
+
+## is2D()
+
+### Returns
+
+type | description
+boolean | True if this is a 2D node.
+
+## is3D()
+
+### Returns
+
+type | description
+boolean | True if this is a 3D node.
+
+## is2DGeom()
+
+### Returns
+
+type | description
+boolean | True if this is a 2D geometry node.
+
+## is3DGeom()
+
+### Returns
+
+type | description
+boolean | True if this is a 3D geometry node.
+
+## useAsDefault()
+
+### Returns
+
+type | description
+boolean | True if the node is meant to be loaded initially.
+
+## getDefaultGeometry(searchMasterview, loadLargestView)
+
+### Parameters
+
+searchMasterview (boolean) | Search for master view
+loadLargestView (boolean) | Sort by geometry size
+
+### Returns
+
+type | description
+BubbleNode | The default geometry if any, and otherwise the full data set. For SVF: A geometry node marked as being the default (for SVF: `useAsDefault=true`). When none is found, it returns the first element from `this.search({'type': 'geometry'})`.
+
+## getPlacementTransform() (Deprecated)
+
+Deprecated.
+
+### Returns
+
+type | description
+object | Placement transform of the node.
+
+## isMetadata()
+
+### Returns
+
+type | description
+boolean | True if this is a metadata node.
+
+## findViewableParent()
+
+### Returns
+
+type | description
+Autodesk.Viewing.BubbleNode | First parent in the hierarchy that is a viewable. If called on the top level design node, returns the first child of the design node that is a viewable.
+
+## findParentGeom2Dor3D(options)
+
+### Parameters
+
+options (object) | Advance usage options
+  fallbackParent (Autodesk.Viewing.BubbleNode) | Gets returned when no geometry node is available after iterating through the parent chain.
+
+### Returns
+
+type | description
+Autodesk.Viewing.BubbleNode | First parent in the hierarchy that is a 2D or 3D geometry.
+
+## findAllViewables()
+
+### Returns
+
+type | description
+Array.<Autodesk.Viewing.BubbleNode> | Array with all of the viewables under this node.
+
+## getViewableRootPath(ignoreLeaflet)
+
+Looks for the viewable root path in this node and all its children.
+
+### Parameters
+
+ignoreLeaflet* (boolean) | If set, it will skip any image pyramid sub-nodes and return a path to F2D file if available.
+
+### Returns
+
+type | description
+string | Viewable root path, or null.
+
+## getNamedViews()
+
+Returns all the named view in the viewable. Named views are obtained from the document’s manifest which contains camera information and a string identifier.
+
+### Returns
+
+type | description
+Array | All named views. Returns empty array if none are found.
+
+## findByGuid(guid)
+
+Returns first node from the bubble matching a GUID.
+
+Note that some GUIDs in the bubble are not unique, you have to be sure you are looking for a GUID that is unique if you want correct result from this function. Otherwise use the generic search.
+
+### Parameters
+
+guid* (string) | Node GUID.
+
+### Returns
+
+type | description
+Autodesk.Viewing.BubbleNode | Matching bubble node, or null.
+
+## search(propsToMatch)
+
+Finds nodes from the bubble matching one or more properties.
+
+### Parameters
+
+propsToMatch* (object) | Filter criteria: To match, nodes must have the specified properties and values. Use comma-separated property:value pairs or named preset object. (See comments in examples below.)
+
+### Returns
+
+type | description
+Array.<BubbleNode> | Matching nodes, or null.
+
+### Examples
+
+```
+// Filter criteria syntax:
+```
+
+// { “property”:”value” [, “property”:”value”, …] } // or use named preset objects: // BubbleNode.MODEL_NODE { “role”:”3d”, “type”:”geometry” } // BubbleNode.GEOMETRY_SVF_NODE { “role”:”graphics”, “mime”: “application/autodesk-svf” } // BubbleNode.SHEET_NODE { “role”:”2d”, “type”:”geometry” } // BubbleNode.LEAFLET_NODE { “role”:”leaflet” } // BubbleNode.IMAGE_NODE { “role”:”image” } // BubbleNode.GEOMETRY_F2D_NODE { “role”:”graphics”, “mime”: “application/autodesk-f2d” } // BubbleNode.VIEWABLE_NODE { “role”:”viewable” } // BubbleNode.AEC_MODEL_DATA { “role”:”Autodesk.AEC.ModelData”}
+
+var singleProps = myBubbleNode.search({ “type”:”geometry” }); var multiProps = myBubbleNode.search({ “role”:”3d”, “type”:”geometry” }); var presetProps = myBubbleNode.search( myBubbleNode.SHEET_NODE );
+
+## traverse(cb)
+
+Recursively traverses the bubble, calling a callback function for each node, for as long as the callback function keeps returning false.
+
+### Parameters
+
+cb* (function) | Callback function, accepts a bubble node as an argument, and returns true if the traversal should be terminated.
+
+### Returns
+
+type | description
+boolean | Result of the last callback invocation.
+
+## getLevel()
+
+Returns the Revit Level/Floor of this bubble node. Only relevant for 2d sheets coming from Revit at the moment.
+
+## getLevelName()
+
+### Returns
+
+type | description
+string | The Revit level/floor name of this bubble node. Only relevant for 2d sheets coming from Revit at the moment.

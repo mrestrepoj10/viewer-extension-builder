@@ -1,0 +1,37 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/Extensions/FusionOrbitExtension/
+Reference Guide > Extensions > FusionOrbitExtension
+
+Autodesk.Viewing.Extensions
+
+# FusionOrbitExtension
+
+## new FusionOrbitExtension(viewer, options)
+
+Provides a customization to the orbit tool.
+
+The extension id is: `Autodesk.Viewing.FusionOrbit`
+
+### Parameters
+
+viewer* (Viewer3D) | Viewer instance
+options* (object) | Configurations for the extension
+
+### Examples
+
+```
+viewer.loadExtension('Autodesk.Viewing.FusionOrbit')
+```
+
+# Methods
+
+## activate(mode)
+
+Activates the extension’s tool.
+
+### Parameters
+
+mode (string) | Either ‘fusionorbit’ (default) or ‘fusionfreeorbit’.
+
+## deactivate()
+
+Deactivates the extension’s tool.

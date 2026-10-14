@@ -1,0 +1,15 @@
+https://aps.autodesk.com/en/docs/viewer/v7/reference/globals/TypeDefs/InstancesCallback/
+Reference Guide > Globals > Type Definitions > InstancesCallback
+
+Type Definitions
+
+# InstancesCallback
+
+## Parameters
+
+instanceIds* (number, Array.<number>, undefined) | The ids of the affected instances or undefined if all instances are affected.
+
+## Returns
+
+type | description
+void

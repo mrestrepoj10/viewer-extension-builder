@@ -1,0 +1,14 @@
+{
+  "name": "DoorSchedule",
+  "displayname": "Door Schedule",
+  "description": "Panel counting the model's doors by family and type, with a per-level breakdown; clicking a type selects and zooms to its doors.",
+  "options": {},
+  "viewerversion": "7.*",
+  "loadonstartup": "false",
+  "filestoload": {
+    "cssfiles": ["main.css"],
+    "jsfiles": ["main.js"]
+  },
+  "includeinlist": "true",
+  "bundleAlias": "DoorSchedule"
+}
