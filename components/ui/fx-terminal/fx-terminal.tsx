@@ -12,7 +12,7 @@ import type {
   FxSpeed,
   FxTerminalSession,
 } from '@/components/ui/fx-terminal/runtime'
-import type { FxExecEvent } from '@/components/ui/fx-terminal/workspace'
+import type { FxExecEvent, WorkspaceSeed } from '@/components/ui/fx-terminal/workspace'
 import { type StatusTone, statusInkClasses } from '@/components/ui/token-status'
 import {
   type AgentNotice,
@@ -42,6 +42,10 @@ interface FxTerminalProps {
   colorScheme?: FxColorScheme
   onExec?: (event: FxExecEvent) => void
   onReady?: () => void
+  /** Each prompt the user submits, slash commands excluded. */
+  onPrompt?: (prompt: string) => void
+  /** Files written into the workspace before fx starts; read once, at start. */
+  seed?: WorkspaceSeed
   className?: string
   ref?: React.Ref<FxTerminalHandle>
 }
@@ -104,6 +108,8 @@ function FxTerminal({
   colorScheme,
   onExec,
   onReady,
+  onPrompt,
+  seed,
   className,
   ref,
 }: FxTerminalProps) {
@@ -116,6 +122,8 @@ function FxTerminal({
   const initialScheme = React.useEffectEvent(() => scheme)
   const handleExec = React.useEffectEvent((event: FxExecEvent) => onExec?.(event))
   const handleReady = React.useEffectEvent(() => onReady?.())
+  const handlePrompt = React.useEffectEvent((prompt: string) => onPrompt?.(prompt))
+  const initialSeed = React.useEffectEvent(() => seed)
 
   const [container, setContainer] = React.useState<HTMLDivElement | null>(null)
   const [session, setSession] = React.useState<FxTerminalSession | null>(null)
@@ -153,6 +161,8 @@ function FxTerminal({
           signal: aborter.signal,
           onExec: handleExec,
           onRefusal: setRefusal,
+          onPrompt: handlePrompt,
+          seed: initialSeed(),
         })
         if (aborter.signal.aborted) {
           started.dispose()
