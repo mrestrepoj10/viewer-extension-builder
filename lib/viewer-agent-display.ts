@@ -2,6 +2,7 @@ import {
   boxCenter,
   distance,
   documentOf,
+  hideOthersOf,
   json,
   parseHexColor,
   plural,
@@ -101,17 +102,32 @@ export function displayTools(kit: ViewerToolKit): ViewerToolSpec[] {
     },
     {
       name: 'isolate_elements',
-      description: 'Show only these elements; everything else is ghosted. show_all undoes it.',
-      properties: { ...targetProperties, fit: { type: 'boolean', description: 'Zoom to them.' } },
+      description:
+        'Show only these elements; everything else is ghosted, or fully hidden with hideOthers (the toolbar Hide others mode, which then follows the user selection). show_all undoes either.',
+      properties: {
+        ...targetProperties,
+        fit: { type: 'boolean', description: 'Zoom to them.' },
+        hideOthers: { type: 'boolean', description: 'Hide everything else instead of ghosting.' },
+      },
       mutates: true,
       movesCamera: (args) => args.boolean('fit') === true,
       async run(args, viewer) {
         const { dbIds, source } = kit.resolveTargets(args, viewer)
-        viewer.isolate(dbIds)
+        const hideOthers = args.boolean('hideOthers') === true
+        const mode = hideOthersOf(viewer)
+        if (hideOthers && mode) {
+          mode.setHideOthers(true, dbIds)
+        } else if (hideOthers) {
+          viewer.setGhosting(false)
+          viewer.isolate(dbIds)
+        } else {
+          if (mode?.getHideOthersState().active) mode.setHideOthers(false)
+          viewer.isolate(dbIds)
+        }
         if (args.boolean('fit')) viewer.fitToView(dbIds)
         return {
-          text: json({ isolated: dbIds.length }),
-          label: `Isolated ${plural(dbIds.length, 'element')}`,
+          text: json({ isolated: dbIds.length, others: hideOthers ? 'hidden' : 'ghosted' }),
+          label: `${hideOthers ? 'Hid all but' : 'Isolated'} ${plural(dbIds.length, 'element')}`,
           detail: source,
           setId: knownSet(kit, args.string('setId')),
         }
@@ -450,9 +466,8 @@ export function displayTools(kit: ViewerToolKit): ViewerToolSpec[] {
           const names = [...kit.savedStates.keys()].join(', ')
           throw new ToolInputError(`no saved view "${name}" (saved: ${names || 'none'})`)
         }
-        viewer.restoreState(saved.viewerState)
-        kit.colors.restore(saved.colors)
-        kit.repaint(viewer, kit.requireModel(viewer))
+        kit.requireModel(viewer)
+        kit.restoreSnapshot(viewer, saved)
         return { text: json({ restored: name }), label: `Restored the view “${name}”` }
       },
     },

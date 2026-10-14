@@ -12,7 +12,12 @@ import type {
   ElementSetStore,
   ViewerSnapshot,
 } from '@/lib/viewer-agent-state'
-import type { Vec3 } from '@/lib/viewer-types'
+import {
+  APS_HIDE_OTHERS_EXTENSION_ID,
+  type APSHideOthersController,
+  isAPSHideOthersController,
+  type Vec3,
+} from '@/lib/viewer-types'
 
 type PropertyResult = Autodesk.Viewing.PropertyResult
 
@@ -92,6 +97,8 @@ export interface ViewerAgentViewer {
   select(dbIds: number[] | number): void
   clearSelection(): void
   isolate(dbIds?: number[] | number): void
+  setGhosting(value: boolean): void
+  getExtension(id: string): object | null
   hide(dbIds: number[] | number): void
   showAll(): void
   fitToView(dbIds?: number[] | null, model?: ViewerAgentModel, immediate?: boolean): void
@@ -431,6 +438,12 @@ export function isInternalCategory(category: string): boolean {
   return category.startsWith('__') && category !== '__category__'
 }
 
+/** The viewer's Hide others mode when `aps-viewer` registered it, else null. */
+export function hideOthersOf(viewer: ViewerAgentViewer): APSHideOthersController | null {
+  const extension = viewer.getExtension(APS_HIDE_OTHERS_EXTENSION_ID)
+  return isAPSHideOthersController(extension) ? extension : null
+}
+
 export function documentOf(model: ViewerAgentModel | null): ViewerAgentDocument | null {
   try {
     return model?.getDocumentNode()?.getDocument() ?? null
@@ -536,6 +549,11 @@ export interface ViewerToolKit {
   ): ToolTargets
   repaint(viewer: ViewerAgentViewer, model: ViewerAgentModel): void
   takeSnapshot(viewer: ViewerAgentViewer): ViewerSnapshot
+  restoreSnapshot(
+    viewer: ViewerAgentViewer,
+    snapshot: ViewerSnapshot,
+    filter?: ViewerStateFilter,
+  ): void
   runQuery(request: {
     snapshot: PropertySnapshot
     elements: readonly ElementRow[]

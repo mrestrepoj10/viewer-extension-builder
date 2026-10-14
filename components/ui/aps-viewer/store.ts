@@ -1,14 +1,17 @@
-import type {
-  APSCameraState,
-  APSExtensionStatus,
-  APSViewer3D,
-  APSViewerStatus,
+import {
+  APS_HIDE_OTHERS_CHANGED_EVENT,
+  type APSCameraState,
+  type APSExtensionStatus,
+  type APSHideOthersState,
+  type APSViewer3D,
+  type APSViewerStatus,
 } from '@/lib/viewer-types'
 
 type Listener = () => void
 
 const EMPTY_SELECTION: readonly number[] = Object.freeze([])
 const EMPTY_EXTENSIONS: Readonly<Record<string, APSExtensionStatus>> = Object.freeze({})
+const HIDE_OTHERS_OFF: APSHideOthersState = Object.freeze({ active: false, ids: EMPTY_SELECTION })
 
 // Snapshots are cached and replaced only when the underlying viewer event
 // fires, so `useSyncExternalStore` gets referentially stable values and never
@@ -16,20 +19,21 @@ const EMPTY_EXTENSIONS: Readonly<Record<string, APSExtensionStatus>> = Object.fr
 export class ViewerStore {
   private viewer: APSViewer3D | null = null
   private listeners = new Set<Listener>()
-  private handlers: Array<[string, () => void]> = []
+  private handlers: Array<[string, (event: { state?: APSHideOthersState }) => void]> = []
   private selection: readonly number[] = EMPTY_SELECTION
   private camera: APSCameraState | null = null
   private modelLoaded = false
   private rafId: number | null = null
   private extensions: Readonly<Record<string, APSExtensionStatus>> = EMPTY_EXTENSIONS
   private status: APSViewerStatus = 'idle'
+  private hideOthers: APSHideOthersState = HIDE_OTHERS_OFF
 
   attach(viewer: APSViewer3D): void {
     const viewing = window.Autodesk?.Viewing
     if (!viewing) throw new Error('cantera aps-viewer: viewer runtime not loaded')
     this.viewer = viewer
 
-    const on = (type: string, handler: () => void) => {
+    const on = (type: string, handler: (event: { state?: APSHideOthersState }) => void) => {
       viewer.addEventListener(type, handler)
       this.handlers.push([type, handler])
     }
@@ -44,6 +48,10 @@ export class ViewerStore {
       // First snapshot at geometry, so useAPSCamera has an initial value
       // before the user moves the camera.
       this.scheduleCameraSnapshot()
+      this.emit()
+    })
+    on(APS_HIDE_OTHERS_CHANGED_EVENT, (event) => {
+      this.hideOthers = event.state ?? HIDE_OTHERS_OFF
       this.emit()
     })
 
@@ -89,6 +97,7 @@ export class ViewerStore {
     this.camera = null
     this.modelLoaded = false
     this.extensions = EMPTY_EXTENSIONS
+    this.hideOthers = HIDE_OTHERS_OFF
     this.status = 'idle'
     this.emit()
   }
@@ -106,6 +115,7 @@ export class ViewerStore {
   isModelLoaded = (): boolean => this.modelLoaded
   getExtensionStatuses = (): Readonly<Record<string, APSExtensionStatus>> => this.extensions
   getStatus = (): APSViewerStatus => this.status
+  getHideOthers = (): APSHideOthersState => this.hideOthers
 
   static getServerViewer = (): APSViewer3D | null => null
   static getServerSelection = (): readonly number[] => EMPTY_SELECTION
@@ -114,6 +124,7 @@ export class ViewerStore {
   static getServerExtensionStatuses = (): Readonly<Record<string, APSExtensionStatus>> =>
     EMPTY_EXTENSIONS
   static getServerStatus = (): APSViewerStatus => 'idle'
+  static getServerHideOthers = (): APSHideOthersState => HIDE_OTHERS_OFF
 
   private emit(): void {
     for (const listener of this.listeners) listener()

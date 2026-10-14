@@ -19,9 +19,16 @@ import {
   extensionLabel,
 } from '@/components/ui/aps-viewer/extensions'
 import { useAPSViewer } from '@/components/ui/aps-viewer/hooks'
-import type {
-  APSViewerToolbarPosition,
-  APSViewerToolbarScale,
+import {
+  type APSViewerToolbarButton,
+  type APSViewerToolbarPosition,
+  type APSViewerToolbarScale,
+  createAPSViewerToolbarButton,
+  hasAPSViewerToolbarControl,
+  mountAPSViewerToolbarControl,
+  setAPSViewerToolbarButtonLabel,
+  setAPSViewerToolbarButtonPressed,
+  unmountAPSViewerToolbarControl,
 } from '@/components/ui/aps-viewer/toolbar'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -36,6 +43,8 @@ export interface APSViewerSettingsValue {
   toolbarPosition: APSViewerToolbarPosition
   toolbarScale: APSViewerSettingsScale
   viewCube: boolean
+  /** The Hide others toggle in the native toolbar. */
+  hideOthers: boolean
   theme: APSViewerSettingsTheme
   /** Frame radius in pixels, 0–32. */
   radius: number
@@ -48,6 +57,7 @@ export const DEFAULT_APS_VIEWER_SETTINGS: APSViewerSettingsValue = {
   toolbarPosition: 'bottom',
   toolbarScale: 'md',
   viewCube: true,
+  hideOthers: true,
   theme: 'system',
   radius: 0,
   extensions: [],
@@ -58,13 +68,14 @@ export function apsViewerPropsFor(
   value: APSViewerSettingsValue,
 ): Pick<
   APSViewerProps,
-  'toolbar' | 'toolbarPosition' | 'toolbarScale' | 'viewCube' | 'theme' | 'radius'
+  'toolbar' | 'toolbarPosition' | 'toolbarScale' | 'viewCube' | 'hideOthers' | 'theme' | 'radius'
 > {
   return {
     toolbar: value.toolbar ? 'native' : 'none',
     toolbarPosition: value.toolbarPosition,
     toolbarScale: value.toolbarScale,
     viewCube: value.viewCube,
+    hideOthers: value.hideOthers,
     theme: value.theme === 'system' ? undefined : value.theme,
     radius: value.radius,
   }
@@ -80,6 +91,7 @@ interface UncheckedViewerSettings {
   toolbarPosition?: unknown
   toolbarScale?: unknown
   viewCube?: unknown
+  hideOthers?: unknown
   theme?: unknown
   radius?: unknown
   extensions?: unknown
@@ -102,7 +114,7 @@ export function parseAPSViewerSettings(
   fallback: APSViewerSettingsValue = DEFAULT_APS_VIEWER_SETTINGS,
 ): APSViewerSettingsValue {
   if (!isUncheckedSettings(input)) return fallback
-  const { toolbar, viewCube, toolbarScale: scale, radius, extensions } = input
+  const { toolbar, viewCube, hideOthers, toolbarScale: scale, radius, extensions } = input
   return {
     toolbar: typeof toolbar === 'boolean' ? toolbar : fallback.toolbar,
     toolbarPosition: oneOf(POSITIONS, input.toolbarPosition, fallback.toolbarPosition),
@@ -111,6 +123,7 @@ export function parseAPSViewerSettings(
         ? Math.min(64, Math.max(32, scale))
         : oneOf(SCALE_PRESETS, scale, fallback.toolbarScale),
     viewCube: typeof viewCube === 'boolean' ? viewCube : fallback.viewCube,
+    hideOthers: typeof hideOthers === 'boolean' ? hideOthers : fallback.hideOthers,
     theme: oneOf(THEMES, input.theme, fallback.theme),
     radius:
       typeof radius === 'number' && Number.isFinite(radius)
@@ -128,45 +141,10 @@ export function parseAPSViewerSettings(
   }
 }
 
-const GROUP_ID = 'cantera-viewer-settings-group'
 const BUTTON_ID = 'cantera-viewer-settings-button'
-const STYLE_ATTRIBUTE = 'data-cantera-aps-viewer-settings'
+const BUTTON_ORDER = 1
 
 const SETTINGS_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:block" aria-hidden="true"><line x1="21" x2="14" y1="4" y2="4"/><line x1="10" x2="3" y1="4" y2="4"/><line x1="21" x2="12" y1="12" y2="12"/><line x1="8" x2="3" y1="12" y2="12"/><line x1="21" x2="16" y1="20" y2="20"/><line x1="12" x2="3" y1="20" y2="20"/><line x1="14" x2="14" y1="2" y2="6"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="16" x2="16" y1="18" y2="22"/></svg>`
-
-// Mid-gray divider before our control group, legible on both LMV themes; the
-// orientation follows the cantera-toolbar-- classes the toolbar item applies.
-const SETTINGS_TRIGGER_CSS = `
-.adsk-control-group.cantera-viewer-settings-group {
-  border-inline-start: 1px solid rgb(128 128 128 / 40%);
-}
-
-.cantera-toolbar--left .cantera-viewer-settings-group,
-.cantera-toolbar--right .cantera-viewer-settings-group {
-  border-inline-start: 0;
-  border-top: 1px solid rgb(128 128 128 / 40%);
-}
-`
-
-let stylesheetConsumers = 0
-
-function retainStylesheet(): void {
-  stylesheetConsumers += 1
-  if (document.head.querySelector(`style[${STYLE_ATTRIBUTE}]`)) return
-  const style = document.createElement('style')
-  style.setAttribute(STYLE_ATTRIBUTE, '')
-  style.textContent = SETTINGS_TRIGGER_CSS
-  document.head.appendChild(style)
-}
-
-function releaseStylesheet(): void {
-  stylesheetConsumers = Math.max(0, stylesheetConsumers - 1)
-  if (stylesheetConsumers === 0) {
-    document.head.querySelector(`style[${STYLE_ATTRIBUTE}]`)?.remove()
-  }
-}
-
-type ToolbarButton = Autodesk.Viewing.UI.Button & { container: HTMLElement }
 
 export interface APSViewerSettingsTriggerProps {
   open: boolean
@@ -183,7 +161,7 @@ export function APSViewerSettingsTrigger({
   label = 'Viewer settings',
 }: APSViewerSettingsTriggerProps) {
   const { viewer } = useAPSViewer()
-  const buttonRef = useRef<ToolbarButton | null>(null)
+  const buttonRef = useRef<APSViewerToolbarButton | null>(null)
   const openRef = useRef(open)
   const toggleRef = useRef(onToggle)
   const labelRef = useRef(label)
@@ -199,35 +177,20 @@ export function APSViewerSettingsTrigger({
     if (!viewer) return
     const viewing = window.Autodesk?.Viewing
     if (!viewing) return
-    retainStylesheet()
 
     const mount = () => {
-      const toolbar = viewer.toolbar
-      if (!toolbar || toolbar.getControl(GROUP_ID)) return
-      const button = new viewing.UI.Button(BUTTON_ID) as ToolbarButton
-      button.setToolTip(labelRef.current)
-      button.icon.innerHTML = SETTINGS_ICON_SVG
-      button.onClick = () => toggleRef.current()
-      // LMV buttons are divs with mouse handlers only; wire up the keyboard
-      // and name/role/state ourselves.
-      const node = button.container
-      node.setAttribute('role', 'button')
-      node.setAttribute('aria-label', labelRef.current)
-      node.tabIndex = 0
-      node.addEventListener('keydown', (event) => {
-        if (event.key !== 'Enter' && event.key !== ' ') return
-        event.preventDefault()
-        toggleRef.current()
-      })
-      button.setState(
-        openRef.current ? viewing.UI.Button.State.ACTIVE : viewing.UI.Button.State.INACTIVE,
+      if (!viewer.toolbar || hasAPSViewerToolbarControl(viewer, BUTTON_ID)) return
+      const button = createAPSViewerToolbarButton(
+        viewing,
+        BUTTON_ID,
+        labelRef.current,
+        SETTINGS_ICON_SVG,
+        () => toggleRef.current(),
       )
-      node.setAttribute('aria-pressed', String(openRef.current))
-      const group = new viewing.UI.ControlGroup(GROUP_ID)
-      group.addClass('cantera-viewer-settings-group')
-      group.addControl(button)
-      toolbar.addControl(group)
-      buttonRef.current = button
+      setAPSViewerToolbarButtonPressed(viewing, button, openRef.current)
+      if (mountAPSViewerToolbarControl(viewing, viewer, button, BUTTON_ORDER)) {
+        buttonRef.current = button
+      }
     }
 
     mount()
@@ -240,11 +203,10 @@ export function APSViewerSettingsTrigger({
       viewer.removeEventListener(viewing.MODEL_ADDED_EVENT, mount)
       buttonRef.current = null
       try {
-        viewer.toolbar?.removeControl(GROUP_ID)
+        unmountAPSViewerToolbarControl(viewer, BUTTON_ID)
       } catch {
         // the viewer may already be finished
       }
-      releaseStylesheet()
     }
   }, [viewer])
 
@@ -252,9 +214,13 @@ export function APSViewerSettingsTrigger({
     const viewing = window.Autodesk?.Viewing
     const button = buttonRef.current
     if (!viewing || !button) return
-    button.setState(open ? viewing.UI.Button.State.ACTIVE : viewing.UI.Button.State.INACTIVE)
-    button.container.setAttribute('aria-pressed', String(open))
+    setAPSViewerToolbarButtonPressed(viewing, button, open)
   }, [open])
+
+  useEffect(() => {
+    const button = buttonRef.current
+    if (button) setAPSViewerToolbarButtonLabel(button, label)
+  }, [label])
 
   return null
 }
@@ -429,6 +395,7 @@ function sameSettings(a: APSViewerSettingsValue, b: APSViewerSettingsValue): boo
     a.toolbarPosition === b.toolbarPosition &&
     a.toolbarScale === b.toolbarScale &&
     a.viewCube === b.viewCube &&
+    a.hideOthers === b.hideOthers &&
     a.theme === b.theme &&
     a.radius === b.radius &&
     a.extensions.length === b.extensions.length &&
@@ -615,9 +582,14 @@ export function APSViewerSettings({
                     checked={value.viewCube}
                     onChange={(viewCube) => onValueChange({ ...value, viewCube })}
                   />
+                  <ToggleRow
+                    label="Hide others button"
+                    checked={value.hideOthers}
+                    onChange={(hideOthers) => onValueChange({ ...value, hideOthers })}
+                  />
                   {!value.toolbar && (
                     <p id={toolbarOffId} className="text-muted-foreground text-xs leading-snug">
-                      Position and density apply to the native toolbar.
+                      Position, density, and the Hide others button apply to the native toolbar.
                     </p>
                   )}
                 </fieldset>

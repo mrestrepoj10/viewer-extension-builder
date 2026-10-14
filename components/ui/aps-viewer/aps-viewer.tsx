@@ -10,6 +10,10 @@ import {
 } from 'react'
 import { APSViewerContext } from '@/components/ui/aps-viewer/context'
 import {
+  type APSViewerHideOthersExtension,
+  registerAPSViewerHideOthers,
+} from '@/components/ui/aps-viewer/hide-others'
+import {
   acquireViewerRuntime,
   onViewerTokenError,
   releaseViewerRuntime,
@@ -23,13 +27,14 @@ import {
   type APSViewerToolbarScale,
   registerAPSViewerToolbar,
 } from '@/components/ui/aps-viewer/toolbar'
-import type {
-  APSDocument,
-  APSExtensionRequest,
-  APSModel,
-  APSViewer3D,
-  APSViewerProfile,
-  GetAccessToken,
+import {
+  APS_HIDE_OTHERS_EXTENSION_ID,
+  type APSDocument,
+  type APSExtensionRequest,
+  type APSModel,
+  type APSViewer3D,
+  type APSViewerProfile,
+  type GetAccessToken,
 } from '@/lib/viewer-types'
 
 export type {
@@ -58,6 +63,9 @@ export interface APSViewerProps {
   /** Changes apply live, without recreating the viewer. */
   toolbarScale?: APSViewerToolbarScale
   viewCube?: boolean
+  /** The Hide others toggle in the native toolbar: keeps the selection and fully hides the
+   * rest. `useAPSHideOthers` drives the mode with or without the button. Changes apply live. */
+  hideOthers?: boolean
   /** Clip the viewer frame to this pixel radius, clamped to 0–32. */
   radius?: number
   /** Force one appearance. Omit to follow the app's light/dark appearance live. */
@@ -125,6 +133,7 @@ export function APSViewer({
   toolbarPosition = 'bottom',
   toolbarScale = 'md',
   viewCube = true,
+  hideOthers = true,
   radius,
   theme,
   autoResize = true,
@@ -146,6 +155,7 @@ export function APSViewer({
   const viewerRef = useRef<APSViewer3D | null>(null)
   const viewCubeRef = useRef(viewCube)
   const toolbarOptionsRef = useRef({ position: toolbarPosition, scale: toolbarScale })
+  const hideOthersRef = useRef(hideOthers)
   const frameRadius =
     radius === undefined || !Number.isFinite(radius) ? undefined : Math.min(32, Math.max(0, radius))
 
@@ -184,6 +194,10 @@ export function APSViewer({
   useEffect(() => {
     toolbarOptionsRef.current = { position: toolbarPosition, scale: toolbarScale }
   }, [toolbarPosition, toolbarScale])
+
+  useEffect(() => {
+    hideOthersRef.current = hideOthers
+  }, [hideOthers])
 
   useEffect(() => {
     const container = containerRef.current
@@ -247,6 +261,26 @@ export function APSViewer({
               callbacksRef.current.onExtensionError?.(APS_VIEWER_TOOLBAR_EXTENSION_ID, wrapped)
             })
         }
+        registerAPSViewerHideOthers(autodesk)
+        boundViewer
+          .loadExtension(APS_HIDE_OTHERS_EXTENSION_ID, { button: hideOthersRef.current })
+          .then((extension) => {
+            if (disposed) {
+              boundViewer.unloadExtension(APS_HIDE_OTHERS_EXTENSION_ID)
+              return
+            }
+            const mode = extension as APSViewerHideOthersExtension
+            mode.setOptions({ button: hideOthersRef.current })
+          })
+          .catch((error) => {
+            if (disposed) return
+            const wrapped =
+              error instanceof Error
+                ? error
+                : new Error('cantera aps-viewer: Hide others failed to load')
+            console.error('cantera aps-viewer: failed to load Hide others', error)
+            callbacksRef.current.onExtensionError?.(APS_HIDE_OTHERS_EXTENSION_ID, wrapped)
+          })
         for (const request of callbacksRef.current.extensions ?? []) {
           const { id, options } = toExtensionEntry(request)
           store.setExtensionStatus(id, 'loading')
@@ -280,6 +314,8 @@ export function APSViewer({
       // detach() also resets the store's status to 'idle'.
       store.detach()
       if (viewer) {
+        // Unloaded before finish so an active Hide others hands back the ghosting preference.
+        viewer.unloadExtension(APS_HIDE_OTHERS_EXTENSION_ID)
         viewer.unloadExtension(APS_VIEWER_TOOLBAR_EXTENSION_ID)
         viewer.finish()
         viewer = null
@@ -360,6 +396,15 @@ export function APSViewer({
     extension?.setOptions({ position: toolbarPosition, scale: toolbarScale })
   }, [status, toolbar, toolbarPosition, toolbarScale, viewerEpoch])
 
+  useEffect(() => {
+    if (viewerEpoch === 0 || status !== 'ready') return
+    const extension = viewerRef.current?.getExtension(APS_HIDE_OTHERS_EXTENSION_ID) as
+      | APSViewerHideOthersExtension
+      | null
+      | undefined
+    extension?.setOptions({ button: hideOthers })
+  }, [status, hideOthers, viewerEpoch])
+
   // Switching viewables (the document browser, a sheet link) tears the viewer
   // down, and LMV unloads every extension it did not load itself. Load ours
   // again once the next model is in; the ones still loading are left alone.
@@ -397,6 +442,11 @@ export function APSViewer({
           ),
         )
       }
+      restore(APS_HIDE_OTHERS_EXTENSION_ID, { button: hideOthersRef.current }, (extension) =>
+        (extension as APSViewerHideOthersExtension | undefined)?.setOptions({
+          button: hideOthersRef.current,
+        }),
+      )
       const statuses = store.getExtensionStatuses()
       for (const request of callbacksRef.current.extensions ?? []) {
         const { id, options } = toExtensionEntry(request)
