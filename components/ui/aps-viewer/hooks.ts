@@ -3,12 +3,15 @@
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
 import { useAPSViewerStore } from '@/components/ui/aps-viewer/context'
 import { ViewerStore } from '@/components/ui/aps-viewer/store'
-import type {
-  APSCameraState,
-  APSExtensionStatus,
-  APSPropertyResult,
-  APSViewer3D,
-  Vec3,
+import {
+  APS_HIDE_OTHERS_EXTENSION_ID,
+  type APSCameraState,
+  type APSExtensionStatus,
+  type APSHideOthersState,
+  type APSPropertyResult,
+  type APSViewer3D,
+  isAPSHideOthersController,
+  type Vec3,
 } from '@/lib/viewer-types'
 
 export interface APSViewerHandle {
@@ -61,6 +64,36 @@ export function useAPSSelection(): APSSelection {
   )
 
   return useMemo(() => ({ dbIds, ...verbs }), [dbIds, verbs])
+}
+
+export interface APSHideOthers extends APSHideOthersState {
+  toggle: () => void
+  /** `true` keeps `ids` (else the selection, else the current isolation) and fully hides
+   * everything else; `false` shows everything and restores ghosting. */
+  set: (active: boolean, ids?: readonly number[]) => void
+}
+
+/** The toolbar's Hide others mode as state plus verbs; it works with the button hidden. */
+export function useAPSHideOthers(): APSHideOthers {
+  const store = useAPSViewerStore()
+  const state = useSyncExternalStore(
+    store.subscribe,
+    store.getHideOthers,
+    ViewerStore.getServerHideOthers,
+  )
+
+  const verbs = useMemo(() => {
+    const controller = () => {
+      const extension = store.getViewer()?.getExtension(APS_HIDE_OTHERS_EXTENSION_ID)
+      return isAPSHideOthersController(extension) ? extension : null
+    }
+    return {
+      toggle: () => controller()?.toggleHideOthers(),
+      set: (active: boolean, ids?: readonly number[]) => controller()?.setHideOthers(active, ids),
+    }
+  }, [store])
+
+  return useMemo(() => ({ active: state.active, ids: state.ids, ...verbs }), [state, verbs])
 }
 
 export interface APSCamera {

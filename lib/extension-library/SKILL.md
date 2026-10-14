@@ -10,7 +10,7 @@ Write Viewer v7 extensions (aps-extensions format) and load them into the live v
 
 ## Commands
 - `ext new <Id> [--from <Example>]`, `ext list`, `ext check`, `ext load`, `ext click <Id> <control-id>`, `ext unload`, `ext errors`, `ext export`.
-- `docs grep <pattern>`, `docs show <path>`: offline Viewer v7 and Data Visualization docs (`/docs/INDEX.txt` lists pages; line 1 of a page is its portal URL to cite). Check APIs there first.
+- `docs grep <pattern>`, `docs show <path>`: offline Viewer v7 and Data Visualization docs (`/docs/INDEX.txt` lists pages; line 1 of a page is its portal URL to cite). Check APIs there.
 - Loop: edit, `ext check`, `ext load`, `ext click` your button, `viewer take_screenshot`, fix, `ext load` again (it replaces the old one).
 
 ## Lifecycle
@@ -38,6 +38,7 @@ Reuse `toolbar.getControl('aps-extensions-toolbar')` or add `new Autodesk.Viewin
 
 ## Display
 `viewer.select(ids)`, `clearSelection()`, `isolate(ids)`, `showAll()`, `hide(ids)`, `show(ids)`, `fitToView(ids)`, `setThemingColor(dbId, new THREE.Vector4(r, g, b, 1), model)` (0 to 1), `clearThemingColors(model)`.
+`viewer isolate_elements --hide-others` hides the rest instead of ghosting it. The toolbar's Hide others toggle is `viewer.getExtension('Cantera.HideOthers')`: `setHideOthers(true, ids)` (no ids: the selection), `setHideOthers(false)`, `toggleHideOthers()`, `getHideOthersState()` → `{active, ids}`; event `'cantera.hideOthersChanged'`.
 
 ## This model
 Commercial Office (Revit, feet): walls, curtain walls, floors, roofs, ceilings, columns, doors, stairs, railings, grids, Levels 1 to 4. It has NO rooms. Data Visualization room heatmaps (`generateSurfaceShadingData`, `LevelRoomsMap`) find nothing: build `SurfaceShadingData` by hand from floor dbIds ("Applying Heatmaps to Arbitrary Models"), or use sprites or theming.

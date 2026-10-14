@@ -6,6 +6,7 @@ import type {
 } from '@/lib/agent-types'
 import {
   documentOf,
+  hideOthersOf,
   type PropertySnapshot,
   parseHexColor,
   plural,
@@ -135,12 +136,25 @@ export function createViewerAgentTools(
     viewer.impl.invalidate(true, true, true)
   }
 
-  const undo = new UndoStack((snapshot) => {
-    const viewer = getViewer()
-    if (!viewer?.model) return
-    viewer.restoreState(snapshot.viewerState, snapshot.restoreCamera ? undefined : KEEP_CAMERA)
+  const restoreSnapshot = (
+    viewer: ViewerAgentViewer,
+    snapshot: ViewerSnapshot,
+    filter?: ViewerStateFilter,
+  ) => {
+    if (!viewer.model) return
+    const mode = hideOthersOf(viewer)
+    if (mode?.getHideOthersState().active && !snapshot.hideOthers) mode.setHideOthers(false)
+    viewer.restoreState(snapshot.viewerState, filter)
+    if (mode && snapshot.hideOthers) mode.setHideOthers(true, snapshot.hideOthers)
     colors.restore(snapshot.colors)
     repaint(viewer, viewer.model)
+  }
+
+  const undo = new UndoStack((snapshot) => {
+    const viewer = getViewer()
+    if (viewer) {
+      restoreSnapshot(viewer, snapshot, snapshot.restoreCamera ? undefined : KEEP_CAMERA)
+    }
   })
 
   const sync = (viewer: ViewerAgentViewer) => {
@@ -220,7 +234,15 @@ export function createViewerAgentTools(
       return { dbIds: [...new Set(dbIds)], source: parts.join(' and ') }
     },
     repaint,
-    takeSnapshot: (viewer) => ({ viewerState: viewer.getState(), colors: colors.snapshot() }),
+    takeSnapshot(viewer) {
+      const mode = hideOthersOf(viewer)?.getHideOthersState()
+      return {
+        viewerState: viewer.getState(),
+        colors: colors.snapshot(),
+        hideOthers: mode?.active ? [...mode.ids] : null,
+      }
+    },
+    restoreSnapshot,
     runQuery: (request) => sandbox.run({ ...request, key: modelKey }),
   }
 

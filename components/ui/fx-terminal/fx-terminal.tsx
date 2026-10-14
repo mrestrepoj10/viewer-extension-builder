@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import type {
   FxColorScheme,
   FxGatewayRefusal,
+  FxSpeed,
   FxTerminalSession,
 } from '@/components/ui/fx-terminal/runtime'
 import type { FxExecEvent } from '@/components/ui/fx-terminal/workspace'
@@ -36,8 +37,7 @@ interface FxTerminalProps {
   gatewayBase?: string
   model?: string
   effort?: string
-  /** Required when the model has a fast variant, so /model does not stop at the speed picker. */
-  speed?: string
+  speed?: FxSpeed
   /** Omit to follow the `.dark` class on the document, live. */
   colorScheme?: FxColorScheme
   onExec?: (event: FxExecEvent) => void
@@ -100,7 +100,7 @@ function FxTerminal({
   gatewayBase = '/api/agent/gateway',
   model = 'anthropic/claude-haiku-5.5',
   effort = 'low',
-  speed,
+  speed = 'normal',
   colorScheme,
   onExec,
   onReady,

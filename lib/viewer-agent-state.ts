@@ -180,6 +180,8 @@ export interface UndoEntry {
 export interface ViewerSnapshot {
   viewerState: ViewerAgentState
   colors: ColorLedgerSnapshot
+  /** The ids Hide others kept visible, or null when the mode was off. */
+  hideOthers?: readonly number[] | null
   restoreCamera?: boolean
 }
 

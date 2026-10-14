@@ -69,3 +69,37 @@ export type APSExtensionRequest = string | { id: string; options?: Record<string
 export type APSExtensionStatus = 'loading' | 'ready' | 'error'
 
 export type APSViewerProfile = 'aec' | 'default' | 'fluent' | 'navis'
+
+/** `aps-viewer` registers Hide others as a viewer extension under this id, so code that
+ * holds only the viewer drives the same mode as the toolbar toggle. */
+export const APS_HIDE_OTHERS_EXTENSION_ID = 'Cantera.HideOthers'
+
+/** Dispatched on the viewer with `{ state: APSHideOthersState }` after every change. */
+export const APS_HIDE_OTHERS_CHANGED_EVENT = 'cantera.hideOthersChanged'
+
+export interface APSHideOthersState {
+  active: boolean
+  /** The dbIds left visible. Empty while active means the mode waits for a selection. */
+  ids: readonly number[]
+}
+
+export interface APSHideOthersController {
+  getHideOthersState(): APSHideOthersState
+  /** `true` hides everything except `ids`, else the selection, else the current isolation;
+   * `false` shows everything and restores ghosting. */
+  setHideOthers(active: boolean, ids?: readonly number[]): void
+  toggleHideOthers(): void
+}
+
+export function isAPSHideOthersController(value: unknown): value is APSHideOthersController {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'getHideOthersState' in value &&
+    typeof value.getHideOthersState === 'function' &&
+    'setHideOthers' in value &&
+    typeof value.setHideOthers === 'function' &&
+    'toggleHideOthers' in value &&
+    typeof value.toggleHideOthers === 'function'
+  )
+}

@@ -1,4 +1,9 @@
-import type { APSViewer3D, APSViewerExtension, AutodeskGlobal } from '@/lib/viewer-types'
+import type {
+  APSViewer3D,
+  APSViewerExtension,
+  APSViewingNamespace,
+  AutodeskGlobal,
+} from '@/lib/viewer-types'
 
 export const APS_VIEWER_TOOLBAR_EXTENSION_ID = 'Cantera.APSViewerToolbar'
 
@@ -179,6 +184,34 @@ const APS_VIEWER_TOOLBAR_CSS = `
   transform: translateY(-50%) !important;
 }
 
+/* Mid-gray divider before our control group, legible on both LMV themes. */
+.adsk-control-group.cantera-viewer-controls {
+  border-inline-start: 1px solid rgb(128 128 128 / 40%);
+}
+
+.cantera-toolbar--left .cantera-viewer-controls,
+.cantera-toolbar--right .cantera-viewer-controls {
+  border-inline-start: 0;
+  border-top: 1px solid rgb(128 128 128 / 40%);
+}
+
+/* Our buttons take keyboard focus, which LMV styles exactly like a pressed button: keep a
+ * released toggle looking released after a click, and mark keyboard focus with a ring. */
+.adsk-viewing-viewer .cantera-viewer-controls .adsk-button.inactive:focus:not(:hover) {
+  box-shadow: none;
+  color: inherit;
+}
+
+.adsk-viewing-viewer.light-theme .cantera-viewer-controls .adsk-button:focus-visible {
+  outline: 2px solid rgb(10 19 28);
+  outline-offset: 1px;
+}
+
+.adsk-viewing-viewer.dark-theme .cantera-viewer-controls .adsk-button:focus-visible {
+  outline: 2px solid rgb(255 255 255 / 90%);
+  outline-offset: 1px;
+}
+
 .adsk-toolbar.cantera-toolbar--right .adsk-control-tooltip,
 .adsk-toolbar.cantera-toolbar--right .toolbar-vertical-group,
 .adsk-toolbar.cantera-toolbar--right .toolbar-settings-sub-menu,
@@ -296,4 +329,92 @@ export function registerAPSViewerToolbar(autodesk: AutodeskGlobal): void {
 
   manager.registerExtension(APS_VIEWER_TOOLBAR_EXTENSION_ID, CanteraAPSViewerToolbar)
   registeredManagers.add(manager)
+}
+
+export const APS_VIEWER_CONTROL_GROUP_ID = 'cantera-viewer-controls'
+const CONTROL_ORDER_ATTRIBUTE = 'data-cantera-order'
+
+export type APSViewerToolbarButton = Autodesk.Viewing.UI.Button & { container: HTMLElement }
+
+/** LMV buttons are divs with mouse handlers only; this one also carries the keyboard and
+ * name/role/state an accessible toggle needs. */
+export function createAPSViewerToolbarButton(
+  viewing: APSViewingNamespace,
+  id: string,
+  label: string,
+  iconSvg: string,
+  onActivate: () => void,
+): APSViewerToolbarButton {
+  const button = new viewing.UI.Button(id) as APSViewerToolbarButton
+  button.setToolTip(label)
+  button.icon.innerHTML = iconSvg
+  button.onClick = () => onActivate()
+  const node = button.container
+  node.setAttribute('role', 'button')
+  node.setAttribute('aria-label', label)
+  node.setAttribute('aria-pressed', 'false')
+  node.tabIndex = 0
+  node.addEventListener('keydown', (event) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return
+    event.preventDefault()
+    onActivate()
+  })
+  return button
+}
+
+export function setAPSViewerToolbarButtonLabel(button: APSViewerToolbarButton, label: string) {
+  button.setToolTip(label)
+  button.container.setAttribute('aria-label', label)
+}
+
+export function setAPSViewerToolbarButtonPressed(
+  viewing: APSViewingNamespace,
+  button: APSViewerToolbarButton,
+  pressed: boolean,
+): void {
+  button.setState(pressed ? viewing.UI.Button.State.ACTIVE : viewing.UI.Button.State.INACTIVE)
+  button.container.setAttribute('aria-pressed', String(pressed))
+}
+
+function controlGroupOf(viewer: APSViewer3D): Autodesk.Viewing.UI.ControlGroup | null {
+  const ControlGroup = window.Autodesk?.Viewing.UI.ControlGroup
+  const group = viewer.toolbar?.getControl(APS_VIEWER_CONTROL_GROUP_ID)
+  return ControlGroup && group instanceof ControlGroup ? group : null
+}
+
+export function hasAPSViewerToolbarControl(viewer: APSViewer3D, controlId: string): boolean {
+  return Boolean(controlGroupOf(viewer)?.getControl(controlId))
+}
+
+/** Appends a control to cantera's group at the end of the SDK toolbar, after a divider, so it
+ * inherits the toolbar's position and scale. Lower `order` sits first. */
+export function mountAPSViewerToolbarControl(
+  viewing: APSViewingNamespace,
+  viewer: APSViewer3D,
+  control: APSViewerToolbarButton,
+  order: number,
+): boolean {
+  const toolbar = viewer.toolbar
+  if (!toolbar) return false
+  let group = controlGroupOf(viewer)
+  if (!group) {
+    group = new viewing.UI.ControlGroup(APS_VIEWER_CONTROL_GROUP_ID)
+    group.addClass(APS_VIEWER_CONTROL_GROUP_ID)
+    toolbar.addControl(group)
+  }
+  if (group.getControl(control.getId())) return false
+  control.container.setAttribute(CONTROL_ORDER_ATTRIBUTE, String(order))
+  const count = group.getNumberOfControls()
+  const after = [...group.container.children].findIndex(
+    (node) => Number(node.getAttribute(CONTROL_ORDER_ATTRIBUTE) ?? 0) > order,
+  )
+  group.addControl(control, { index: after < 0 ? count : Math.min(after, count) })
+  return true
+}
+
+export function unmountAPSViewerToolbarControl(viewer: APSViewer3D, controlId: string): void {
+  const group = controlGroupOf(viewer)
+  if (!group) return
+  group.removeControl(controlId)
+  if (group.getNumberOfControls() === 0) viewer.toolbar?.removeControl(APS_VIEWER_CONTROL_GROUP_ID)
 }

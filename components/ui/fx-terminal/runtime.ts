@@ -13,6 +13,8 @@ import type { ViewerAgentTools } from '@/lib/viewer-agent-tools'
 
 export type FxColorScheme = 'light' | 'dark'
 
+export type FxSpeed = 'normal' | 'fast'
+
 export interface FxGatewayRefusal {
   status: number
   type: string
@@ -33,7 +35,7 @@ export interface FxTerminalStartOptions {
   gatewayBase: string
   model: string
   effort: string
-  speed?: string
+  speed: FxSpeed
   colorScheme: FxColorScheme
   signal: AbortSignal
   onExec?: (event: FxExecEvent) => void
@@ -42,6 +44,7 @@ export interface FxTerminalStartOptions {
 
 const GATEWAY_ORIGIN = 'https://ai-gateway.vercel.sh'
 const REFUSAL_STATUSES = new Set([400, 403, 413, 429, 503])
+const CATALOG_PATH = '/coding-agent/v1/models'
 const INTERACTIVE_TIMEOUT_MS = 30_000
 const STORAGE_PREFIX = 'cantera.fx.'
 const HISTORY_LIMIT = 100
@@ -244,18 +247,44 @@ function withTimeout<T>(promise: Promise<T>, ms: number, message: string): Promi
   })
 }
 
+function pricesFastMode(entry: unknown, model: string): boolean {
+  if (!entry || typeof entry !== 'object' || !('id' in entry)) return false
+  if (entry.id === `${model}-fast`) return true
+  if (entry.id !== model || !('pricing' in entry)) return false
+  const { pricing } = entry
+  return !!pricing && typeof pricing === 'object' && 'fast' in pricing
+}
+
+async function offersFastMode(
+  gatewayBase: string,
+  model: string,
+  signal: AbortSignal,
+): Promise<boolean> {
+  try {
+    const response = await fetch(`${gatewayBase.replace(/\/$/, '')}${CATALOG_PATH}`, { signal })
+    if (!response.ok) return false
+    const body: unknown = await response.json()
+    const entries = body && typeof body === 'object' && 'data' in body ? body.data : null
+    return Array.isArray(entries) && entries.some((entry) => pricesFastMode(entry, model))
+  } catch {
+    return false
+  }
+}
+
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 // The browser terminal reads no effort from env or args, and fx cannot save
 // /model to its settings file there (it prints an error), so effort is chosen
 // through /model and the screen is reset with /clear before it is shown. fx's
 // /clear wipes the scrollback itself; clearing xterm as well races its renderer.
+// For a model with a fast mode, /model also waits for a speed and would swallow the Enter.
 async function applyEffort(
   runtime: TerminalRuntime,
   options: FxTerminalStartOptions,
   saved: Promise<void>,
+  hasSpeed: Promise<boolean>,
 ) {
-  const speed = options.speed ? ` ${options.speed}` : ''
+  const speed = (await hasSpeed) ? ` ${options.speed}` : ''
   runtime.write(`/model ${options.model} ${options.effort}${speed}`)
   await sleep(150)
   runtime.write('\r')
@@ -327,6 +356,7 @@ export async function startFxTerminal(
 
   try {
     throwIfAborted(options.signal)
+    const hasSpeed = offersFastMode(options.gatewayBase, options.model, options.signal)
     const workspace = createViewerWorkspace(options.tools, {
       gatewayBase: options.gatewayBase,
       model: options.model,
@@ -359,7 +389,7 @@ export async function startFxTerminal(
       'The agent did not start in time. Try again.',
     )
     throwIfAborted(options.signal)
-    await applyEffort(runtime, options, saved)
+    await applyEffort(runtime, options, saved, hasSpeed)
     throwIfAborted(options.signal)
   } catch (error) {
     dispose()

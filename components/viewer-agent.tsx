@@ -26,6 +26,7 @@ import {
 import type { ViewerStore } from '@/components/ui/aps-viewer/store'
 import { Button } from '@/components/ui/button'
 import { FxTerminal, type FxTerminalHandle } from '@/components/ui/fx-terminal/fx-terminal'
+import type { FxSpeed } from '@/components/ui/fx-terminal/runtime'
 import { Sheet, SheetClose, SheetContent, SheetTitle } from '@/components/ui/sheet'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { statusInkClasses, statusToneClasses } from '@/components/ui/token-status'
@@ -43,7 +44,7 @@ export interface ViewerAgentProps {
   gatewayBase?: string
   model?: string
   effort?: string
-  speed?: string
+  speed?: FxSpeed
   embedded?: boolean
   className?: string
 }
