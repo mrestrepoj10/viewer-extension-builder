@@ -9,11 +9,14 @@
     "lint": "eslint",
     "format": "biome format --write .",
     "check": "biome check .",
+    "db:migrate": "node --env-file-if-exists=.env.local scripts/migrate.ts",
     "docs:build": "node lib/extension-library/scripts/build-docs-index.mts",
     "docs:regen": "node lib/extension-library/scripts/build-workspace-files.mts"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
+    "@neondatabase/serverless": "^1.2.0",
+    "@vercel/blob": "^2.8.1",
     "@xterm/addon-fit": "^0.11.0",
     "@xterm/xterm": "^6.0.0",
     "acorn": "8.19.0",
@@ -26,6 +29,7 @@
     "just-bash": "^3.6.0",
     "libfx": "0.0.13",
     "lucide-react": "^1.55.0",
+    "modern-screenshot": "^4.7.0",
     "next": "16.4.0",
     "next-themes": "^0.4.6",
     "react": "19.3.0",

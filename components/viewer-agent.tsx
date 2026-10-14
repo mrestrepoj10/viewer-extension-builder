@@ -1,6 +1,7 @@
 'use client'
 
 import { SparklesIcon, TriangleAlertIcon, XIcon } from 'lucide-react'
+import Link from 'next/link'
 import {
   type RefObject,
   useCallback,
@@ -24,14 +25,16 @@ import {
   parseAPSViewerSettings,
 } from '@/components/ui/aps-viewer/settings'
 import type { ViewerStore } from '@/components/ui/aps-viewer/store'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { FxTerminal, type FxTerminalHandle } from '@/components/ui/fx-terminal/fx-terminal'
 import type { FxSpeed } from '@/components/ui/fx-terminal/runtime'
+import type { WorkspaceSeed } from '@/components/ui/fx-terminal/workspace'
 import { Sheet, SheetClose, SheetContent, SheetTitle } from '@/components/ui/sheet'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { statusInkClasses, statusToneClasses } from '@/components/ui/token-status'
 import type { AgentRuntimeStatus } from '@/lib/agent-types'
 import { createExtensionRuntime } from '@/lib/extensions/runtime'
+import { loadRemixSeed } from '@/lib/gallery/remix'
 import { cn } from '@/lib/utils'
 import { type ColorLedger, createViewerAgentTools } from '@/lib/viewer-agent-tools'
 import { AEC_STARTER_EXTENSIONS } from '@/lib/viewer-extension-types'
@@ -146,6 +149,15 @@ function useHydrated(): boolean {
     subscribeNothing,
     () => true,
     () => false,
+  )
+}
+
+/** The gallery id in `?remix=`; undefined until hydration, null when absent. */
+function useRemixId(): string | null | undefined {
+  return useSyncExternalStore(
+    subscribeNothing,
+    () => new URLSearchParams(window.location.search).get('remix'),
+    () => undefined,
   )
 }
 
@@ -342,8 +354,24 @@ function ViewerAgent({
     else setDockOpen(next)
   }
 
+  const remixId = useRemixId()
+  const [seed, setSeed] = useState<WorkspaceSeed | null>(null)
+  const [firstPrompt, setFirstPrompt] = useState<string | null>(null)
+  useEffect(() => {
+    if (!remixId) return
+    let cancelled = false
+    void loadRemixSeed(remixId).then((next) => {
+      if (!cancelled) setSeed(next)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [remixId])
+  // fx reads the workspace once at start, so a remix holds the terminal until its files arrive.
+  const workspaceReady = remixId !== undefined && (!remixId || seed !== null)
+
   const [terminalWanted, setTerminalWanted] = useState(false)
-  if (hydrated && open && !terminalWanted) setTerminalWanted(true)
+  if (hydrated && open && workspaceReady && !terminalWanted) setTerminalWanted(true)
 
   const slot = (compact ? sheetSlot : dockSlot) ?? parkingSlot
 
@@ -382,6 +410,9 @@ function ViewerAgent({
         <h1 className="min-w-0 flex-1 truncate font-medium font-mono text-sm lowercase">
           extension builder
         </h1>
+        <Link href="/" className={cn(buttonVariants({ variant: 'ghost' }), 'h-11 px-3')}>
+          Gallery
+        </Link>
         <ThemeToggle />
         <Button
           type="button"
@@ -416,6 +447,7 @@ function ViewerAgent({
             <ColorLegend colors={tools.colors} className="top-3 left-3" />
             <ExtensionsOverlay
               runtime={extensions}
+              firstPrompt={firstPrompt}
               className="absolute bottom-20 left-3 z-10 max-sm:bottom-34"
             />
           </APSViewer>
@@ -502,6 +534,8 @@ function ViewerAgent({
               effort={effort}
               speed={speed}
               onReady={() => setTerminalReady(true)}
+              onPrompt={(prompt) => setFirstPrompt((current) => current ?? prompt)}
+              seed={seed ?? undefined}
               className="min-h-0 flex-1"
             />,
             terminalHost,

@@ -2,7 +2,7 @@
 
 Describe an Autodesk Viewer extension in plain words. The fx agent writes it, checks it, loads it into the live viewer, presses its button, fixes what breaks, and hands you a folder that drops into any Viewer v7 app. The app is built on [cantera](https://github.com/mrestrepoj10/cantera) ([canteraui.vercel.app](https://canteraui.vercel.app)), the shadcn registry for construction UI. It installs the `@cantera/viewer-agent` template, which puts a translated model in a full-bleed Autodesk Viewer with the fx coding agent docked beside it as a terminal, and turns that template into an extension builder.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/mrestrepoj10/viewer-extension-builder&env=APS_CLIENT_ID,APS_CLIENT_SECRET,APS_MODEL_URN,AI_GATEWAY_API_KEY)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/mrestrepoj10/viewer-extension-builder&env=APS_CLIENT_ID,APS_CLIENT_SECRET,APS_MODEL_URN,AI_GATEWAY_API_KEY,DATABASE_URL,BLOB_READ_WRITE_TOKEN)
 
 ![The extension builder: the Commercial Office model in the viewer, the fx terminal docked on the right](docs/hero.png)
 
@@ -36,7 +36,24 @@ Each extension follows the [aps-extensions](https://github.com/autodesk-platform
 
 `main.js` defines one class that extends `Autodesk.Viewing.Extension`. Its `load()` and `unload()` both return `true`, `unload()` removes everything the extension added, and the file ends with `Autodesk.Viewing.theExtensionManager.registerExtension('<Id>', Class)`.
 
-The check pipeline runs in order and stops at the first failing stage: config contract, syntax (acorn, plain script), then ESLint core rules with browser, `Autodesk`, and `THREE` globals plus four viewer rules (one extension class with `load()`/`unload()` returning true, one top-level `registerExtension`, no `require`/`import()`/`eval`, and an `unload()` cleanup warning). Loading never runs generated code inside a bash command: the command calls a page-side runtime that injects a blob `<script>` with `//# sourceURL=ext/<Id>/main.js`, so errors map back to the file. The agent's system prompt carries a short skill of extension patterns (`lib/extension-library/SKILL.md`). The **Extensions** overlay in the bottom-left corner of the viewer has one chip per loaded extension, with Unload and Export.
+The check pipeline runs in order and stops at the first failing stage: config contract, syntax (acorn, plain script), then ESLint core rules with browser, `Autodesk`, and `THREE` globals plus four viewer rules (one extension class with `load()`/`unload()` returning true, one top-level `registerExtension`, no `require`/`import()`/`eval`, and an `unload()` cleanup warning). Loading never runs generated code inside a bash command: the command calls a page-side runtime that injects a blob `<script>` with `//# sourceURL=ext/<Id>/main.js`, so errors map back to the file. The agent's system prompt carries a short skill of extension patterns (`lib/extension-library/SKILL.md`). The **Extensions** overlay in the bottom-left corner of the viewer has one chip per loaded extension, with Unload, Export, and Publish.
+
+## Gallery
+
+The home page is a public gallery of published extensions; the builder lives at `/agent`. Every chip in the **Extensions** overlay has a **Publish** button. It opens a dialog with the title and description from `config.json`, your display name (remembered in this browser, `anonymous` when blank), the first prompt of the session if there was one, and a 1200×750 thumbnail: the viewer canvas with the extension's open panels and labels drawn where they sit.
+
+Each published extension gets a page at `/e/<id>` that runs it in the viewer through the same loader as `ext load`, with **Remix in builder** (opens `/agent?remix=<id>`, which writes the folder to `/model/extensions/<Id>/` before the agent starts and tells the agent in its first workspace message), **Download .zip**, and **Copy loader snippet** (a `<script>` tag for the public `main.js` plus `viewer.loadExtension('<Id>')`).
+
+What is stored:
+
+- **Vercel Blob** (public), under `gallery/<id>/`: the zip from `ext export`, `<Id>/contents/main.js`, `<Id>/contents/main.css` when there is one, and `thumbnail.jpg`.
+- **Postgres**, one `extensions` row per publish: id, title, description, author, extension id, prompt, agent model, the Blob URLs, `config.json` as jsonb, the SHA-256 of the edit token, and the time.
+
+The server rebuilds the zip from the submitted files, checks `config.json` with the same contract as `ext check` and `main.js` with acorn, and refuses a zip over 2 MB or a thumbnail over 1 MB. Publishing is limited to 10 per IP per 10 minutes on each server instance.
+
+There are no accounts yet. Publishing returns an edit token once; the browser keeps it in `localStorage`, and the extension's page shows **Delete** only where that token is. Delete removes the row and the Blob files. Clearing site data loses the token, and with it the way to delete from the page; the owner of the deployment can still delete the row and the `gallery/<id>/` files directly.
+
+Set up storage once per deployment: add a Neon Postgres database and a public Blob store to the Vercel project (they set `DATABASE_URL` and `BLOB_READ_WRITE_TOKEN`), pull them with `vercel env pull .env.local`, then run `pnpm db:migrate`. The builder works without them; the gallery page then says that storage is missing.
 
 ## A recorded session
 
@@ -66,6 +83,8 @@ Copy `.env.example` to `.env.local` and fill in every key.
 | `APS_CLIENT_SECRET` | yes | Client secret of the same APS app. |
 | `APS_MODEL_URN` | yes | Base64 Model Derivative URN of a model Autodesk has already translated, with or without the `urn:` prefix. The examples assume the Commercial Office sample. |
 | `AI_GATEWAY_API_KEY` | yes | Vercel AI Gateway key, held by the `/api/agent/gateway` proxy route and never sent to the browser. Only the model in `lib/agent-model.ts` is allowed through. |
+| `DATABASE_URL` | for the gallery | Postgres connection string (the Neon integration sets it). Run `pnpm db:migrate` once against it. |
+| `BLOB_READ_WRITE_TOKEN` | for the gallery | Read-write token of a public Vercel Blob store, where published files and thumbnails go. |
 
 ## Run locally
 
@@ -75,13 +94,14 @@ cp .env.example .env.local
 pnpm dev
 ```
 
-Open http://localhost:3000. The home route redirects to `/agent`. libfx needs WebAssembly JSPI: use Chrome or Edge 137+, or Safari 27+.
+Open http://localhost:3000 for the gallery and http://localhost:3000/agent for the builder. libfx needs WebAssembly JSPI: use Chrome or Edge 137+, or Safari 27+.
 
 | Script | What it does |
 | --- | --- |
 | `pnpm dev` / `pnpm build` | Next.js dev server / production build |
 | `pnpm lint` | Next's ESLint config |
 | `pnpm check` / `pnpm format` | Biome check / format in place |
+| `pnpm db:migrate` | Creates the gallery's `extensions` table in `DATABASE_URL` (reads `.env.local`); safe to rerun |
 | `pnpm docs:build` | Rebuilds the offline docs from the APS docs portal (TOC JSON from developer.doc.config.autodesk.com, pages from developer.doc.autodesk.com), then runs `docs:regen` |
 | `pnpm docs:regen` | Regenerates `lib/extension-library/generated/*.ts` after editing an example, the docs text, or `SKILL.md` |
 
@@ -94,7 +114,8 @@ To pull a newer cantera template, run `pnpm dlx shadcn@latest add @cantera/viewe
 - One model: `openai/gpt-6.1-sol` at low effort (`lib/agent-model.ts`). The gateway route rejects any other.
 - The workspace lives in memory. A reload loses every draft that you have not exported.
 - There is no auth. Anyone who can open the page spends your AI Gateway credit, so do not expose a deployment with an unbudgeted key. Set a budget on the key, or put the app behind Vercel deployment protection.
-- Extensions run in the page with full access to it. Read what the agent wrote before you ship it.
+- Extensions run in the page with full access to it. Read what the agent wrote before you ship it. The same holds for every gallery page: opening one runs someone else's code.
+- Anyone can publish to the gallery of a deployment, within the per-IP limit. There is no moderation.
 - `viewer take_screenshot` captures the 3D canvas only. Toolbar buttons and panels are reported as text by `ext load` and `ext click`.
 
 ## Credits

@@ -7,7 +7,11 @@ import {
   type TerminalRuntime,
   xtermAdapter,
 } from 'libfx/browser'
-import { createViewerWorkspace, type FxExecEvent } from '@/components/ui/fx-terminal/workspace'
+import {
+  createViewerWorkspace,
+  type FxExecEvent,
+  type WorkspaceSeed,
+} from '@/components/ui/fx-terminal/workspace'
 import type { ExtensionRuntime } from '@/lib/extensions/runtime'
 import type { ViewerAgentTools } from '@/lib/viewer-agent-tools'
 
@@ -40,6 +44,9 @@ export interface FxTerminalStartOptions {
   signal: AbortSignal
   onExec?: (event: FxExecEvent) => void
   onRefusal?: (refusal: FxGatewayRefusal) => void
+  /** Each prompt the user submits, slash commands excluded. */
+  onPrompt?: (prompt: string) => void
+  seed?: WorkspaceSeed
 }
 
 const GATEWAY_ORIGIN = 'https://ai-gateway.vercel.sh'
@@ -171,10 +178,11 @@ function loadHistory(root: string): string[] {
   }
 }
 
-function createPromptHistoryStore(): PromptHistoryStore {
+function createPromptHistoryStore(onPrompt?: (prompt: string) => void): PromptHistoryStore {
   return {
     load: (root, limit) => loadHistory(root).slice(-Math.max(0, limit)),
     append(root, value) {
+      if (!value.startsWith('/')) onPrompt?.(value)
       const entries = loadHistory(root)
       if (entries.at(-1) === value) return 'duplicate'
       write(`history.${root}`, JSON.stringify([...entries, value].slice(-HISTORY_LIMIT)))
@@ -362,6 +370,7 @@ export async function startFxTerminal(
       model: options.model,
       onExec: options.onExec,
       extensions: options.extensions,
+      seed: options.seed,
     })
     let modelSaved = () => {}
     const saved = new Promise<void>((resolve) => {
@@ -380,7 +389,7 @@ export async function startFxTerminal(
       fetch: createGatewayFetch(options.gatewayBase, options.onRefusal),
       workspace,
       configStore: createConfigStore(options.model),
-      promptHistoryStore: createPromptHistoryStore(),
+      promptHistoryStore: createPromptHistoryStore(options.onPrompt),
     })
     throwIfAborted(options.signal)
     await withTimeout(

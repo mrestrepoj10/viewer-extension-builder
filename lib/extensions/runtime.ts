@@ -64,6 +64,9 @@ export interface ExtensionRuntime {
   errors(id?: string): CapturedError[]
   loaded(): readonly LoadedExtension[]
   isLoaded(id: string): boolean
+  /** The extension's DOM nodes that are on screen now: its panels, labels, overlays. */
+  visibleElements(id: string): Element[]
+  viewer(): ExtensionHostViewer | null
   subscribe(listener: () => void): () => void
   download(fileName: string, bytes: Uint8Array): void
   dispose(): void
@@ -85,6 +88,7 @@ export interface ExtensionHostViewer {
   unloadExtension(id: string): boolean
   addEventListener(type: string, listener: (event: unknown) => void): unknown
   removeEventListener(type: string, listener: (event: unknown) => void): unknown
+  getScreenShot(width: number, height: number, callback: (url: string) => void): void
 }
 
 const SCRIPT_TIMEOUT_MS = 5_000
@@ -753,6 +757,8 @@ export function createExtensionRuntime(
     },
     loaded: () => snapshot,
     isLoaded: (id) => records.has(id),
+    visibleElements: (id) => [...(attributed.elements.get(id) ?? [])].filter(isShown),
+    viewer: getViewer,
     subscribe(listener) {
       listeners.add(listener)
       return () => listeners.delete(listener)

@@ -38,6 +38,15 @@ export interface ViewerWorkspaceOptions {
   fetch?: typeof fetch
   /** Page-side loader the `ext` command drives; without it `ext load` refuses. */
   extensions?: ExtensionRuntime
+  /** Files written into the workspace before the first command, with a MOTD line about them. */
+  seed?: WorkspaceSeed
+}
+
+export interface WorkspaceSeed {
+  files: Readonly<Record<string, string>>
+  notice: string
+  /** Extension ids the seed replaces, so they stop counting as read-only references. */
+  extensionIds: readonly string[]
 }
 
 type WorkspaceFs = CommandContext['fs']
@@ -548,12 +557,19 @@ export function createViewerWorkspace(
   )
   const ext = createExtCommand({
     runtime: options.extensions,
-    references: new Set(REFERENCE_EXTENSIONS),
+    references: new Set(
+      REFERENCE_EXTENSIONS.filter((id) => !options.seed?.extensionIds.includes(id)),
+    ),
     defaultTemplate: 'BasicSkeleton',
   })
   const docs = createDocsCommand({ root: DOCS_ROOT, indexPath: DOCS_INDEX_PATH })
   const bash = new Bash({
-    files: { ...WORKSPACE_FILES, [`${ROOT}/README.md`]: readme(catalog), [`${HOME}/.keep`]: '' },
+    files: {
+      ...WORKSPACE_FILES,
+      ...options.seed?.files,
+      [`${ROOT}/README.md`]: readme(catalog),
+      [`${HOME}/.keep`]: '',
+    },
     cwd: ROOT,
     env: { HOME, USER: 'agent', TERM: 'xterm-256color' },
     customCommands: [viewer, ext, docs],
@@ -575,7 +591,8 @@ export function createViewerWorkspace(
       result = fitOutput(result)
       if (first) {
         first = false
-        result.stdout = MOTD + result.stdout
+        const notice = options.seed ? `[workspace] ${options.seed.notice}\n\n` : ''
+        result.stdout = MOTD + notice + result.stdout
       }
       onExec?.({ command, exitCode: result.exitCode, ms: Math.round(performance.now() - started) })
       return result

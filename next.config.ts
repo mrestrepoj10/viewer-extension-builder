@@ -2,8 +2,8 @@ import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
   cacheComponents: true,
-  async redirects() {
-    return [{ source: '/', destination: '/agent', permanent: false }]
+  images: {
+    remotePatterns: [{ protocol: 'https', hostname: '*.public.blob.vercel-storage.com' }],
   },
   partialPrefetching: true,
   turbopack: {
