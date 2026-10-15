@@ -111,7 +111,7 @@ To pull a newer cantera template, run `pnpm dlx shadcn@latest add @cantera/viewe
 
 ## Limits
 
-- Two models: `openai/gpt-6.1-sol` (default, low effort) and `anthropic/claude-haiku-5.5`, both in `lib/agent-model.ts`; switch for the session with `/model anthropic/claude-haiku-5.5 low` in the terminal. The gateway route rejects any other.
+- One model: `openai/gpt-6.1-sol` at low effort (`lib/agent-model.ts`). The gateway route rejects any other.
 - The workspace lives in memory. A reload loses every draft that you have not exported.
 - There is no auth. Anyone who can open the page spends your AI Gateway credit, so do not expose a deployment with an unbudgeted key. Set a budget on the key, or put the app behind Vercel deployment protection.
 - Extensions run in the page with full access to it. Read what the agent wrote before you ship it. The same holds for every gallery page: opening one runs someone else's code.
