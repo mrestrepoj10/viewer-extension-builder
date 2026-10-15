@@ -14,23 +14,9 @@ import type { APSModel, APSViewer3D, GetAccessToken } from '@/lib/viewer-types'
 
 const STARTER_EXTENSIONS = AEC_STARTER_EXTENSIONS.map((entry) => entry.id)
 
-const BUILDING_CATEGORIES = ['Revit Walls', 'Revit Floors', 'Revit Roofs']
-
 const READY_CEILING_MS = 120_000
 
 type LoadState = { kind: 'pending' } | { kind: 'failed'; title: string; message: string }
-
-function searchCategory(model: APSModel, category: string): Promise<number[]> {
-  return new Promise((resolve) =>
-    model.search(category, resolve, () => resolve([]), ['Category'], { searchHidden: true }),
-  )
-}
-
-async function fitToBuilding(viewer: APSViewer3D, model: APSModel): Promise<void> {
-  const found = await Promise.all(BUILDING_CATEGORIES.map((name) => searchCategory(model, name)))
-  const dbIds = found.flat()
-  if (dbIds.length > 0) viewer.fitToView(dbIds, model, true)
-}
 
 // Loads happen where `ext load` runs them in the builder: once the object tree and the toolbar
 // exist, so load() can query the model and onToolbarCreated() runs.
@@ -145,7 +131,6 @@ export function ItemViewer({
     } catch (error) {
       if (!signal.aborted) fail(`${extensionId} did not load`, error)
     }
-    if (!signal.aborted) await fitToBuilding(viewer, model)
   }
 
   const onModelLoaded = (model: APSModel) => {
