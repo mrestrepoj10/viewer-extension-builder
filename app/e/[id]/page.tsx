@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { connection } from 'next/server'
 import { cache, Suspense } from 'react'
 
 import { ItemActions } from '@/components/gallery/item-actions'
 import { ItemViewer } from '@/components/gallery/item-viewer'
-import { PageFrame, SiteFooter, SiteHeader } from '@/components/gallery/site-chrome'
 import { galleryConfigured, getGalleryItem } from '@/lib/gallery/db'
 import { relativeTime } from '@/lib/gallery/types'
 
@@ -25,6 +25,20 @@ export async function generateMetadata({ params }: PageProps<'/e/[id]'>): Promis
   }
 }
 
+const headerClass =
+  'grid shrink-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 border-border border-b px-4 pt-1 pb-2 sm:flex sm:h-14 sm:py-0 sm:pe-2'
+
+function Wordmark() {
+  return (
+    <Link
+      href="/"
+      className="-ms-1 inline-flex h-10 shrink-0 items-center whitespace-nowrap rounded-md px-1 font-medium font-mono text-sm lowercase focus-visible:outline-2 focus-visible:outline-ring"
+    >
+      extension builder
+    </Link>
+  )
+}
+
 async function Item({ params }: { params: PageProps<'/e/[id]'>['params'] }) {
   const loaded = await loadItem((await params).id)
   if (!loaded) notFound()
@@ -32,73 +46,57 @@ async function Item({ params }: { params: PageProps<'/e/[id]'>['params'] }) {
   const urn = process.env.APS_MODEL_URN
   return (
     <>
-      <PageFrame className="grid gap-6 pt-8 pb-10 sm:pt-12">
-        <div className="grid gap-3">
-          <h1 className="text-balance font-semibold text-3xl tracking-tight sm:text-4xl">
-            {item.title}
-          </h1>
-          <p className="flex flex-wrap items-baseline gap-x-2 text-muted-foreground text-sm">
-            <span className="font-mono text-[0.8125rem] text-foreground/80">
-              {item.extensionId}
-            </span>
-            <span aria-hidden>·</span>
-            <span>by {item.author}</span>
-            <span aria-hidden>·</span>
+      <header className={headerClass}>
+        <div className="col-span-2 flex min-w-0 items-center gap-3">
+          <Wordmark />
+          <h1 className="min-w-0 truncate font-medium text-sm">{item.title}</h1>
+        </div>
+        <p className="flex min-w-0 items-baseline gap-x-2 text-muted-foreground text-sm sm:flex-1">
+          <span className="shrink-0 font-mono text-[0.8125rem] text-foreground/80">
+            {item.extensionId}
+          </span>
+          <span className="truncate max-sm:hidden">
+            by {item.author} ·{' '}
             <time dateTime={item.createdAt} className="tabular-nums">
               {relativeTime(item.createdAt, now)}
             </time>
-          </p>
-        </div>
-        {item.description && (
-          <p className="max-w-2xl text-pretty text-lg leading-relaxed">{item.description}</p>
-        )}
-        {item.prompt && (
-          <figure className="grid max-w-2xl gap-2 border-border border-s ps-4">
-            <figcaption className="text-muted-foreground text-sm">
-              The prompt, to {item.model}
-            </figcaption>
-            <blockquote className="whitespace-pre-line text-pretty text-muted-foreground">
-              {item.prompt}
-            </blockquote>
-          </figure>
-        )}
+          </span>
+        </p>
         <ItemActions item={item} />
-      </PageFrame>
-      {urn ? (
-        <ItemViewer galleryId={item.id} extensionId={item.extensionId} urn={urn} />
-      ) : (
-        <PageFrame>
-          <p className="text-muted-foreground">
+      </header>
+      <main className="relative min-h-0 flex-1 bg-muted">
+        {urn ? (
+          <ItemViewer galleryId={item.id} extensionId={item.extensionId} urn={urn} />
+        ) : (
+          <p className="grid size-full place-items-center p-4 text-center text-muted-foreground text-sm">
             Set APS_MODEL_URN, APS_CLIENT_ID, and APS_CLIENT_SECRET to run it here.
           </p>
-        </PageFrame>
-      )}
+        )}
+      </main>
     </>
   )
 }
 
 function ItemSkeleton() {
   return (
-    <div aria-hidden className="grid gap-6">
-      <PageFrame className="grid gap-3 pt-8 pb-10 sm:pt-12">
-        <div className="h-10 w-2/3 max-w-md rounded-sm bg-muted" />
-        <div className="h-5 w-1/2 max-w-xs rounded-sm bg-muted" />
-      </PageFrame>
-      <div className="h-[min(78svh,52rem)] min-h-[26rem] bg-muted" />
-    </div>
+    <>
+      <header className={headerClass}>
+        <div className="col-span-2 flex min-w-0 items-center gap-3">
+          <Wordmark />
+          <div aria-hidden className="h-4 w-40 rounded-sm bg-muted" />
+        </div>
+      </header>
+      <div aria-hidden className="min-h-0 flex-1 bg-muted" />
+    </>
   )
 }
 
 export default function ItemPage({ params }: PageProps<'/e/[id]'>) {
   return (
-    <div className="flex min-h-svh flex-col bg-background text-foreground">
-      <SiteHeader />
-      <main>
-        <Suspense fallback={<ItemSkeleton />}>
-          <Item params={params} />
-        </Suspense>
-      </main>
-      <SiteFooter />
+    <div className="flex h-svh flex-col overflow-hidden bg-background text-foreground">
+      <Suspense fallback={<ItemSkeleton />}>
+        <Item params={params} />
+      </Suspense>
     </div>
   )
 }

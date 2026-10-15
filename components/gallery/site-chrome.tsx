@@ -4,6 +4,9 @@ import { cn } from '@/lib/utils'
 
 export const REPOSITORY_URL = 'https://github.com/mrestrepoj10/viewer-extension-builder'
 
+export const PUBLISHED_CODE_NOTE =
+  'Published extensions run in the page with full access to it. Read the code before you ship one.'
+
 const navLink =
   'inline-flex h-11 items-center rounded-md px-3 text-muted-foreground text-sm transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring'
 
@@ -44,10 +47,7 @@ export function SiteFooter() {
   return (
     <footer className="mt-auto">
       <PageFrame className="flex flex-col gap-1 py-10 text-muted-foreground text-sm sm:flex-row sm:justify-between sm:gap-6">
-        <p className="max-w-xl text-pretty">
-          Published extensions run in the page with full access to it. Read the code before you ship
-          one.
-        </p>
+        <p className="max-w-xl text-pretty">{PUBLISHED_CODE_NOTE}</p>
         <p>
           Built on{' '}
           <a
