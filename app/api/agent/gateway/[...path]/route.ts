@@ -1,4 +1,4 @@
-import { AGENT_MODEL as ALLOWED_MODEL } from '@/lib/agent-model'
+import { ALLOWED_MODELS } from '@/lib/agent-model'
 
 const GATEWAY_ORIGIN = 'https://ai-gateway.vercel.sh'
 const ALLOWED_ROUTES = new Map([
@@ -164,11 +164,12 @@ async function handle(
       return gatewayError(400, 'invalid-request', 'The model request is not valid JSON.')
     }
     const models = [headerModel, bodyModel].filter((model) => model !== null)
-    if (models.length === 0 || models.some((model) => model !== ALLOWED_MODEL)) {
+    const allowed = (model: string) => (ALLOWED_MODELS as readonly string[]).includes(model)
+    if (models.length === 0 || !models.every(allowed)) {
       return gatewayError(
         400,
         'model-not-allowed',
-        `Only ${ALLOWED_MODEL} is available through this server.`,
+        `Only ${ALLOWED_MODELS.join(' and ')} are available through this server.`,
       )
     }
     body = raw
